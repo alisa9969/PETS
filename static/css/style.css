@@ -1,17 +1,133 @@
 body .main, main .container{
   font-family: 'Yu Gothic UI Semilight';
-  color: #0e0a0f;
+  color: #09080a;
+}
+.main_div {
+    border-radius: 20px;
+    background-color: #f6f5f7;
+    }
+.button_group {
+    justify-items: start;
+    margin-bottom: 30px;
+}
+.buttons {
+    margin-top: 10px;
+    margin-left: -7px;
+    justify-items: start;
+    width: 600px;
+    }
+.content{
+    width: 1200px;
+    display: block;
+    justify-items: start;
+    margin: 20px;
+    margin-left: -50px;
+    margin-top: 50px;
 }
 nav {
-    border-radius: 15px;
-    background-color: #ede9f0;
-    text-align: ;
-    margin: 1px;
-    color: #0e0a0f;
-    padding: 10px;
-    font-size: 52px;
+    box-shadow: 0px 0px 10px 10px #dcd3e5;
+    border-radius: 0px 0px 15px 15px;
+    background-color: #f6f5f7;
+    color: #e2d3ed;
+    height: 70px;
     }
+div{
+    align-items: center;
+    height: 50px;
+    display: flex;
+    }
+.butt {
+    border-radius: 30px;
+    border-color: #d6d3db;
+    justify-items: center;
+    outline:none;
+    padding: 10px;
+    margin-right: 20px;
+    width: 120px;
+    background: none;
+}
+.butt:hover {
+    border-color: #b1a3bf;
+    background: #8f74b3;
+    color: #fff;
+}
+.butt:focus{
+    background: #724da3;
+    border-color: #8365ab;
+    color: #fff;
+}
+.un{
+    margin-left: 10px;
+    font-size: 19px;
+    padding: 0px;
+    align-items: center;
+    margin-top: 9px;
+    list-style-type: none;
+    display: flex;
+}
+
+.li2:hover .submenu{
+    display: block;
+}
+.submenu {
+    position: absolute;
+    background: #e5ddf0;
+    padding: 0px;
+    margin-top: 5px;
+    font-size: 17px;
+    list-style-type: none;
+    display: none;
+    transform-origin: 0 0;
+    border-radius: 0px 10px 10px 5px;
+    }
+
+.submenu li:hover{
+  border-radius: 0px 10px 10px 5px;
+  background: #9072b8;}
+
+.link2:hover{
+  text-decoration: none;
+  color:  #f1ebf7;
+}
+.link {
+  margin-right: 20px;
+  text-decoration: none;
+  color:  #09080a;
+}
+.link:hover{
+    color: #663f99;
+    text-decoration: none;
+}
+.link:focus{
+    color: #542e85;
+    text-decoration: none;
+}
+.link2 {
+  padding: 5px;
+  margin-top: 5px;
+  text-decoration: none;
+  color:  #09080a;
+}
+.img{
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 0px;
+    outline:none;
+    margin-left: 10px;
+    margin-right: 20px;
+}
+.img:focus {
+    border: none;
+}
 .container {
     text-align: center;
     margin-top: 30px
     }
+.search_f input{
+    padding: 3px;
+    width: 350px;
+    margin-left: 30px;
+    border-radius: 10px;
+    border-color: #b1a3bf;
+}
