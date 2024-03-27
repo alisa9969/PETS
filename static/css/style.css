@@ -1,0 +1,17 @@
+body .main, main .container{
+  font-family: 'Yu Gothic UI Semilight';
+  color: #0e0a0f;
+}
+nav {
+    border-radius: 15px;
+    background-color: #ede9f0;
+    text-align: ;
+    margin: 1px;
+    color: #0e0a0f;
+    padding: 10px;
+    font-size: 52px;
+    }
+.container {
+    text-align: center;
+    margin-top: 30px
+    }
