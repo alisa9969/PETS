@@ -24,7 +24,7 @@ body .main, main .container{
     align-items: start;
     height: 240px;
     display: block;
-    background: #634f7d;
+    background: #6f627f;
     color: #fff;
 }
 .text{
@@ -115,7 +115,7 @@ div{
 }
 .butt:focus{
     background: #7855a6;
-    border-color: #8359ba;
+    border-color: #74638a;
     color: #fff;
 }
 .un{
