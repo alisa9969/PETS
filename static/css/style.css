@@ -14,12 +14,12 @@ nav {
     align-items: start;
     height: 250px;
     display: block;
-    background: #6f627f;
+    background: #8489CD;
     color: #fff;
 }
 body .main, main .container{
   font-family: 'Segoe UI Light';
-  color: #09080a;
+  color: #1C1C1C;
 }
 .container {
     text-align: center;
@@ -104,7 +104,7 @@ div{
 }
 .submenu {
     position: absolute;
-    background: #e5ddf0;
+    background: #DFDFE7;
     padding: 0px;
     margin-top: 5px;
     font-size: 17px;
@@ -115,7 +115,7 @@ div{
     }
 .submenu li:hover{
   border-radius: 0px 10px 10px 5px;
-  background: #9072b8;
+  background: #9595D0;
   }
 .li2:hover .submenu{
     display: block;
@@ -133,7 +133,7 @@ div{
 }
 .link2:hover{
   text-decoration: none;
-  color:  #f1ebf7;
+  color:  #F2F2F2;
 }
 .link {
   margin-right: 20px;
@@ -160,11 +160,28 @@ div{
 .img_a {
     margin-left: 20px;
 }
+.butt3{border-radius: 30px;
+    border-color: #E3E3E3;
+    justify-items: center;
+    outline:none;
+    height: 40px;
+    padding: 6px;
+    width: 140px;
+    background: #fff;
+}
+.butt3:focus{
+    background: #A6A8E2;
+    color: #fff;
+}
+.butt3:hover{
+    background: #C0C1E8;
+    color: #fff;
+}
 .b_reg {
-    color: #1f1a24;
-    background: #d6d6d6;
+    color: #1F1E29;
+    background: #fff;
     border-radius: 30px;
-    border-color: #e0dee3;
+    border-color: #FAFAFA;
     justify-items: center;
     outline:none;
     padding: 6px;
@@ -174,13 +191,13 @@ div{
     margin-bottom: 30px;
 }
 .b_reg:hover{
-    background: #c5bfc9;
+    background: #FAFAFA;
 }
 .b_login{
     color: #fff;
-    background: #744a94;
+    background: #9A9AD5;
     border-radius: 30px;
-    border-color: #a4a2a6;
+    border-color: #9A9AD5;
     justify-items: center;
     outline:none;
     padding: 6px;
@@ -190,13 +207,13 @@ div{
     margin-bottom: 30px;
 }
 .b_login:hover{
-    background: #5f347f;
+    background: #8F8FD6;
 }
 .butt2 {
     color: #fff;
-    background: #744a94;
+    background: #ACAED2;
     border-radius: 30px;
-    border-color: #e0dee3;
+    border-color: #ACAED2;
     justify-items: center;
     outline:none;
     padding: 6px;
@@ -214,32 +231,32 @@ div{
     background: #fff;
 }
 .butt:hover {
-    border-color: #b1a3bf;
-    background: #b8a5d1;
+    border-color: #C0C1E8;
+    background: #C0C1E8;
     color: #fff;
 }
 .butt:focus{
-    background: #7855a6;
-    border-color: #74638a;
+    background: #A6A8E2;
+    border-color: #A6A8E2;
     color: #fff;
 }
 .login{
   font-size: 17px;
     border-radius: 30px;
-    border-color: #ab86db;
+    border-color: #BDBDBD;
     padding: 6px;
     margin-left: 30px;
     width: 120px;
     background: #fff;
 }
 .login:hover {
-    border-color: #b1a3bf;
-    background: #b8a5d1;
+    border-color: #9A9AD5;
+    background: #9A9AD5;
     color: #fff;
 }
 .login:focus{
-    background: #8359ba;
-    border-color: #8359ba;
+    background: #8F8FD6;
+    border-color: #8F8FD6;
     color: #fff;
 }
 .img{
@@ -277,7 +294,7 @@ div{
     width: 350px;
     margin-left: 15px;
     border-radius: 20px;
-    border-color: #b1a3bf;
+    border-color: #BDBDBD;
 }
 .form_login{
     padding: 5px;
@@ -285,7 +302,7 @@ div{
     width: 350px;
     height: 40px;
     border-radius: 20px;
-    border-color: #b1a3bf;
+    border-color: #BDBDBD;
     margin-top: 15px;
 }
 .form_login2{
@@ -294,7 +311,7 @@ div{
     width: 350px;
     height: 60px;
     border-radius: 20px;
-    border-color: #b1a3bf;
+    border-color: #BDBDBD;
     margin-top: 15px;
 }
 
@@ -303,5 +320,5 @@ div{
 .error {
     margin-top: 10px;
     font-size: 17px;
-    color: #7800f0;
+    color: #39399D;
 }
