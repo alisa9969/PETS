@@ -1,5 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="account">
+    <div style="text-align: start; display: flex;">
+        <div style="justify-content: center;">
+            <img src="/static/img/avatar.png" class="ava"><br>
+            <button class="butt" style="width: 140px;">Изменить фото</button>
+        </div>
+        <div style="text-align: start; margin-left: 40px;">
+            <h5>Имя пользователя: {{ current_user.name }}</h5>
+            <h5 class="phone">Телефон: {{ current_user.phone }}</h5>
+            <h5>О себе:</h5>
+            <div class="about">
+                <p>{{ current_user.phone }}</p>
+            </div>
+        </div>
+        <div style="display: block; margin-left: 150px;">
+            <a href="" class="edit">Редатировать</a><br>
+            <a href="" class="logout">Выйти</a>
+        </div>
 
+    </div>
+    <div class="geo">
+        <a href=""><img src="/static/img/point.png" height="50" style="margin-right: 7px"></a><a href="">г. Сургут</a>
+    </div>
+</div>
 {% endblock %}

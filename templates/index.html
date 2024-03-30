@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div style="text-align: start;"><a><button class="butt2"> + Создать объявление</button></a></div>
 <div class="content">
     <div class="button_group">
         <button class="butt" autofocus>Все</button>
@@ -14,11 +15,16 @@
         <button class="butt">Другое</button>
     </div>
     <div class="buttons">
-        <button class="img"><img src="/static/img/filter.png" height="33"></button>
-        <button class="img"><img src="/static/img/sort.png" height="30"></button>
-        <button class="img"><img src="/static/img/point.png" height="30" style="margin-right: 7px">г. Сургут </button>
-        <button class="butt3" style="margin-left: 500px"> Пристройство</button>
-        <button class="butt3" style="margin-left: 20px"> Пропажа</button>
+        <div>
+            <button class="img"><img src="/static/img/filter.png" height="33"></button>
+            <button class="img"><img src="/static/img/sort.png" height="30"></button>
+            <button class="img"><img src="/static/img/point.png" height="30" style="margin-right: 7px">г. Сургут
+            </button>
+        </div>
+        <div style="background: #fff; border-radius: 30px; padding: 10px; margin-top: -10px;">
+            <button class="butt3"> Ищут дом</button>
+            <button class="butt3"> Потерялись</button>
+        </div>
     </div>
     <div class="main_div">
     </div>
