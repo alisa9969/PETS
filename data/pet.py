@@ -18,3 +18,5 @@ class Pet(SqlAlchemyBase):
     vaccin = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
     steril = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
     category = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    post_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                sqlalchemy.ForeignKey("post.id"))
