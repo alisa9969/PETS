@@ -4,7 +4,7 @@ from data.users import User
 from forms.user import RegisterForm
 
 app = Flask(__name__, static_folder="static")
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['SECRET_KEY'] = 'pets.website_secret_key'
 
 
 @app.route('/')

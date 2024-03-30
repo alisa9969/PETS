@@ -22,4 +22,5 @@ class Post(SqlAlchemyBase):
     views_count = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     pet = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("pet.id"))
+    destination = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     user = orm.relationship('User')
