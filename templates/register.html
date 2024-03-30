@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="content2">
-<h3 style="margin-bottom: 15px; color: #705187">Регистрация</h3>
+<h3 style="margin-bottom: 15px; color: #262626">Регистрация</h3>
 <form action="" method="post" class="f">
 
     {{ form.csrf_token }}
@@ -52,7 +52,7 @@
         {% endfor %}
     </p>
     <p>{{ form.submit (class='butt2')}}</p>
-    <p class='error'>{{message}}</p>
+    <h4 class='error'>{{message}}</h4>
 </form>
 </div>
 {% endblock %}

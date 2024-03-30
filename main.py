@@ -17,6 +17,12 @@ def index():
 def profile():
     return render_template('profile.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+@app.route('/autorization')
+def autoriz():
+    return render_template('autorization.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
