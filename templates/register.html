@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content2">
+<h3 style="margin-bottom: 15px; color: #705187">Регистрация</h3>
+<form action="" method="post" class="f">
+
+    {{ form.csrf_token }}
+    <p>
+        {{ form.name.label}}<br>
+        {{ form.name(class="form_login")}}<br>
+        {% for error in form.name.errors %}
+            <p>
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.phone.label}}<br>
+        {{ form.phone(class="form_login")}}<br>
+        {% for error in form.phone.errors %}
+            <p>
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.password.label}}<br>
+        {{ form.password(class="form_login")}}<br>
+        {% for error in form.password.errors %}
+            <p>
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.password_again.label}}<br>
+        {{ form.password_again(class="form_login")}}<br>
+        {% for error in form.password_again.errors %}
+            <p>
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.about.label }}<br>
+        {{ form.about(class="form_login2")}}<br>
+        {% for error in form.about.errors %}
+            <p>
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit (class='butt2')}}</p>
+    <p class='error'>{{message}}</p>
+</form>
+</div>
+{% endblock %}
