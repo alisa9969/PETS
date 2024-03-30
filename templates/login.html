@@ -2,6 +2,30 @@
 
 {% block content %}
 <div class="content2">
-<h3 style="margin-bottom: 15px; color: #262626">Вход</h3>
+    <h3 style="margin-bottom: 20px; color: #262626">Вход в аккаунт</h3>
+    <form action="" method="post" class="f">
+        {{ form.csrf_token() }}
+        <p>
+            {{ form.phone.label}}<br>
+            {{ form.phone(class="form_login")}}<br>
+            {% for error in form.phone.errors %}
+        <p>
+            {{ error }}
+        </p>
+        {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label}}<br>
+            {{ form.password(class="form_login")}}<br>
+            {% for error in form.password.errors %}
+        <p>
+            {{ error }}
+        </p>
+        {% endfor %}
+        </p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p>{{ form.submit (class='butt2')}}</p>
+        <h5 class='error'>{{message}}</h5>
+    </form>
 </div>
 {% endblock %}
