@@ -9,6 +9,8 @@ class Pet(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     training = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
+    delivery = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
+    home = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     breed = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     color = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     age = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)

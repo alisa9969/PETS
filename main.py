@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from data import db_session
+from data.users import User
 
 app = Flask(__name__, static_folder="static")
 
