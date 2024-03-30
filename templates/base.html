@@ -35,7 +35,7 @@
                         <li><a class="link2" href="#">Зоомагазины</a></li>
                         <li><a class="link2" href="#">Ветеринарные клиники</a></li>
                         <li><a class="link2" href="#">Зоозащита</a></li>
-                        <li><a class="link2" href="#">Грумминг</a></li>
+                        <li><a class="link2" href="#">Груминг</a></li>
                         <li><a class="link2" href="#">Зоогостиницы</a></li>
                     </ul>
 
@@ -45,8 +45,9 @@
                 <input placeholder=" Поиск">
                 <button class="img"><img src="/static/img/search_logo.png" height="20px"></button>
             </form>
-            <button class="img" style="display: block"><img src="/static/img/chat2.png" height="23px" alt="сообщения"></button>
-            <button class="img" style="display: block"><img src="/static/img/bell.png" height="27px" alt="уведомления"></button>
+            <button class="img"><img src="/static/img/chat2.png" height="23px" alt="сообщения"></button>
+            <button class="img"><img src="/static/img/bell.png" height="27px" alt="уведомления"></button>
+            <button class="login">Войти</button>
         </div>
     </nav>
 </header>
@@ -55,5 +56,26 @@
     {% block content %}
     {% endblock %}
 </main>
+<footer>
+    <div class="footer">
+        <div style="display: block;">
+        <div>
+            <img  class="logo" src="/static/img/logo.png" height="60px"><h2> PETS</h2>
+        </div>
+        <div class="text">
+            <p>A service for finding and adopting pets, placing services and products for animals.</p>
+            <p style="font-size: 17px;">2024</p>
+        </div>
+        </div>
+        <div class="contacts">
+            <div class="cont">
+                <img src="/static/img/phone.png"><p>Тел.: +7(982)542-14-49</p>
+            </div>
+            <div class="cont">
+                <img src="/static/img/email.png"><p>E-mail: pets.support@gmail.com</p>
+            </div>
+            <button class="butt">Поддержка</button>
+        </div>
+    </div>
+</footer>
 </body>
-</html>

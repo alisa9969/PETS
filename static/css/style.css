@@ -1,10 +1,67 @@
 body .main, main .container{
-  font-family: 'Yu Gothic UI Semilight';
+  font-family: 'Segoe UI Light';
   color: #09080a;
+}
+.contacts{
+    display: block;
+    margin-left: 700px;
+    padding: 50px;
+    margin-top: -100px;
+}
+.cont{
+    align-items: center;
+    margin-bottom: 10px;
+}
+.cont img{
+    margin-top: -16px;
+    height:30px;
+    margin-right: 30px
+}
+.footer{
+    margin-top: 200px;
+    padding-left: 100px;
+    padding-top: 30px;
+    align-items: start;
+    height: 240px;
+    display: block;
+    background: #634f7d;
+    color: #fff;
+}
+.text{
+ width: 200px;
+ display: block;
+ font-size: 13px;
+ margin-top: 40px;
+}
+.logo{
+    margin-right: 20px;
+}
+
+.login{
+  font-size: 17px;
+    border-radius: 30px;
+    border-color: #ab86db;
+    padding: 6px;
+    margin-right: 20px;
+    width: 120px;
+    background: #fff;
+}
+.login:hover {
+    border-color: #b1a3bf;
+    background: #b8a5d1;
+    color: #fff;
+}
+.login:focus{
+    background: #8359ba;
+    border-color: #8359ba;
+    color: #fff;
+}
+.img:hover {
+  color:  #6b16db;
 }
 .main_div {
     border-radius: 20px;
-    background-color: #f6f5f7;
+    background-color: #fff;
     }
 .button_group {
     justify-items: start;
@@ -17,15 +74,19 @@ body .main, main .container{
     width: 600px;
     }
 .content{
+    border-radius: 20px;
+    height: 95%;
+    background-color: #f6f5f7;
     width: 1200px;
     display: block;
+    padding: 15px;
     justify-items: start;
-    margin: 20px;
+    margin: 10px;
     margin-left: -50px;
     margin-top: 50px;
 }
 nav {
-    box-shadow: 0px 0px 10px 10px #dcd3e5;
+    box-shadow: 0px 0px 7px 7px #e5e5e5;
     border-radius: 0px 0px 15px 15px;
     background-color: #f6f5f7;
     color: #e2d3ed;
@@ -37,23 +98,24 @@ div{
     display: flex;
     }
 .butt {
+  font-size: 15px;
     border-radius: 30px;
-    border-color: #d6d3db;
+    border-color: #e0dee3;
     justify-items: center;
     outline:none;
-    padding: 10px;
+    padding: 6px;
     margin-right: 20px;
     width: 120px;
-    background: none;
+    background: #fff;
 }
 .butt:hover {
     border-color: #b1a3bf;
-    background: #8f74b3;
+    background: #b8a5d1;
     color: #fff;
 }
 .butt:focus{
-    background: #724da3;
-    border-color: #8365ab;
+    background: #7855a6;
+    border-color: #8359ba;
     color: #fff;
 }
 .un{
@@ -127,7 +189,7 @@ div{
 .search_f input{
     padding: 3px;
     width: 350px;
-    margin-left: 30px;
+    margin-left: 15px;
     border-radius: 10px;
     border-color: #b1a3bf;
 }
