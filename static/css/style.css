@@ -1,7 +1,6 @@
     /* footer, main, navigation */
 
 nav {
-    box-shadow: 0px 0px 7px 7px #e5e5e5;
     border-radius: 0px 0px 15px 15px;
     background-color: #f6f5f7;
     color: #e2d3ed;
@@ -37,12 +36,32 @@ nav div{
     align-items: center;
     display: flex;
 }
+.types_checkbox {
+    margin-left: 200px;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
 .category div:hover{
     transform: scale(1.1);
     transition: 0.7s;
 }
 .category{
     display: flex;
+}
+.subcategory{
+    display: block;
+    text-align: start;
+    font-size: 18px;
+    border-radius: 30px;
+    background: #f6f5f7;
+    padding: 60px;
+}
+.sb{
+    display: block;
+    margin-top: 70px;
+
+    width: 750px;
+    text-align: start;
 }
 .geo{
     width: 500px;
@@ -73,7 +92,6 @@ nav div{
     margin-top: 40px;
 }
 .main_div {
-    box-shadow: 5px 5px 0px 0px #e5e5e5;
     border-radius: 20px;
     margin-top: 15px;
     background-color: #fff;
@@ -95,7 +113,6 @@ nav div{
     display: block;
     padding: 30px;
     margin-top: 30px;
-    box-shadow: 5px 5px 0px 0px #e5e5e5;
 }
 .account{
     border-radius: 20px;
@@ -103,11 +120,9 @@ nav div{
     padding: 60px;
     display: block;
     margin-top: 30px;
-    box-shadow: 5px 5px 0px 0px #e5e5e5;
 }
 .content{
     border-radius: 20px;
-    box-shadow: 5px 5px 0px 0px #e5e5e5;
     background-color: #f6f5f7;
     display: block;
     padding: 15px;
@@ -135,10 +150,8 @@ nav div{
     list-style-type: none;
     display: none;
     transform-origin: 0 0;
-    border-radius: 0px 10px 10px 5px;
 }
 .submenu li:hover{
-    border-radius: 0px 10px 10px 5px;
     background: #9595D0;
 }
 .li2:hover .submenu{
@@ -156,6 +169,7 @@ nav div{
     text-decoration: none;
     color: #5B5BCD;
 }
+
 .geo a{
     font-size: 20px;
     color: #282829;
@@ -278,6 +292,18 @@ nav div{
 .b_login:hover{
     background: #8F8FD6;
 }
+.back{
+    color: #969696;
+    padding: 6px;
+    font-size: 17px;
+    width: 100px;
+    border-color: #969696;
+    border-radius: 20px;
+}
+.back:hover{
+    color: #8D8DCE;
+    border-color: #8D8DCE;
+}
 .butt2 {
     color: #fff;
     background: #8F8FD6;
@@ -288,7 +314,6 @@ nav div{
     padding: 6px;
     width: 200px;
 }
-
 .butt2:hover{
     transform: scale(1.05);
     transition: 0.5s;

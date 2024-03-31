@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="subcategory">
+    <div style="display: flex; justify-content: space-between">
+    <a href="/category">
+        <button class="back">назад</button>
+    </a>
+    <h2>{{ name }}</h2>
+    <a href="/category">
+        <button class="back">далее</button>
+    </a>
+    </div>
+    <div class="sb">
+        <div>
+            <input type="checkbox" id="all" name="all" checked/>
+            <label for="all">Все</label></div>
+        {% for i in types %}
+        <div>
+            <input type="checkbox" id=f'{{i}}' name=f'{{i}}'/>
+            <label for=f'{{i}}'>{{i}}</label>
+        </div>
+        {% endfor %}
+        <div>
+            <input type="checkbox" id="another" name="another"/>
+            <label for="another">Другое</label></div>
+    </div>
+</div>
+{% endblock %}

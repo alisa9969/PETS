@@ -4,6 +4,7 @@ from data.users import User
 from forms.user import RegisterForm
 from forms.login import LoginForm
 from flask_login import LoginManager, login_user, current_user
+import json
 
 app = Flask(__name__, static_folder="static")
 app.config['SECRET_KEY'] = 'pets.website_secret_key'
@@ -20,17 +21,28 @@ def load_user(user_id):
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', title='Главная')
+
 
 @app.route('/category')
 def category():
-    return render_template('category.html')
+    return render_template('category.html', title='Категории')
+
+
+@app.route('/category/<types>')
+def subcategory(types):
+    f = open('category.json', encoding="utf8")
+    r = json.load(f)
+    if types in r:
+        m = r[f"{types}"]['types']
+        name = r[f"{types}"]['name']
+        return render_template('subcategory.html', title=str(types), name=name, types=m)
 
 @app.route('/profile')
 def profile():
     if current_user.is_authenticated:
-        return render_template('profile.html')
-    return render_template('autorization.html')
+        return render_template('profile.html', title='Профиль')
+    return render_template('autorization.html', title='Авторизация')
 
 
 @app.route('/login', methods=['GET', 'POST'])
