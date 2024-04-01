@@ -29,6 +29,11 @@ def category():
     return render_template('category.html', title='Категории')
 
 
+@app.route('/organizations')
+def organizations():
+    return render_template('organizations.html', title='Организации')
+
+
 @app.route('/category/<types>')
 def subcategory(types):
     f = open('category.json', encoding="utf8")
@@ -37,6 +42,7 @@ def subcategory(types):
         m = r[f"{types}"]['types']
         name = r[f"{types}"]['name']
         return render_template('subcategory.html', title=str(types), name=name, types=m)
+
 
 @app.route('/profile')
 def profile():

@@ -1,10 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+<h2>Организации</h2>
+<div class="div_o">
+    <div class="geo2">
+        <a href=""><img src="/static/img/point.png" height="30" style="margin-right: 7px">г. Сургут</a>
+        <button class="card">На карте</button>
+    </div>
+    <div class="org">
+        <a href=""><img class='org_im' src="/static/img/adopt.jpg"></a>
+        <div style="width: 60%;">
+            <a href="" class="type_org" style="color: #281D35">Приюты</a>
+            <p style="margin-top: 25px">Частные и государственные волонтерские организации для помощи животным</p>
+        </div>
+        <div  class='v_div' >
+            <a href=""><button class="v_org" > ➜ </button></a>
+        </div>
+    </div>
+    <div class="org">
+        <a href=""><img class='org_im' src="/static/img/store.jpg"></a>
+        <div style="width: 60%;">
+            <a href="" class="type_org" style="color: #281D35">Зоомагазины</a>
+            <p style="margin-top: 25px">Одежда и обувь, игрушки, клетки и аквариумы, корм для животных</p>
+        </div>
+        <div  class='v_div' >
+            <a href=""><button class="v_org" > ➜ </button></a>
+        </div>
+    </div>
+    <div class="org">
+        <a href=""><img class='org_im' src="/static/img/vet.jpg"></a>
+        <div style="width: 60%;">
+            <a href="" class="type_org" style="color: #281D35">Ветеринарные клиники</a>
+            <p style="margin-top: 25px">Частные и государственные учреждения для оказания ветеринарной помощи животным</p>
+        </div>
+        <div  class='v_div' >
+            <a href=""><button class="v_org" > ➜ </button></a>
+        </div>
+    </div>
+    <div class="org">
+        <a href=""><img class='org_im' src="/static/img/help_zoo.jpg"></a>
+        <div style="width: 60%;">
+            <a href="" class="type_org" style="color: #281D35">Зоозащита</a>
+            <p style="margin-top: 25px">Организации и фонды, контролирующие благополучие и права животных</p>
+        </div>
+        <div  class='v_div' >
+            <a href=""><button class="v_org" > ➜ </button></a>
+        </div>
+    </div>
+    <div class="org">
+        <a href=""><img class='org_im' src="/static/img/grouming.jpg"></a>
+        <div style="width: 60%;">
+            <a href="" class="type_org" style="color: #281D35">Груминг</a>
+            <p style="margin-top: 25px">Процедуры по уходу за внешним видом домашних животных</p>
+        </div>
+        <div  class='v_div'>
+            <a href=""><button class="v_org" > ➜ </button></a>
+        </div>
+    </div>
+    <div class="org">
+        <a href=""><img class='org_im' src="/static/img/zoohotel.jpg"></a>
+        <div style="width: 60%;">
+            <a href="" class="type_org" style="color: #281D35">Зоогостиницы</a>
+            <p style="margin-top: 25px">Места для временного проживания питомцев</p>
+        </div>
+        <div class='v_div' >
+            <a href=""><button class="v_org" > ➜ </button></a>
+        </div>
+    </div>
+</div>
+{% endblock %}
