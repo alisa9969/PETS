@@ -172,20 +172,6 @@ nav div{
     list-style-type: none;
     display: flex;
 }
-.submenu {
-    position: absolute;
-    background: #DFDFE7;
-    padding: 0px;
-    margin-top: 5px;
-    font-size: 17px;
-    list-style-type: none;
-    display: none;
-    border-radius: 0px 10px 10px 5px;
-    transform-origin: 0 0;
-}
-.submenu li:hover{
-    background: #9595D0;
-}
 .li2:hover .submenu{
     display: block;
 }
@@ -239,10 +225,6 @@ nav div{
 .help:hover{
     color: #fff;
 }
-.link2:hover{
-    text-decoration: none;
-    color:  #F2F2F2;
-}
 .link {
     margin-right: 20px;
     text-decoration: none;
@@ -257,12 +239,6 @@ nav div{
     text-decoration: none;
     transform: scale(1.1);
     transition: 0.5s;
-}
-.link2 {
-    padding: 5px;
-    margin-top: 5px;
-    text-decoration: none;
-    color:  #09080a;
 }
 .edit{
     padding: 10px;

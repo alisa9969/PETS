@@ -31,7 +31,19 @@ def category():
 
 @app.route('/organizations')
 def organizations():
-    return render_template('organizations.html', title='Организации')
+    f = open('organizations.json', encoding="utf8")
+    r = json.load(f)
+    tit, names, im, texts = [], [], [], []
+    for key in r:
+        tit.append(key)
+        names.append(r[key]["name"])
+        im.append(r[key]["img"])
+        texts.append(r[key]["text"])
+    return render_template('organizations.html', title='Организации', name=names, types=tit, img=im, text=texts)
+
+@app.route('/organizations/<types>')
+def organization(types):
+    return render_template('org_type.html', title=str(types), name=types)
 
 
 @app.route('/category/<types>')
