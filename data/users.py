@@ -20,6 +20,7 @@ class User(SqlAlchemyBase, UserMixin):
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     posts = orm.relationship("Post", back_populates='user')
+    city = sqlalchemy.Column(sqlalchemy.String, default='Москва')
 
     def set_password(self, password):
         self.hashed_password = werkzeug.security.generate_password_hash(password)

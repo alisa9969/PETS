@@ -4,14 +4,15 @@
 <h2>Организации</h2>
 <div class="div_o">
     {% for i in range(6) %}
+    {% set hr = '/organizations/' + types[i] %}
     <div class="org">
-        <a href=f"/organizations/{{types[i]}}"><img class='org_im' src={{img[i]}}></a>
+        <a href={{hr}}><img class='org_im' src={{img[i]}}></a>
         <div style="width: 60%;">
-            <a href=f"/organizations/{{types[i]}}" class="type_org" style="color: #281D35">{{name[i]}}</a>
+            <a href={{hr}} class="type_org" style="color: #281D35">{{name[i]}}</a>
             <p style="margin-top: 25px">{{text[i]}}</p>
         </div>
         <div  class='v_div' >
-            <a href=f"/organizations/{{types[i]}}"><button class="v_org" > ➜ </button></a>
+            <a href={{hr}}><button class="v_org" > ➜ </button></a>
         </div>
     </div>
     {% endfor %}

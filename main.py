@@ -1,15 +1,24 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 from data import db_session
 from data.users import User
 from forms.user import RegisterForm
 from forms.login import LoginForm
 from flask_login import LoginManager, login_user, current_user
 import json
+from geopy import Nominatim
+import requests
+
 
 app = Flask(__name__, static_folder="static")
 app.config['SECRET_KEY'] = 'pets.website_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+
+def get_coords(city, country):
+    app = Nominatim(user_agent="PetWeb")
+    location = app.geocode(f"{country}, {city}").raw
+    return location
 
 
 @login_manager.user_loader
@@ -21,7 +30,11 @@ def load_user(user_id):
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', title='Главная')
+    if current_user.is_authenticated:
+        city = current_user.city
+    else:
+        city = 'Москва'
+    return render_template('index.html', title='Главная', city=city)
 
 
 @app.route('/category')
@@ -41,9 +54,17 @@ def organizations():
         texts.append(r[key]["text"])
     return render_template('organizations.html', title='Организации', name=names, types=tit, img=im, text=texts)
 
+
 @app.route('/organizations/<types>')
 def organization(types):
-    return render_template('org_type.html', title=str(types), name=types)
+    f = open('organizations.json', encoding="utf8")
+    r = json.load(f)
+    n = r[types]["name"]
+    if current_user.is_authenticated:
+        city = current_user.city
+    else:
+        city = 'Москва'
+    return render_template('org_type.html', title=n, name=n, city=city)
 
 
 @app.route('/category/<types>')
@@ -59,7 +80,8 @@ def subcategory(types):
 @app.route('/profile')
 def profile():
     if current_user.is_authenticated:
-        return render_template('profile.html', title='Профиль')
+        city = 'Суругт'
+        return render_template('profile.html', title='Профиль', city=city)
     return render_template('autorization.html', title='Авторизация')
 
 
