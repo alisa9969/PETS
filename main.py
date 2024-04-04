@@ -64,8 +64,18 @@ def organization(types):
         city = current_user.city
     else:
         city = 'Москва'
-    return render_template('org_type.html', title=n, name=n, city=city)
+    src = r[types]["src"]
+    return render_template('org_type.html', title=n, name=n, city=city, link_kard=src)
 
+
+@app.route('/choice_city')
+def choice_city():
+    n = "Выбор города"
+    if current_user.is_authenticated:
+        city = current_user.city
+    else:
+        city = 'Москва'
+    return render_template('choice_city.html', title=n, city=city)
 
 @app.route('/category/<types>')
 def subcategory(types):

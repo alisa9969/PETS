@@ -8,9 +8,15 @@
             <button class="back">назад</button>
         </a>
         <script type="text/javascript" charset="utf-8" async
-                src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Af60f7aa653d5fcdc395cee376135b64cb8fd200b7254678758a4ab5bc1fbcf76&amp;width=648&amp;height=400&amp;lang=ru_RU&amp;scroll=true&amp;apikey=d23bf23d-46c2-4979-b70e-da63b052758e">
+                src={{link_kard}}>
         </script>
-        <a href=""><img src="/static/img/point.png" height="30" style="margin-right: 7px">г. {{ city }}</a>
+        <a href="#city"><img src="/static/img/point.png" height="30" style="margin-right: 7px">г. {{ city }}</a>
+        <dialog id="city">
+            <a href=link>
+                <button class="back">назад</button>
+            </a>
+
+        </dialog>
     </div>
 </div>
 {% endblock %}

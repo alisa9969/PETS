@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="text-align: start;"><a><button class="butt2"> + Создать объявление</button></a></div>
+<div style="text-align: start;"><a>
+    <button class="butt2"> + Создать объявление</button>
+</a></div>
 <div class="content">
     <div class="button_group">
         <button class="butt" autofocus>Все</button>
@@ -16,8 +18,10 @@
         <div>
             <button class="img"><img src="/static/img/filter.png" height="33"></button>
             <button class="img"><img src="/static/img/sort.png" height="30"></button>
-            <button class="img"><img src="/static/img/point.png" height="30" style="margin-right: 7px">г. {{city}}
-            </button>
+            <a href="/choice_city">
+                <button class="img"><img src="/static/img/point.png" height="30" style="margin-right: 7px">г. {{city}}
+                </button>
+            </a>
         </div>
         <div style="background: #fff; border-radius: 30px; padding: 10px; margin-top: -10px;">
             <button class="butt3"> Ищут дом</button>

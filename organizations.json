@@ -1,31 +1,37 @@
 {
   "shelters": {
     "name": "Приюты",
+    "src": "https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Af60f7aa653d5fcdc395cee376135b64cb8fd200b7254678758a4ab5bc1fbcf76&width=648&height=400&lang=ru_RU&scroll=true&apikey=d23bf23d-46c2-4979-b70e-da63b052758e",
     "img": "/static/img/adopt.jpg",
     "text": "Частные и государственные волонтерские организации для помощи животным"
   },
   "petshops": {
     "name": "Зоомагазины",
+    "src": "https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A154e9841b84baa697b9d4a687724f3b816773a851e9c22370068abb1e327b87f&width=648&height=400&lang=ru_RU&scroll=true&apikey=d23bf23d-46c2-4979-b70e-da63b052758e",
     "img": "/static/img/store.jpg",
     "text": "Одежда и обувь, игрушки, клетки и корм для животных"
   },
   "vetclinics": {
     "name": "Ветеринарные клиники",
+    "src": "https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Aa917250b4a512be8d00c151c2b3db5a8a0515a083e14f1ac484496aa97cfe33d&width=648&height=400&lang=ru_RU&scroll=true&apikey=d23bf23d-46c2-4979-b70e-da63b052758e",
     "img": "/static/img/vet.jpg",
     "text": "Частные и государственные учреждения для оказания ветеринарной помощи животным"
   },
   "protection": {
     "name": "Зоозащита",
+    "src": "https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A733387ad14a445597dbf23cbf959ec967a4ec77004a7bc670d4b608fc1a26dcf&width=648&height=400&lang=ru_RU&scroll=true&apikey=d23bf23d-46c2-4979-b70e-da63b052758e",
     "img": "/static/img/help_zoo.jpg",
     "text": "Организации и фонды, контролирующие благополучие и права животных"
   },
   "grooming": {
     "name": "Груминг",
+    "src": "https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Afb306c28c6d50041ea02d432bddc3281f61a906d2cec7cddb199eb11772e026f&width=648&height=400&lang=ru_RU&scroll=true&apikey=d23bf23d-46c2-4979-b70e-da63b052758e",
     "img": "/static/img/grouming.jpg",
     "text": "Процедуры по уходу за внешним видом домашних животных"
   },
   "zoohotels": {
     "name": "Зоогостиницы",
+    "src": "https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A04bdba325b480a15607e81cfd255794f8ad7ae1fa849ed742065c2b8f88b6c0b&width=648&height=400&lang=ru_RU&scroll=true&apikey=d23bf23d-46c2-4979-b70e-da63b052758e",
     "img": "/static/img/zoohotel.jpg",
     "text": "Места для временного проживания питомцев"
   }
