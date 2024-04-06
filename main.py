@@ -83,12 +83,15 @@ def organization(types):
 @app.route('/add_post')
 def add_post():
     if current_user.is_authenticated:
+        f = open('category.json', encoding="utf8")
+        r = json.load(f)
         form1 = PostForm()
         form2 = PetForm()
         if form1.validate_on_submit() and form2.validate():
             post = Post()
             pet = Pet()
             post.pet = pet.id
+            r[form2.category.data]["types"].append(form2.breed.data)
             post.user_id = current_user.id
             pet.post_id = post.id
             db_sess = db_session.create_session()

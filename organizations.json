@@ -23,16 +23,16 @@
     "img": "/static/img/help_zoo.jpg",
     "text": "Организации и фонды, контролирующие благополучие и права животных"
   },
-  "grooming": {
-    "name": "Груминг",
-    "src": "https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Afb306c28c6d50041ea02d432bddc3281f61a906d2cec7cddb199eb11772e026f&width=648&height=400&lang=ru_RU&scroll=true&apikey=d23bf23d-46c2-4979-b70e-da63b052758e",
-    "img": "/static/img/grouming.jpg",
-    "text": "Процедуры по уходу за внешним видом домашних животных"
-  },
   "zoohotels": {
     "name": "Зоогостиницы",
     "src": "https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A04bdba325b480a15607e81cfd255794f8ad7ae1fa849ed742065c2b8f88b6c0b&width=648&height=400&lang=ru_RU&scroll=true&apikey=d23bf23d-46c2-4979-b70e-da63b052758e",
     "img": "/static/img/zoohotel.jpg",
     "text": "Места для временного проживания питомцев"
+  },
+  "grooming": {
+    "name": "Груминг",
+    "src": "https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Afb306c28c6d50041ea02d432bddc3281f61a906d2cec7cddb199eb11772e026f&width=648&height=400&lang=ru_RU&scroll=true&apikey=d23bf23d-46c2-4979-b70e-da63b052758e",
+    "img": "/static/img/grouming.jpg",
+    "text": "Процедуры по уходу за внешним видом домашних животных"
   }
 }

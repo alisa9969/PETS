@@ -8,8 +8,8 @@ class Pet(SqlAlchemyBase):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    breed = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    color = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    breed = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    color = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     age = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
     documents = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     vaccin = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False)

@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="content2">
+<div class="content2" style="font-size: 18px">
     <div class="img_block">
-        <div class="img_form">
-            <input style="display: none;" id="file-input" type="file" name="file" multiple>
-            <button class="add_photo"><label for="file-input">+</label></button>
+        <div style="text-align: center;">
+            <div class="img_form">
+                <input style="display: none;" id="file-input" type="file" name="file" multiple>
+                <button class="add_photo"><label for="file-input">+</label></button>
+            </div>
+            <button class="butt" style="width: 70%; padding-top: 10px;  margin: 20px; padding-bottom: 0px"><label
+                    for="file-input">Изменить фото</label></button>
         </div>
-        <div style="text-align: start; font-size: 18px; width: 100%; padding-left: 60px;">
+        <div style="text-align: start; padding-left: 30px;  width: 100%">
             <p>
                 Заголовок: {{ form1.title ( class="title_form") }}
             </p>
@@ -15,19 +19,60 @@
             <p>
                 {{ form1.content (class="about_pet")}}
             </p>
+            <p>{{form1.destination ( class='category_select', style='width: 100%; margin-left: 0px;')}}</p>
         </div>
     </div>
-    <div style="text-align: start; padding: 30px; padding-top: 0px;">
-        <button class="butt" style="width: 20%; padding-top:10px;"><label for="file-input">Изменить фото</label></button>
+    <div style="text-align: start; padding: 30px;
+    background: #fff; border-radius: 30px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h5>Характеристика питомца</h5>
+        </div>
+        <div class="features">
+            <p>
+                Категория: {{ form2.category ( class='category_select', style='width: 48%; background: #f6f5f7') }}
+            </p>
+        </div>
+        <div class="features">
+            <p>
+                Порода: {{ form2.breed ( class='category_select',style='background: #f6f5f7')}}
+            </p>
+        </div>
+        <div class="features">
+            <p>Возраст: {{form2.age ( class='category_select', style='width: 10%;background: #f6f5f7')}} лет</p>
+        </div>
+        <div class="features">
+            <p> {{form2.vaccin}} Наличие прививок</p>
+        </div>
+        <div class="features">
+            <p> {{form2.documents}} Документы</p>
+        </div>
+        <div class="features">
+            <p> {{form2.steril}} Питомец стерилизован</p>
+        </div>
+        <div class="features">
+            <p>Цвет: {{form2.color ( class='category_select', style='width: 25%;background: #f6f5f7')}}</p>
+        </div>
     </div>
-    <div style="text-align: start; font-size: 18px; padding: 20px">
-        <p>
-            {{ form2.category }}
-        </p>
-        <p>
-            {{ form2.documents }}
-        </p>
+    <div style="text-align: start; padding: 30px;">
+        <div class="features">
+            <p>Номер телефона для связи (необязательное поле): {{form1.phone( class='category_select', style='width:
+                30%;')}}</p>
+        </div>
+        <div class="features">
+            <p>Адрес: {{form1.address ( class='category_select', style='width: 70%;')}}</p>
+        </div>
+        <div class="features">
+            <p>{{form1.delivery}} Возможность доставки </p>
+        </div>
 
+        <div class="features" style="font-size: 21px; padding-top: 70px;">
+            <p> Цена:{{form1.price ( class='category_select', style='width: 30%; height: 50px;')}} {{form1.currency (
+                class='category_select', style='width: 8%; height: 50px;')}}</p>
+        </div>
+    </div>
+    <div style="display: inline">
+        <a><button class="cancel"> Отмена</button></a>
+        {{ form1.submit (class='submit_b')}}
     </div>
 </div>
 {% endblock %}

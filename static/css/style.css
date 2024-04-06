@@ -297,6 +297,15 @@ nav div{
 .type_org:hover{
     color: #451A7F;
 }
+.features{
+    text-align: start;
+    display: inline;
+    margin: 7px;
+    width: 100%;
+}
+.features p{
+    margin-right: 15px;
+}
 
     /* buttons */
 
@@ -437,6 +446,31 @@ nav div{
     width: 120px;
     background: #fff;
 }
+.cancel {
+    background: #fff;
+    border-radius: 30px;
+    text-align: center;
+    border-color:  #BFBFBF;
+    padding: 7px;
+    margin-right: 20px;
+    width: 150px;
+}
+.cancel:hover{
+    background: #E6E5E5;
+}
+.submit_b:hover{
+    background: #5C5E8A;
+}
+.submit_b{
+    border-radius: 30px;
+    text-align: center;
+    padding: 7px;
+    margin-right: 20px;
+    width: 150px;
+    border-color: #8489CD;
+    background: #8489CD;
+    color: #fff;
+}
 .butt:hover {
     border-color: #C0C1E8;
     background: #C0C1E8;
@@ -517,6 +551,13 @@ nav div{
     width: 82%;
     margin-left: 30px;
     border-color: #C7C7C7;
+}
+.category_select{
+    width: 50%;
+    margin-left: 15px;
+    padding: 6px;
+    border-radius: 13px;
+
 }
 .about_pet{
     background: #fff;
