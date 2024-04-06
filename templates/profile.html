@@ -8,11 +8,11 @@
             <button class="butt" style="width: 140px;">Изменить фото</button>
         </div>
         <div style="text-align: start; margin-left: 40px;">
-            <h5>Имя пользователя: {{ current_user.name }}</h5>
-            <h5 class="phone">Телефон: {{ current_user.phone }}</h5>
+            <div style="display: flex; margin-bottom: 13px;"><h5 style="margin-right: 15px;">Имя пользователя:</h5> <p>{{ current_user.name}}</p></div>
+            <div style="display: flex; margin-bottom: 13px;"><h5 style="margin-right: 15px;">E-mail:</h5><p>{{ current_user.email}}</p></div>
             <h5>О себе:</h5>
             <div class="about">
-                <p>{{ current_user.phone }}</p>
+                <p>{{ current_user.about}}</p>
             </div>
         </div>
         <div style="display: block; margin-left: 150px;">
@@ -22,7 +22,7 @@
 
     </div>
     <div class="geo">
-        <a href=""><img src="/static/img/point.png" height="50" style="margin-right: 7px"></a><a href="/choice_city">г. {{current_user.city}}</a>
+        <a href=""><img src="/static/img/point.png" height="35" style="margin-right: 7px"></a><a href="/choice_city">г. {{current_user.city}}</a>
     </div>
 </div>
 {% endblock %}

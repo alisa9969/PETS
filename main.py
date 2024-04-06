@@ -2,13 +2,25 @@ from flask import Flask, render_template, redirect, request
 from data import db_session
 from data.users import User
 from forms.user import RegisterForm
+from data.pet import Pet
+from data.post import Post
 from forms.login import LoginForm
+from forms.pets import PetForm
+from forms.posts import PostForm
 from flask_login import LoginManager, login_user, current_user
 import json
 from geopy import Nominatim
 import requests
+'''
+< div
 
 
+class ="photo_pet" >
+
+< img
+src = "" >
+< / div >
+'''
 app = Flask(__name__, static_folder="static")
 app.config['SECRET_KEY'] = 'pets.website_secret_key'
 login_manager = LoginManager()
@@ -68,6 +80,24 @@ def organization(types):
     return render_template('org_type.html', title=n, name=n, city=city, link_kard=src)
 
 
+@app.route('/add_post')
+def add_post():
+    if current_user.is_authenticated:
+        form1 = PostForm()
+        form2 = PetForm()
+        if form1.validate_on_submit() and form2.validate():
+            post = Post()
+            pet = Pet()
+            post.pet = pet.id
+            post.user_id = current_user.id
+            pet.post_id = post.id
+            db_sess = db_session.create_session()
+            db_sess.add(post)
+            db_sess.add(pet)
+            db_sess.commit()
+        return render_template('add_post.html', title='Создание объявления', form1=form1, form2=form2)
+
+
 @app.route('/choice_city')
 def choice_city():
     n = "Выбор города"
@@ -76,6 +106,7 @@ def choice_city():
     else:
         city = 'Москва'
     return render_template('choice_city.html', title=n, city=city)
+
 
 @app.route('/category/<types>')
 def subcategory(types):
@@ -102,7 +133,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.phone == form.phone.data).first()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/profile")
@@ -118,7 +149,7 @@ def register():
         return render_template('profile.html')
     form = RegisterForm()
     if form.validate_on_submit():
-        if len(form.password.data) <= 6:
+        if len(form.password.data) < 6:
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Минимальная длина пароля: 6")
@@ -127,19 +158,23 @@ def register():
                                    form=form,
                                    message="Пароли не совпадают")
         db_sess = db_session.create_session()
-        if db_sess.query(User).filter(User.phone == form.phone.data).first():
+        if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Номер телефона уже используется")
+                                   message="Почта телефона уже используется")
         user = User(
             name=form.name.data,
-            phone=form.phone.data,
+            email=form.email.data,
             about=form.about.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/profile')
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=True)
+            return redirect("/profile")
     return render_template('register.html', title='Регистрация', form=form)
 
 

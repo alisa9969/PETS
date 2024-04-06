@@ -8,17 +8,12 @@ class Pet(SqlAlchemyBase):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    training = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
-    delivery = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
-    home = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     breed = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    color = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    color = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     age = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
-    defects = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
-    documents = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    connect = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
-    vaccin = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
-    steril = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
+    documents = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    vaccin = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False)
+    steril = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False)
     category = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     post_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("post.id"))

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content2">
+    <div class="img_block">
+        <div class="img_form">
+            <input style="display: none;" id="file-input" type="file" name="file" multiple>
+            <button class="add_photo"><label for="file-input">+</label></button>
+        </div>
+        <div style="text-align: start; font-size: 18px; width: 100%; padding-left: 60px;">
+            <p>
+                Заголовок: {{ form1.title ( class="title_form") }}
+            </p>
+            <p>Описание:</p>
+            <p>
+                {{ form1.content (class="about_pet")}}
+            </p>
+        </div>
+    </div>
+    <div style="text-align: start; padding: 30px; padding-top: 0px;">
+        <button class="butt" style="width: 20%; padding-top:10px;"><label for="file-input">Изменить фото</label></button>
+    </div>
+    <div style="text-align: start; font-size: 18px; padding: 20px">
+        <p>
+            {{ form2.category }}
+        </p>
+        <p>
+            {{ form2.documents }}
+        </p>
+
+    </div>
+</div>
+{% endblock %}

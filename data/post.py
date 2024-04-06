@@ -16,11 +16,13 @@ class Post(SqlAlchemyBase):
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     address = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    photo = orm.relationship('Photo')
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     views_count = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     pet = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("pet.id"))
     destination = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    delivery = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
+    photo = sqlalchemy.Column(sqlalchemy.BLOB, nullable=True)
+    phone = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user = orm.relationship('User')
