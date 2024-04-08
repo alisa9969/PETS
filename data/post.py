@@ -20,9 +20,9 @@ class Post(SqlAlchemyBase):
                                 sqlalchemy.ForeignKey("users.id"))
     views_count = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     pet = sqlalchemy.Column(sqlalchemy.Integer,
-                                sqlalchemy.ForeignKey("pet.id"))
+                            sqlalchemy.ForeignKey("pet.id"))
     destination = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    delivery = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
-    photo = sqlalchemy.Column(sqlalchemy.BLOB, nullable=True)
-    phone = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    delivery = sqlalchemy.Column(sqlalchemy.Boolean)
+    photo = sqlalchemy.Column(sqlalchemy.BLOB)
+    phone = sqlalchemy.Column(sqlalchemy.String)
     user = orm.relationship('User')

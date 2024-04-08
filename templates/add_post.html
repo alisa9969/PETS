@@ -5,21 +5,48 @@
     <div class="img_block">
         <div style="text-align: center;">
             <div class="img_form">
-                <input style="display: none;" id="file-input" type="file" name="file" multiple>
+
+                <form action="" method="post" id="file-input" style="display: none;">{{ form1.photo }}</form>
                 <button class="add_photo"><label for="file-input">+</label></button>
             </div>
-            <button class="butt" style="width: 70%; padding-top: 10px;  margin: 20px; padding-bottom: 0px"><label
-                    for="file-input">Изменить фото</label></button>
+
+            <form action="" method="post">
+                <button class="butt" style="width: 70%; padding-top: 10px;  margin: 20px; padding-bottom: 0px"><label
+                        for="file-input">Изменить фото</label></button>
+                {% for error in form1.photo.errors %}
+                <p style="color: #8C2121">
+                    {{ error }}
+                </p>
+                {% endfor %}
+            </form>
         </div>
         <div style="text-align: start; padding-left: 30px;  width: 100%">
-            <p>
-                Заголовок: {{ form1.title ( class="title_form") }}
-            </p>
-            <p>Описание:</p>
-            <p>
-                {{ form1.content (class="about_pet")}}
-            </p>
-            <p>{{form1.destination ( class='category_select', style='width: 100%; margin-left: 0px;')}}</p>
+
+            <form action="" method="post">
+                <p>
+                    Заголовок: {{ form1.title ( class="title_form") }}
+                    {% for error in form1.title.errors %}
+                <p style="color: #8C2121">
+                    {{ error }}
+                </p>
+                {% endfor %}
+                </p>
+                <p>Описание:</p>
+                <p>
+                    {{ form1.content (class="about_pet")}}
+                </p>
+                {% for error in form1.title.errors %}
+                <p style="color: #8C2121">
+                    {{ error }}
+                </p>
+                {% endfor %}
+                <p>{{form1.destination ( class='category_select', style='width: 100%; margin-left: 0px;')}}</p>
+                {% for error in form1.destination.errors %}
+                <p style="color: #8C2121">
+                    {{ error }}
+                </p>
+                {% endfor %}
+            </form>
         </div>
     </div>
     <div style="text-align: start; padding: 30px;
@@ -28,51 +55,95 @@
             <h5>Характеристика питомца</h5>
         </div>
         <div class="features">
-            <p>
-                Категория: {{ form2.category ( class='category_select', style='width: 48%; background: #f6f5f7') }}
-            </p>
+
+            <form action="" method="post">
+                <p>
+                    Категория: {{ form2.category ( class='category_select', style='width: 48%; background: #f6f5f7') }}
+                </p>
+            </form>
         </div>
         <div class="features">
-            <p>
-                Порода: {{ form2.breed ( class='category_select',style='background: #f6f5f7')}}
-            </p>
+
+            <form action="" method="post">
+                <p>
+                    Порода: {{ form2.breed ( class='category_select',style='background: #f6f5f7')}}
+                </p>
+                {% for error in form2.breed.errors %}
+                <p style="color: #8C2121">
+                    {{ error }}
+                </p>
+                {% endfor %}
+            </form>
         </div>
         <div class="features">
-            <p>Возраст: {{form2.age ( class='category_select', style='width: 10%;background: #f6f5f7')}} лет</p>
+
+            <form action="" method="post">
+                <p>Возраст: {{form2.age ( class='category_select', style='width: 10%;background: #f6f5f7')}} лет</p>
+                {{ age_err }}
+            </form>
         </div>
         <div class="features">
-            <p> {{form2.vaccin}} Наличие прививок</p>
+
+            <form action="" method="post">
+                <p> {{form2.vaccin}} Наличие прививок</p>
+            </form>
         </div>
         <div class="features">
-            <p> {{form2.documents}} Документы</p>
+            <form action="" method="post">
+                <p> {{form2.documents}} Документы</p></form>
         </div>
         <div class="features">
-            <p> {{form2.steril}} Питомец стерилизован</p>
+            <form action="" method="post">
+                <p> {{form2.steril}} Питомец стерилизован</p>
+            </form>
         </div>
         <div class="features">
-            <p>Цвет: {{form2.color ( class='category_select', style='width: 25%;background: #f6f5f7')}}</p>
+            <form action="" method="post">
+                <p>Цвет: {{form2.color ( class='category_select', style='width: 25%;background: #f6f5f7')}}</p>
+            </form>
         </div>
     </div>
     <div style="text-align: start; padding: 30px;">
         <div class="features">
-            <p>Номер телефона для связи (необязательное поле): {{form1.phone( class='category_select', style='width:
-                30%;')}}</p>
+            <form action="" method="post">
+                <p>Номер телефона для связи (необязательное поле): {{form1.phone( class='category_select', style='width:
+                    30%;')}}</p>
+            </form>
         </div>
         <div class="features">
-            <p>Адрес: {{form1.address ( class='category_select', style='width: 70%;')}}</p>
-        </div>
-        <div class="features">
-            <p>{{form1.delivery}} Возможность доставки </p>
-        </div>
 
+            <form action="" method="post">
+                <p>Адрес: {{form1.address ( class='category_select', style='width: 70%;')}}</p>
+                {% for error in form1.address.errors %}
+                <p style="color: #8C2121">
+                    {{ error }}
+                </p>
+                {% endfor %}
+            </form>
+        </div>
+        <div class="features">
+
+            <form action="" method="post">
+                <p>{{form1.delivery}} Возможность доставки </p>
+            </form>
+
+        </div>
         <div class="features" style="font-size: 21px; padding-top: 70px;">
-            <p> Цена:{{form1.price ( class='category_select', style='width: 30%; height: 50px;')}} {{form1.currency (
-                class='category_select', style='width: 8%; height: 50px;')}}</p>
+
+            <form action="" method="post">
+                <p> Цена:{{form1.price ( class='category_select', style='width: 30%; height: 50px;')}} {{form1.currency
+                    (
+                    class='category_select', style='width: 8%; height: 50px;')}}</p>
+            </form>
         </div>
     </div>
-    <div style="display: inline">
-        <a><button class="cancel"> Отмена</button></a>
-        {{ form1.submit (class='submit_b')}}
+    <div style="display: flex; justify-content: end;">
+        <a href="/">
+            <button class="cancel"> Отмена</button>
+        </a>
+        <form action="" method="post">
+            {{ form1.submit (class='submit_b')}}
+        </form>
     </div>
 </div>
 {% endblock %}

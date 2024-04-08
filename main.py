@@ -11,16 +11,7 @@ from flask_login import LoginManager, login_user, current_user
 import json
 from geopy import Nominatim
 import requests
-'''
-< div
 
-
-class ="photo_pet" >
-
-< img
-src = "" >
-< / div >
-'''
 app = Flask(__name__, static_folder="static")
 app.config['SECRET_KEY'] = 'pets.website_secret_key'
 login_manager = LoginManager()
@@ -80,7 +71,7 @@ def organization(types):
     return render_template('org_type.html', title=n, name=n, city=city, link_kard=src)
 
 
-@app.route('/add_post')
+@app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
     if current_user.is_authenticated:
         f = open('category.json', encoding="utf8")
@@ -88,16 +79,39 @@ def add_post():
         form1 = PostForm()
         form2 = PetForm()
         if form1.validate_on_submit() and form2.validate():
-            post = Post()
-            pet = Pet()
-            post.pet = pet.id
-            r[form2.category.data]["types"].append(form2.breed.data)
-            post.user_id = current_user.id
-            pet.post_id = post.id
             db_sess = db_session.create_session()
+            if form2.age.data < 0:
+                return render_template('add_post.html', title='Создание объявления', form1=form1, form2=form2,
+                                       age_err="Введен неверный возраст")
+            post = Post(
+                price=form1.price.data,
+                phone=form1.phone.data,
+                photo=form1.photo.data,
+                currency=form1.title.data,
+                title=form1.title.data,
+                content=form1.content.data,
+                address=form1.address.data,
+                destination=form1.destination.data,
+                delivery=form1.delivery.data
+            )
+            pets = Pet(
+                breed=form2.breed.data,
+                color=form2.color.data,
+                age=form2.age.data,
+                documents=form2.documents.data,
+                vaccin=form2.vaccin.data,
+                steril=form2.steril.data,
+                category=form2.category.data,
+            )
+            post.pet = pets.id.data
+            r[form2.category.data]["types"].append(form2.breed.data)
+            json.dump(r, f, ensure_ascii=False, indent=2)
+            post.user_id.data = current_user.id.data
+            pets.post_id.data = post.id.data
             db_sess.add(post)
-            db_sess.add(pet)
+            db_sess.add(pets)
             db_sess.commit()
+            return redirect("/")
         return render_template('add_post.html', title='Создание объявления', form1=form1, form2=form2)
 
 

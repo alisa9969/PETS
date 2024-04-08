@@ -2,58 +2,57 @@
 
 {% block content %}
 <div class="content2">
-<h3 style="margin-bottom: 20px; color: #262626">Регистрация</h3>
-<form action="" method="post" class="f">
-
-    {{ form.csrf_token }}
-    <p>
-        {{ form.name.label}}<br>
-        {{ form.name(class="form_login")}}<br>
-        {% for error in form.name.errors %}
-            <p style="color: #8C2121">
-                {{ error }}
-            </p>
+    <h3 style="margin-bottom: 20px; color: #262626">Регистрация</h3>
+    <form action="" method="post" class="f">
+        {{ form.csrf_token }}
+        <p>
+            {{ form.name.label}}<br>
+            {{ form.name(class="form_login")}}<br>
+            {% for error in form.name.errors %}
+        <p style="color: #8C2121">
+            {{ error }}
+        </p>
         {% endfor %}
-    </p>
-    <p>
-        {{ form.email.label}}<br>
-        {{ form.email(class="form_login")}}<br>
-        {% for error in form.email.errors %}
-            <p style="color: #8C2121">
-                {{ error }}
-            </p>
+        </p>
+        <p>
+            {{ form.email.label}}<br>
+            {{ form.email(class="form_login")}}<br>
+            {% for error in form.email.errors %}
+        <p style="color: #8C2121">
+            {{ error }}
+        </p>
         {% endfor %}
-    </p>
-    <p>
-        {{ form.password.label}}<br>
-        {{ form.password(class="form_login")}}<br>
-        {% for error in form.password.errors %}
-            <p style="color: #8C2121">
-                {{ error }}
-            </p>
+        </p>
+        <p>
+            {{ form.password.label}}<br>
+            {{ form.password(class="form_login")}}<br>
+            {% for error in form.password.errors %}
+        <p style="color: #8C2121">
+            {{ error }}
+        </p>
         {% endfor %}
-    </p>
-    <p>
-        {{ form.password_again.label}}<br>
-        {{ form.password_again(class="form_login")}}<br>
-        {% for error in form.password_again.errors %}
-            <p style="color: #8C2121">
-                {{ error }}
-            </p>
+        </p>
+        <p>
+            {{ form.password_again.label}}<br>
+            {{ form.password_again(class="form_login")}}<br>
+            {% for error in form.password_again.errors %}
+        <p style="color: #8C2121">
+            {{ error }}
+        </p>
         {% endfor %}
-    </p>
-    <p>
-        {{ form.about.label }}<br>
-        {{ form.about(class="form_login2")}}<br>
-        {% for error in form.about.errors %}
-            <p style="color: #8C2121">
-                {{ error }}
-            </p>
+        </p>
+        <p>
+            {{ form.about.label }}<br>
+            {{ form.about(class="form_login2")}}<br>
+            {% for error in form.about.errors %}
+        <p style="color: #8C2121">
+            {{ error }}
+        </p>
         {% endfor %}
-    </p>
-    <p>{{ form.submit (class='butt2')}}</p>
-    <h5 class='error'>{{message}}</h5>
-    <a href='/login' style='color: #8A8ABC; margin-left: 10px;'  class="link">Войти в аккаунт</a>
-</form>
+        </p>
+        <p>{{ form.submit (class='butt2')}}</p>
+        <h5 class='error'>{{message}}</h5>
+        <a href='/login' style='color: #8A8ABC; margin-left: 10px;' class="link">Войти в аккаунт</a>
+    </form>
 </div>
 {% endblock %}

@@ -9,11 +9,11 @@ class Pet(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     breed = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    color = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    color = sqlalchemy.Column(sqlalchemy.String)
     age = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
-    documents = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    vaccin = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False)
-    steril = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False)
-    category = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    documents = sqlalchemy.Column(sqlalchemy.String)
+    vaccin = sqlalchemy.Column(sqlalchemy.Boolean)
+    steril = sqlalchemy.Column(sqlalchemy.Boolean)
+    category = sqlalchemy.Column(sqlalchemy.String)
     post_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("post.id"))
