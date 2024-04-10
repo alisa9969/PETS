@@ -141,6 +141,19 @@ nav div{
     align-items: center;
     margin-bottom: 10px;
 }
+.post_d{
+    border-radius: 30px;
+    background-color: #f6f5f7;
+    display: block;
+    padding: 50px;
+    padding-bottom: 70px;
+    margin-top: 30px;
+    font-size: 18px;
+    text-align: start;
+    justify-content: start;
+    width:  80%;
+    margin-left: 10%
+}
 .text{
     width: 200px;
     display: block;
@@ -453,7 +466,7 @@ nav div{
     border-color:  #BFBFBF;
     padding: 7px;
     margin-right: 20px;
-    width: 150px;
+    width: 30%;
 }
 .cancel:hover{
     background: #E6E5E5;
@@ -466,7 +479,7 @@ nav div{
     text-align: center;
     padding: 7px;
     margin-right: 20px;
-    width: 150px;
+    width: 46%;
     border-color: #8489CD;
     background: #8489CD;
     color: #fff;
@@ -552,10 +565,14 @@ nav div{
     margin-left: 30px;
     border-color: #C7C7C7;
 }
+.post_f p{
+    margin-bottom: 9px;
+    margin-top: 35px;
+}
 .category_select{
-    width: 50%;
-    margin-left: 15px;
+    width: 80%;
     padding: 6px;
+    margin-left: 10px;
     border-radius: 13px;
 
 }

@@ -2,15 +2,12 @@ from flask import Flask, render_template, redirect, request
 from data import db_session
 from data.users import User
 from forms.user import RegisterForm
-from data.pet import Pet
 from data.post import Post
 from forms.login import LoginForm
-from forms.pets import PetForm
 from forms.posts import PostForm
 from flask_login import LoginManager, login_user, current_user
 import json
-from geopy import Nominatim
-import requests
+import io
 
 app = Flask(__name__, static_folder="static")
 app.config['SECRET_KEY'] = 'pets.website_secret_key'
@@ -68,48 +65,43 @@ def organization(types):
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
     if current_user.is_authenticated:
-        form1 = PostForm()
-        form2 = PetForm()
-        if request.method == 'POST':
-                db_sess = db_session.create_session()
-                if form2.age.data < 0:
-                    return render_template('add_post.html', title='Создание объявления', form1=form1, form2=form2,
-                                           age_err="Введен неверный возраст")
+        form = PostForm()
+        if request.method == 'POST' or form.validate_on_submit():
+            if form.age.data < 0:
+                return render_template('add_post.html', title='Создание объявления', form=form,
+                                       age_err="Введен неверный возраст")
 
-                with open('category.json', 'r', encoding="utf8") as f:
-                    r = json.load(f)
-                    r[form2.category.data]["types"].append(form2.breed.data)
-                with open('category.json', 'w', encoding="utf8") as f:
-                    json.dump(r, f, ensure_ascii=False)
-                post = Post(
-                    price=form1.price.data,
-                    phone=form1.phone.data,
-                    photo=form1.photo.data,
-                    currency=form1.currency.data,
-                    title=form1.title.data,
-                    content=form1.content.data,
-                    address=form1.address.data,
-                    destination=form1.destination.data,
-                    delivery=form1.delivery.data,
-                    user_id=current_user.id
-                )
-                current_user.posts.append(post)
-                db_sess.merge(current_user)
-                db_sess.add(post)
-                pets = Pet(
-                    post_id=post.id,
-                    breed=form2.breed.data,
-                    color=form2.color.data,
-                    age=form2.age.data,
-                    documents=form2.documents.data,
-                    vaccin=form2.vaccin.data,
-                    steril=form2.steril.data,
-                    category=form2.category.data,
-                )
-                db_sess.add(pets)
-                db_sess.commit()
-                return redirect("/index")
-        return render_template('add_post.html', title='Создание объявления', form1=form1, form2=form2)
+            with open('category.json', 'r', encoding="utf8") as f:
+                r = json.load(f)
+                r[form.category.data]["types"].append(form.breed.data)
+            with open('category.json', 'w', encoding="utf8") as f:
+                json.dump(r, f, ensure_ascii=False)
+            post = Post(
+                price=form.price.data,
+                phone=form.phone.data,
+                photo=form.photo.data.read(),
+                currency=form.currency.data,
+                title=form.title.data,
+                content=form.content.data,
+                address=form.address.data,
+                destination=form.destination.data,
+                delivery=form.delivery.data,
+                user_id=current_user.id,
+                breed=form.breed.data,
+                color=form.color.data,
+                age=form.age.data,
+                documents=form.documents.data,
+                vaccin=form.vaccin.data,
+                steril=form.steril.data,
+                category=form.category.data,
+            )
+
+            db_sess = db_session.create_session()
+            current_user.posts.append(post)
+            db_sess.merge(current_user)
+            db_sess.commit()
+            return redirect("/index")
+        return render_template('add_post.html', title='Создание объявления', form=form)
 
 
 @app.route('/choice_city')

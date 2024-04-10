@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="content2" style="font-size: 18px; text-align: start; justify-content: start;">
-    <form action="" method="post">
-        {{ form1.photo }}
-        {% for error in form1.photo.errors %}
+<div class="post_d">
+    <form class='post_f' action="" method="post" enctype="multipart/form-data">
+        {{ form.photo }}
+        {% for error in form.photo.errors %}
         <p style="color: #8C2121">
             {{ error }}
         </p>
         {% endfor %}
-        <p>
-            Заголовок: {{ form1.title ( class="title_form") }}
-            {% for error in form1.title.errors %}
+        <p style="margin-top: 50px;">
+            Заголовок: {{ form.title ( class="title_form") }}
+            {% for error in form.title.errors %}
         <p style="color: #8C2121">
             {{ error }}
         </p>
@@ -19,56 +19,60 @@
         </p>
         <p>Описание:</p>
         <p>
-            {{ form1.content (class="about_pet")}}
+            {{ form.content (class="about_pet")}}
         </p>
-        {% for error in form1.title.errors %}
+        {% for error in form.title.errors %}
         <p style="color: #8C2121">
             {{ error }}
         </p>
         {% endfor %}
-        <p>{{form1.destination ( class='category_select', style='width: 100%; margin-left: 0px;')}}</p>
-        {% for error in form1.destination.errors %}
+        <p>{{form.destination ( class='category_select')}}</p>
+        {% for error in form.destination.errors %}
         <p style="color: #8C2121">
             {{ error }}
         </p>
         {% endfor %}
-        <h5>Характеристика питомца</h5>
         <p>
-            Категория: {{ form2.category ( class='category_select', style='width: 48%; background: #f6f5f7') }}
+            Категория:
         </p>
+        {{ form.category ( class='category_select') }}
         <p>
-            Порода: {{ form2.breed ( class='category_select',style='background: #f6f5f7')}}
+            Порода:
         </p>
-        {% for error in form2.breed.errors %}
+        {{ form.breed ( class='category_select')}}
+        {% for error in form.breed.errors %}
         <p style="color: #8C2121">
             {{ error }}
         </p>
         {% endfor %}
-        <p>Возраст: {{form2.age ( class='category_select', style='width: 10%;background: #f6f5f7')}} лет</p>
+        <p>Возраст: {{form.age ( class='category_select', style='width: 25%;')}} лет</p>
         {{ age_err }}
-        <p> {{form2.vaccin}} Наличие прививок</p>
-        <p> {{form2.documents}} Документы</p>
-        <p> {{form2.steril}} Питомец стерилизован</p>
-        <p>Цвет: {{form2.color ( class='category_select', style='width: 25%;background: #f6f5f7')}}</p>
+        <p> {{form.vaccin}} Наличие прививок</p>
+        <p> {{form.documents}} Документы</p>
+        <p> {{form.steril}} Питомец стерилизован</p>
+        <p>Окрас: {{form.color ( class='category_select', style='width: 25%;')}}</p>
 
-        <p>Номер телефона для связи (необязательное поле): {{form1.phone( class='category_select', style='width:
-            30%;')}}</p>
-
-        <p>Адрес: {{form1.address ( class='category_select', style='width: 70%;')}}</p>
-        {% for error in form1.address.errors %}
+        <p>Номер телефона для связи (необязательное поле): </p>
+        {{form.phone( class='category_select', style='width: 30%;')}}
+        <p>Адрес: </p>
+        {{form.address ( class='category_select')}}
+        {% for error in form.address.errors %}
         <p style="color: #8C2121">
             {{ error }}
         </p>
         {% endfor %}
 
-        <p>{{form1.delivery}} Возможность доставки </p>
+        <p>{{form.delivery}} Возможность доставки </p>
 
-        <p> Цена:{{form1.price ( class='category_select', style='width: 30%; height: 50px;')}} {{form1.currency
+        <p> Цена: {{form.price ( class='category_select', style='width: 20%; height: 50px;')}} {{form.currency
             (class='category_select', style='width: 8%; height: 50px;')}}</p>
-        <a href="/">
-            <button class="cancel"> Отмена</button>
-        </a>
-        {{ form1.submit (class='submit_b')}}
+        <p style="margin-left: 35%; margin-top: 80px; margin-bottom: 30px;">
+            {{ form.submit (class='submit_b')}}
+        </p>
     </form>
+
+    <a href="/" methods="">
+        <button class="cancel" style="margin-left: 35%"> Отмена</button>
+    </a>
 </div>
 {% endblock %}

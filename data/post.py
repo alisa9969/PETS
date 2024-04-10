@@ -21,6 +21,13 @@ class Post(SqlAlchemyBase):
     delivery = sqlalchemy.Column(sqlalchemy.Boolean)
     photo = sqlalchemy.Column(sqlalchemy.BLOB)
     phone = sqlalchemy.Column(sqlalchemy.String)
+    breed = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    color = sqlalchemy.Column(sqlalchemy.String)
+    age = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    documents = sqlalchemy.Column(sqlalchemy.String)
+    vaccin = sqlalchemy.Column(sqlalchemy.Boolean)
+    steril = sqlalchemy.Column(sqlalchemy.Boolean)
+    category = sqlalchemy.Column(sqlalchemy.String)
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relationship("User")
