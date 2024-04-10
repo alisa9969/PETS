@@ -3,7 +3,9 @@
 {% block content %}
 {% if current_user.is_authenticated %}
 <div style="text-align: start;">
-    <a href="/add_post"><button class="butt2"> + Создать объявление</button></a>
+    <a href="/add_post">
+        <button class="butt2"> + Создать объявление</button>
+    </a>
 </div>
 {% endif %}
 <div class="content">
@@ -31,6 +33,28 @@
         </div>
     </div>
     <div class="main_div">
+        {% for i in posts %}
+        <a href='/{{i.id}}' class="post_mini">
+            <div style="text-align: start; display: flex;">
+                <p style='height: 90%; width: 20%'><img  src="i:photo/jpeg;base64,%s/"></p>
+                <div style="width:75%">
+                    <h3>{{i.title}}</h3>
+                    {% if i.price >= 1 %}
+                    <h5>{{i.price}} {{i.currency}}</h5>
+                    {% else %}
+                    <h5>Бесплатно</h5>
+                    {% endif %}
+                    <p></p>
+                    <p>{{i.content}}</p>
+                    <p></p>
+                    <p>{{i.address}} {{i.created_date.strftime('%d.%m.%Y, %H:%M')}}</p>
+                </div>
+                <div>
+                    <button class="fav"><img src="/static/img/fav.png" height="27px" alt="избранное"></button>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

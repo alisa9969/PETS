@@ -21,15 +21,32 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
     if current_user.is_authenticated:
         city = current_user.city
     else:
         city = 'Москва'
-    return render_template('index.html', title='Главная', city=city)
+    db_sess = db_session.create_session()
+    p = ''
+    if request.method == 'POST':
+        pass
+        # p = db_sess.query(Post).filter(Post.category == form.category.data).all()
+    else:
+        p = db_sess.query(Post).all()
+    if len(p) > 50:
+        p = p[:50]
+    for i in p:
+        i.photo = i.photo.decode('base64')
+    return render_template('index.html', title='Главная', city=city, posts=p)
 
+@app.route('/<id_post>', methods=['GET', 'POST'])
+@app.route('/index/<id_post>', methods=['GET', 'POST'])
+def index_post(id_post):
+    db_sess = db_session.create_session()
+    p = db_sess.query(Post).filter(Post.id == id_post).first()
+    return render_template('view_post.html', title=p.title, posts=p)
 
 @app.route('/category')
 def category():
@@ -73,7 +90,8 @@ def add_post():
 
             with open('category.json', 'r', encoding="utf8") as f:
                 r = json.load(f)
-                r[form.category.data]["types"].append(form.breed.data)
+                if form.category.data not in r[form.category.data]["types"]:
+                    r[form.category.data]["types"].append(form.breed.data)
             with open('category.json', 'w', encoding="utf8") as f:
                 json.dump(r, f, ensure_ascii=False)
             post = Post(

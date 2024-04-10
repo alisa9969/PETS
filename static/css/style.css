@@ -141,6 +141,33 @@ nav div{
     align-items: center;
     margin-bottom: 10px;
 }
+.post_mini:hover{
+    box-shadow: 0px 0px 5px 7px #e9e8eb;
+    text-decoration: none;
+    color: #201147;
+}
+.post_mini{
+    color: #130e21;
+    text-decoration: none;
+    border-radius: 20px;
+    background-color: #fff;
+    display: block;
+    padding: 30px;
+    height: 200px;
+    margin: 40px;
+    font-size: 16px;
+    text-align: start;
+    justify-content: start;
+    width: 90%;
+}
+.main_div {
+    display: inline-block;
+    border-radius: 20px;
+    margin-top: 15px;
+    width: 100%;
+    justify-content: start;
+    text-align: start;
+}
 .post_d{
     border-radius: 30px;
     background-color: #f6f5f7;
@@ -160,11 +187,6 @@ nav div{
     font-size: 13px;
     margin-top: 40px;
 }
-.main_div {
-    border-radius: 20px;
-    margin-top: 15px;
-    background-color: #fff;
-    }
 .button_group {
     display: flex;
     margin-bottom: 30px;
@@ -204,7 +226,9 @@ nav div{
     border-radius: 20px;
     background-color: #f6f5f7;
     display: block;
-    padding: 15px;
+    justify-content: start;
+    text-align: start;
+    padding: 40px;
     margin-top: 30px;
 }
 
@@ -321,7 +345,10 @@ nav div{
 }
 
     /* buttons */
-
+.fav{
+    background: none;
+    border: none;
+}
 .add_photo{
     color: #444455;
     border-radius: 30px;
