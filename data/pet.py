@@ -1,10 +1,12 @@
+
 import sqlalchemy
+from sqlalchemy import orm
 
 from .db_session import SqlAlchemyBase
 
 
 class Pet(SqlAlchemyBase):
-    __tablename__ = 'pet'
+    __tablename__ = 'pets'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
@@ -16,4 +18,4 @@ class Pet(SqlAlchemyBase):
     steril = sqlalchemy.Column(sqlalchemy.Boolean)
     category = sqlalchemy.Column(sqlalchemy.String)
     post_id = sqlalchemy.Column(sqlalchemy.Integer,
-                                sqlalchemy.ForeignKey("post.id"))
+                                sqlalchemy.ForeignKey("posts.id"))

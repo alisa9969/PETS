@@ -18,12 +18,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
-def get_coords(city, country):
-    app = Nominatim(user_agent="PetWeb")
-    location = app.geocode(f"{country}, {city}").raw
-    return location
-
-
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
@@ -74,44 +68,47 @@ def organization(types):
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
     if current_user.is_authenticated:
-        f = open('category.json', encoding="utf8")
-        r = json.load(f)
         form1 = PostForm()
         form2 = PetForm()
-        if form1.validate_on_submit() and form2.validate():
-            db_sess = db_session.create_session()
-            if form2.age.data < 0:
-                return render_template('add_post.html', title='Создание объявления', form1=form1, form2=form2,
-                                       age_err="Введен неверный возраст")
-            post = Post(
-                price=form1.price.data,
-                phone=form1.phone.data,
-                photo=form1.photo.data,
-                currency=form1.title.data,
-                title=form1.title.data,
-                content=form1.content.data,
-                address=form1.address.data,
-                destination=form1.destination.data,
-                delivery=form1.delivery.data
-            )
-            pets = Pet(
-                breed=form2.breed.data,
-                color=form2.color.data,
-                age=form2.age.data,
-                documents=form2.documents.data,
-                vaccin=form2.vaccin.data,
-                steril=form2.steril.data,
-                category=form2.category.data,
-            )
-            post.pet = pets.id.data
-            r[form2.category.data]["types"].append(form2.breed.data)
-            json.dump(r, f, ensure_ascii=False, indent=2)
-            post.user_id.data = current_user.id.data
-            pets.post_id.data = post.id.data
-            db_sess.add(post)
-            db_sess.add(pets)
-            db_sess.commit()
-            return redirect("/")
+        if request.method == 'POST':
+                db_sess = db_session.create_session()
+                if form2.age.data < 0:
+                    return render_template('add_post.html', title='Создание объявления', form1=form1, form2=form2,
+                                           age_err="Введен неверный возраст")
+
+                with open('category.json', 'r', encoding="utf8") as f:
+                    r = json.load(f)
+                    r[form2.category.data]["types"].append(form2.breed.data)
+                with open('category.json', 'w', encoding="utf8") as f:
+                    json.dump(r, f, ensure_ascii=False)
+                post = Post(
+                    price=form1.price.data,
+                    phone=form1.phone.data,
+                    photo=form1.photo.data,
+                    currency=form1.currency.data,
+                    title=form1.title.data,
+                    content=form1.content.data,
+                    address=form1.address.data,
+                    destination=form1.destination.data,
+                    delivery=form1.delivery.data,
+                    user_id=current_user.id
+                )
+                current_user.posts.append(post)
+                db_sess.merge(current_user)
+                db_sess.add(post)
+                pets = Pet(
+                    post_id=post.id,
+                    breed=form2.breed.data,
+                    color=form2.color.data,
+                    age=form2.age.data,
+                    documents=form2.documents.data,
+                    vaccin=form2.vaccin.data,
+                    steril=form2.steril.data,
+                    category=form2.category.data,
+                )
+                db_sess.add(pets)
+                db_sess.commit()
+                return redirect("/index")
         return render_template('add_post.html', title='Создание объявления', form1=form1, form2=form2)
 
 

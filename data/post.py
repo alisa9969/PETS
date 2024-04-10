@@ -6,7 +6,7 @@ from .db_session import SqlAlchemyBase
 
 
 class Post(SqlAlchemyBase):
-    __tablename__ = 'post'
+    __tablename__ = 'posts'
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     price = sqlalchemy.Column(sqlalchemy.Integer, default=0)
@@ -16,13 +16,11 @@ class Post(SqlAlchemyBase):
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     address = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    user_id = sqlalchemy.Column(sqlalchemy.Integer,
-                                sqlalchemy.ForeignKey("users.id"))
     views_count = sqlalchemy.Column(sqlalchemy.Integer, default=0)
-    pet = sqlalchemy.Column(sqlalchemy.Integer,
-                            sqlalchemy.ForeignKey("pet.id"))
     destination = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     delivery = sqlalchemy.Column(sqlalchemy.Boolean)
     photo = sqlalchemy.Column(sqlalchemy.BLOB)
     phone = sqlalchemy.Column(sqlalchemy.String)
-    user = orm.relationship('User')
+    user_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                sqlalchemy.ForeignKey("users.id"))
+    user = orm.relationship("User")
