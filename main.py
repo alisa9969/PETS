@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, request
+from werkzeug.utils import secure_filename
 from data import db_session
 from data.users import User
 from forms.user import RegisterForm
@@ -7,7 +8,8 @@ from forms.login import LoginForm
 from forms.posts import PostForm
 from flask_login import LoginManager, login_user, current_user
 import json
-import io
+import os
+from PIL import Image
 
 app = Flask(__name__, static_folder="static")
 app.config['SECRET_KEY'] = 'pets.website_secret_key'
@@ -34,23 +36,33 @@ def index():
         pass
         # p = db_sess.query(Post).filter(Post.category == form.category.data).all()
     else:
-        p = db_sess.query(Post).all()
-    if len(p) > 50:
-        p = p[:50]
-    for i in p:
-        i.photo = i.photo.decode('base64')
+        p = db_sess.query(Post).order_by(Post.created_date.desc()).limit(50).all()
+    for i in range(len(p)):
+        if len(p[i].content) >= 60:
+            p[i].content = p[i].content[:60] + '...'
     return render_template('index.html', title='Главная', city=city, posts=p)
 
-@app.route('/<id_post>', methods=['GET', 'POST'])
-@app.route('/index/<id_post>', methods=['GET', 'POST'])
-def index_post(id_post):
+
+@app.route('/post/<ipost>', methods=['GET', 'POST'])
+def index_post(ipost):
     db_sess = db_session.create_session()
-    p = db_sess.query(Post).filter(Post.id == id_post).first()
-    return render_template('view_post.html', title=p.title, posts=p)
+    p = db_sess.query(Post).filter(Post.id == ipost).first()
+    try:
+        t = p.title
+    except:
+        t = ''
+    return render_template('view_post.html', title=t, post=p)
+
 
 @app.route('/category')
 def category():
-    return render_template('category.html', title='Категории')
+    f = open('category.json', encoding="utf8")
+    r = json.load(f)
+    m = []
+    for i in r:
+        if r[i]["types"]:
+            m.append([r[i]["name"], i, r[i]["src"]])
+    return render_template('category.html', title='Категории', m=m, )
 
 
 @app.route('/organizations')
@@ -94,10 +106,20 @@ def add_post():
                     r[form.category.data]["types"].append(form.breed.data)
             with open('category.json', 'w', encoding="utf8") as f:
                 json.dump(r, f, ensure_ascii=False)
+                file = Image.open(form.photo.data, mode='r', formats=None)
+            db_sess = db_session.create_session()
+            count_p = len(db_sess.query(Post).filter(Post.user_id == current_user.id).all())
+            if file:
+                uploads_dir = os.path.join('C:/Users/Сергей/Desktop/pets/pets_photo/' + str(count_p + 1))
+                os.makedirs(uploads_dir)
+                file.save(os.path.join(uploads_dir, form.photo.data.filename))
+                ph = str(os.path.join(uploads_dir, form.photo.data.filename)).replace('\\', '/')
+            else:
+                ph = 'C:/Users/Сергей/Desktop/pets/static/img/photo_def.jpg'
             post = Post(
                 price=form.price.data,
                 phone=form.phone.data,
-                photo=form.photo.data.read(),
+                photo=ph,
                 currency=form.currency.data,
                 title=form.title.data,
                 content=form.content.data,
@@ -113,12 +135,10 @@ def add_post():
                 steril=form.steril.data,
                 category=form.category.data,
             )
-
-            db_sess = db_session.create_session()
             current_user.posts.append(post)
             db_sess.merge(current_user)
             db_sess.commit()
-            return redirect("/index")
+            return redirect("/")
         return render_template('add_post.html', title='Создание объявления', form=form)
 
 

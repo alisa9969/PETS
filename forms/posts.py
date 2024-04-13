@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, IntegerField, SelectField, BooleanField, FileField
+from wtforms import StringField, TextAreaField, SubmitField, IntegerField, SelectField, BooleanField, FileField, TelField
 from wtforms.validators import DataRequired
 
 
 class PostForm(FlaskForm):
     price = IntegerField('Цена', default=0)
-    phone = StringField('Номер телефона')
+    phone = TelField('Номер телефона')
     photo = FileField('photo', default="")
     currency = SelectField('Валюта',
                            choices=["₽", "$", "€", "₾", "₴", "₸", "Br", "₼"],

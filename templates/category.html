@@ -1,55 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if not m%}
+<div class="category">
+    <h2>Категорий нет</h2>
+</div>
+{% else %}
 <h2>Все категории</h2>
+{% for i in m %}
 <div class="category">
-    <div style="display: block">
-        <a href="/category/cats"><img class='category_im' src="/static/img/cat.jpg"></a><br>
-        <a href="/category/cats" class="names">Кошки</a>
-    </div>
-    <div style="display: block">
-        <a href="/category/waterfowl"><img class='category_im' src="/static/img/fish.jpg"></a><br>
-        <a href="/category/waterfowl" class="names">Аквариумные</a>
-    </div>
-    <div style="display: block">
-        <a href="/category/dogs"><img class='category_im' src="/static/img/dog.jpg"></a><br>
-        <a href="/category/dogs" class="names">Собаки</a>
-    </div>
-    <div style="display: block">
-        <a href="/category/reptiles"><img class='category_im' src="/static/img/reptils.jpg"></a><br>
-        <a href="/category/reptiles" class="names">Рептилии</a>
+    <div style="display: block; margin: 15px;">
+        <a href="/category/{{i[1]}}"><img class='category_im' src={{i[2]}}></a><br>
+        <a href="/category/{{i[1]}}" class="names">{{i[0]}}</a>
     </div>
 </div>
-<div class="category">
-    <div style="display: block">
-        <a href="/category/insects"><img class='category_im' src="/static/img/bug.jpg"></a><br>
-        <a href="/category/insects" class="names">Насекомые</a>
-    </div>
-    <div style="display: block">
-        <a href="/category/birds"><img class='category_im' src="/static/img/bird.jpg"></a><br>
-        <a href="/category/birds" class="names">Птицы</a>
-    </div>
-    <div style="display: block">
-        <a href="/category/arachnids"><img class='category_im' src="/static/img/spider.jpg"></a><br>
-        <a href="/category/arachnids" class="names">Паукообразные</a>
-    </div>
-    <div style="display: block">
-        <a href="/category/rodents"><img class='category_im' src="/static/img/rabbit.jpg"></a><br>
-        <a href="/category/rodents" class="names">Грызуны</a>
-    </div>
-</div>
-<div class="category">
-    <div style="display: block">
-        <a href="/category/farm"><img class='category_im' src="/static/img/ferma.jpg"></a><br>
-        <a href="/category/farm" class="names">Ферма</a>
-    </div>
-    <div style="display: block">
-        <a href="/category/exotic"><img class='category_im' src="/static/img/exzo.jpg"></a><br>
-        <a href="/category/exotic" class="names">Экзотические животные</a>
-    </div>
-    <div style="display: block">
-        <a href="/category/shellfish"><img class='category_im' src="/static/img/mollusk.jpg"></a><br>
-        <a href="/category/shellfish" class="names">Моллюски</a>
-    </div>
-</div>
+{%endfor%}
+{% endif%}
 {% endblock %}

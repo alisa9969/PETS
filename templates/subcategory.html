@@ -3,24 +3,23 @@
 {% block content %}
 <div class="subcategory">
     <div style="display: flex; justify-content: space-between">
-    <a href="/category">
-        <button class="back">назад</button>
-    </a>
-    <h2>{{ name }}</h2>
-    <a href="/category">
-        <button class="back">далее</button>
-    </a>
+        <a href="/category">
+            <button class="back">назад</button>
+        </a>
+        <h2>{{ name }}</h2>
+        <a href="/category">
+            <button class="back">далее</button>
+        </a>
     </div>
     <div class="sb">
         <div>
-            <input type="checkbox" id="all" name="all" checked/>
-            <label for="all">Все</label></div>
-        {% for i in types %}
-        <div>
-            <input type="checkbox" id=f'{{i}}' name=f'{{i}}'/>
-            <label for=f'{{i}}'>{{i}}</label>
+            {% for i in types %}
+            <div>
+                <input type="checkbox" id=f'{{i}}' name=f'{{i}}'/>
+                <label for=f'{{i}}'>{{i}}</label>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
 {% endblock %}

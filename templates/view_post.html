@@ -2,5 +2,34 @@
 
 {% block content %}
 <div class="content2">
+    <div>
+        <div style="display: flex;">
+            <div style="width:75%">
+                <h1>{{post.title}}</h1>
+                <img src='' class="img_pet"><br>
+            </div>
+            <div>
+                {% if post.price >= 1 %}
+                <h3>{{post.price}} {{post.currency}}</h3>
+                {% else %}
+                <h5>Бесплатно</h5>
+                {% endif %}
+                <a>Написать</a>
+                {% if post.phone %}
+                <p>Тел.: {{post.phone}}</p>
+                {%endif%}
+            </div>
+        </div>
+        <div>
+            <div>
+                <p>{{post.content}}</p>
+                <p></p>
+                <p>{{post.address}} {{post.created_date.strftime('%d.%m.%Y, %H:%M')}}</p>
+            </div>
+        </div>
+    </div>
+    <div>
+
+    </div>
 </div>
 {% endblock %}
