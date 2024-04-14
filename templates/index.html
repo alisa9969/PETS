@@ -36,7 +36,7 @@
         {% for i in posts %}
         <a href='/post/{{i.id}}' class="post_mini">
             <div style="text-align: start; display: flex;">
-                <p style='height: 90%; width: 20%'><img  src={{i.photo}}></p>
+                <p style="margin-right: 20px;"><img src={{i.photo}} height="150px" style="border-radius: 20px; "></p>
                 <div style="width:75%">
                     <h3>{{i.title}}</h3>
                     {% if i.price >= 1 %}

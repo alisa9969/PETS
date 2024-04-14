@@ -3,18 +3,18 @@
 {% block content %}
 <div class="content2">
     <div>
-        <div style="display: flex;">
-            <div style="width:75%">
+        <div  style="display: flex;">
+            <div  style="justify-content: start; padding: 15px">
+                <img src={{post.photo}} style="border-radius: 30px; width: 500px; margin-bottom: 10px;"><br>
                 <h1>{{post.title}}</h1>
-                <img src='' class="img_pet"><br>
             </div>
-            <div>
+            <div  style="width: 100%; padding: 15px; text-align: center;">
                 {% if post.price >= 1 %}
-                <h3>{{post.price}} {{post.currency}}</h3>
+                <h2>{{post.price}} {{post.currency}}</h2>
                 {% else %}
-                <h5>Бесплатно</h5>
+                <h2>Бесплатно</h2>
                 {% endif %}
-                <a>Написать</a>
+                <a><button class="butt2" style="font-size: 20px; margin-top: 60px; margin-bottom: 25px;">Написать</button></a>
                 {% if post.phone %}
                 <p>Тел.: {{post.phone}}</p>
                 {%endif%}

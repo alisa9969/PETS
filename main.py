@@ -40,6 +40,7 @@ def index():
     for i in range(len(p)):
         if len(p[i].content) >= 60:
             p[i].content = p[i].content[:60] + '...'
+        print(p[i].photo)
     return render_template('index.html', title='Главная', city=city, posts=p)
 
 
@@ -106,16 +107,19 @@ def add_post():
                     r[form.category.data]["types"].append(form.breed.data)
             with open('category.json', 'w', encoding="utf8") as f:
                 json.dump(r, f, ensure_ascii=False)
-                file = Image.open(form.photo.data, mode='r', formats=None)
             db_sess = db_session.create_session()
-            count_p = len(db_sess.query(Post).filter(Post.user_id == current_user.id).all())
+            file = Image.open(form.photo.data, mode='r', formats=None)
+            w, h = file.size
+            if w > h:
+                file = file.crop((w - (w - h) // 2 - h, 0, w - (w - h) // 2, h))
+            if w < h:
+                file = file.crop((0, h - (h - w) // 2 - w, w, h - (h - w) // 2))
+            count_p = len(db_sess.query(Post).filter(Post.user_id == current_user.id).all()) + 1
             if file:
-                uploads_dir = os.path.join('C:/Users/Сергей/Desktop/pets/pets_photo/' + str(count_p + 1))
-                os.makedirs(uploads_dir)
-                file.save(os.path.join(uploads_dir, form.photo.data.filename))
-                ph = str(os.path.join(uploads_dir, form.photo.data.filename)).replace('\\', '/')
+                file.save(f'C:/Users/Сергей/Desktop/pets/static/pets_photo/{str(count_p)}.png')
+                ph = f'/static/pets_photo/{str(count_p)}.png'
             else:
-                ph = 'C:/Users/Сергей/Desktop/pets/static/img/photo_def.jpg'
+                ph = '/static/img/photo_def.jpg'
             post = Post(
                 price=form.price.data,
                 phone=form.phone.data,
@@ -135,8 +139,7 @@ def add_post():
                 steril=form.steril.data,
                 category=form.category.data,
             )
-            current_user.posts.append(post)
-            db_sess.merge(current_user)
+            db_sess.add(post)
             db_sess.commit()
             return redirect("/")
         return render_template('add_post.html', title='Создание объявления', form=form)
