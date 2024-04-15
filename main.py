@@ -1,5 +1,4 @@
 from flask import Flask, render_template, redirect, request
-from werkzeug.utils import secure_filename
 from data import db_session
 from data.users import User
 from forms.user import RegisterForm
@@ -9,6 +8,7 @@ from forms.posts import PostForm
 from flask_login import LoginManager, login_user, current_user
 import json
 import os
+import requests
 from PIL import Image
 
 app = Flask(__name__, static_folder="static")
@@ -40,7 +40,6 @@ def index():
     for i in range(len(p)):
         if len(p[i].content) >= 60:
             p[i].content = p[i].content[:60] + '...'
-        print(p[i].photo)
     return render_template('index.html', title='Главная', city=city, posts=p)
 
 
@@ -52,7 +51,12 @@ def index_post(ipost):
         t = p.title
     except:
         t = ''
-    return render_template('view_post.html', title=t, post=p)
+    if os.path.exists('C:/Users/Сергей/Desktop/pets/static/pets_photo/' + p.photo.split('/')[3] + '/map.png') == 0:
+        img = None
+    else:
+        img = '/static/pets_photo/' + p.photo.split('/')[3] + '/map.png'
+    print('/static/pets_photo/' + p.photo.split('/')[3] + '/map.png')
+    return render_template('view_post.html', title=t, post=p, img=img)
 
 
 @app.route('/category')
@@ -108,18 +112,38 @@ def add_post():
             with open('category.json', 'w', encoding="utf8") as f:
                 json.dump(r, f, ensure_ascii=False)
             db_sess = db_session.create_session()
-            file = Image.open(form.photo.data, mode='r', formats=None)
-            w, h = file.size
-            if w > h:
-                file = file.crop((w - (w - h) // 2 - h, 0, w - (w - h) // 2, h))
-            if w < h:
-                file = file.crop((0, h - (h - w) // 2 - w, w, h - (h - w) // 2))
             count_p = len(db_sess.query(Post).filter(Post.user_id == current_user.id).all()) + 1
-            if file:
-                file.save(f'C:/Users/Сергей/Desktop/pets/static/pets_photo/{str(count_p)}.png')
-                ph = f'/static/pets_photo/{str(count_p)}.png'
+            os.makedirs(f'C:/Users/Сергей/Desktop/pets/static/pets_photo/{str(count_p)}', exist_ok=True)
+            if form.photo.data.filename != '':
+                file = Image.open(form.photo.data, mode='r', formats=None)
+                if file:
+                    w, h = file.size
+                    if w > h:
+                        file = file.crop((w - (w - h) // 2 - h, 0, w - (w - h) // 2, h))
+                    if w < h:
+                        file = file.crop((0, h - (h - w) // 2 - w, w, h - (h - w) // 2))
+                    file.save(
+                        f'C:/Users/Сергей/Desktop/pets/static/pets_photo/{str(count_p)}/{form.photo.data.filename}')
+                    ph = f'/static/pets_photo/{str(count_p)}/{form.photo.data.filename}'
             else:
-                ph = '/static/img/photo_def.jpg'
+                file = Image.open('/static/img/photo_def.jpg', mode='r', formats=None)
+                if file:
+                    file.save(
+                        f'C:/Users/Сергей/Desktop/pets/static/pets_photo/{str(count_p)}/{form.photo.data.filename}')
+                    ph = f'/static/pets_photo/{str(count_p)}/{form.photo.data.filename}'
+            if form.address.data:
+                response = requests.get(
+                    f'https://search-maps.yandex.ru/v1/?text={form.address.data}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
+                if response:
+                    json_response = response.json()
+                    ll1, ll2 = json_response["features"][0]["geometry"]["coordinates"][0], \
+                    json_response["features"][0]["geometry"]["coordinates"][1]
+                    response = requests.get(
+                        f"http://static-maps.yandex.ru/1.x/?ll={ll1},{ll2}&pt={ll1},{ll2},pm2vvl&spn=0.02,0.01&l=map&lang=ru_RU&apikey=b2673b46-1c73-4d52-9bb6-e23eab02974b")
+                    if response:
+                        map_file = f'C:/Users/Сергей/Desktop/pets/static/pets_photo/{str(count_p)}/map.png'
+                        with open(map_file, "wb") as file:
+                            file.write(response.content)
             post = Post(
                 price=form.price.data,
                 phone=form.phone.data,

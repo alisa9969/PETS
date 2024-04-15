@@ -3,28 +3,41 @@
 {% block content %}
 <div class="content2">
     <div>
-        <div  style="display: flex;">
-            <div  style="justify-content: start; padding: 15px">
-                <img src={{post.photo}} style="border-radius: 30px; width: 500px; margin-bottom: 10px;"><br>
+        <div style="display: flex;">
+            <div style="justify-content: start; padding: 15px">
+                <img src={{post.photo}} style="border-radius: 30px; width: 400px; margin-bottom: 10px;"><br>
                 <h1>{{post.title}}</h1>
             </div>
-            <div  style="width: 100%; padding: 15px; text-align: center;">
+            <div style="width: 100%; padding: 15px; text-align: center;">
                 {% if post.price >= 1 %}
                 <h2>{{post.price}} {{post.currency}}</h2>
                 {% else %}
                 <h2>Бесплатно</h2>
                 {% endif %}
-                <a><button class="butt2" style="font-size: 20px; margin-top: 60px; margin-bottom: 25px;">Написать</button></a>
+                <a>
+                    <button class="butt2" style="font-size: 20px; margin-top: 60px; margin-bottom: 25px;">Написать
+                    </button>
+                </a>
                 {% if post.phone %}
                 <p>Тел.: {{post.phone}}</p>
                 {%endif%}
             </div>
         </div>
-        <div>
+        <div class="org">
             <div>
+                {% if post.address %}
+                <p>
+                    {{post.address}}
+                </p>
+                {%endif%}
+                {% if img %}
+                <p>
+                    <img src={{img}} style="border-radius: 30px; width: 400px; margin: 10px;">
+                </p>
+                {%endif%}
                 <p>{{post.content}}</p>
                 <p></p>
-                <p>{{post.address}} {{post.created_date.strftime('%d.%m.%Y, %H:%M')}}</p>
+                <p>{{post.created_date.strftime('%d.%m.%Y, %H:%M')}}</p>
             </div>
         </div>
     </div>
