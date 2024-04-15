@@ -3,41 +3,86 @@
 {% block content %}
 <div class="content2">
     <div>
-        <div style="display: flex;">
-            <div style="justify-content: start; padding: 15px">
-                <img src={{post.photo}} style="border-radius: 30px; width: 400px; margin-bottom: 10px;"><br>
-                <h1>{{post.title}}</h1>
+        <div style="display: flex; margin-top: -20px; margin-bottom: 40px;">
+            <div style="text-align: start; padding: 15px">
+                <h2>{{post.title}}</h2><br>
+                <img src={{post.photo}} style="border-radius: 30px; width: 400px; margin-bottom: 10px;">
             </div>
-            <div style="width: 100%; padding: 15px; text-align: center;">
+            <div style="width: 100%; padding: 15px; text-align: center; justify-content: center">
                 {% if post.price >= 1 %}
                 <h2>{{post.price}} {{post.currency}}</h2>
                 {% else %}
                 <h2>Бесплатно</h2>
                 {% endif %}
-                <a>
-                    <button class="butt2" style="font-size: 20px; margin-top: 60px; margin-bottom: 25px;">Написать
-                    </button>
-                </a>
-                {% if post.phone %}
-                <p>Тел.: {{post.phone}}</p>
-                {%endif%}
+                <div style="display: block; text-align: center; justify-content: center">
+                    <a>
+                        <button class="butt2"
+                                style="width: 270px; font-size: 22px; margin-top: 25px;">
+                            Написать
+                        </button>
+                    </a><br>
+                    <a>
+                        <button class="butt2"
+                                style="width: 270px; font-size: 22px; margin-top: 20px; margin-bottom: 20px; background: #fff; color: black">
+                            В избранное
+                        </button>
+                    </a>
+                    <div class="user_info">
+                        <a class="img"><img src={{user.photo}} style="border-radius: 20px" width="100px"></a>
+                        <h3>{{user.name}}</h3>
+                        <a>
+                            <button class="butt2" style="font-size: 20px; margin-top: 10px; margin-bottom: 10px;">
+                                Профиль
+                            </button>
+                        </a>
+                        {% if post.phone %}
+                        <p>Тел.: {{post.phone}}</p>
+                        {%endif%}
+                    </div>
+                </div>
             </div>
         </div>
         <div class="org">
-            <div>
-                {% if post.address %}
-                <p>
-                    {{post.address}}
-                </p>
-                {%endif%}
-                {% if img %}
-                <p>
-                    <img src={{img}} style="border-radius: 30px; width: 400px; margin: 10px;">
-                </p>
-                {%endif%}
-                <p>{{post.content}}</p>
-                <p></p>
-                <p>{{post.created_date.strftime('%d.%m.%Y, %H:%M')}}</p>
+            <div style="justify-content: center; padding: 10px; padding-left: 30px; width: 100%">
+                <div style="width: 90%; margin-bottom: 30px;">
+                    <h3>Описание</h3>
+                    <p>{{post.content}}</p>
+                    <p>
+                    <img src="/static/img/{{post.documents}}.png" width="15px;"> Наличие документов</p>
+                    <p>
+                    <img src="/static/img/{{post.steril}}.png" width="15px;"> Стерилизация</p>
+                    <p><img src="/static/img/{{post.vaccin}}.png" width="15px;"> Вакцинация</p>
+                </div>
+                <div style="width: 98%; margin-bottom: 30px;">
+                    <h3>Характеристика</h3>
+                    <p>Категория: {{c}}</p>
+                    <p>Порода: {{post.breed}}</p>
+                    <p>Окрас: {{post.color}}</p>
+                    {% if a[-1] in '234' %}
+                    {% set age = 'года' %}
+                    {% elif a[-1] == '1' %}
+                    {% set age = 'год'%}
+                    {% else %}
+                    {% set age = 'лет' %}
+                    {%endif%}
+                    <p>Возраст: {{a}} {{age}}</p>
+                </div>
+                <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 30px;">
+                    <div>
+                        <h3>Адрес</h3>
+                        <p>
+                            {{post.address}}
+                        </p>
+                        {% if img %}
+                        <p>
+                            <img src={{img}} style="border-radius: 30px; width: 500px;">
+                        </p>
+                        {%endif%}
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 70px;">
+                    <h6>{{post.created_date.strftime('%d.%m.%Y, %H:%M')}}</h6>
+                </div>
             </div>
         </div>
     </div>

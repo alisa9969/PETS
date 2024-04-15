@@ -1,24 +1,24 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, IntegerField, SelectField, BooleanField, FileField, TelField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length
 
 
 class PostForm(FlaskForm):
     price = IntegerField('Цена', default=0)
-    phone = TelField('Номер телефона')
+    phone = TelField('Номер телефона', validators=[Length(max=20)])
     photo = FileField('photo', default="")
     currency = SelectField('Валюта',
                            choices=["₽", "$", "€", "₾", "₴", "₸", "Br", "₼"],
                            default="₽")
-    title = StringField('Заголовок', validators=[DataRequired()])
-    content = TextAreaField("Описание", validators=[DataRequired()])
-    address = StringField('Адрес', validators=[DataRequired()])
+    title = StringField('Заголовок', validators=[DataRequired(), Length(max=30)])
+    content = TextAreaField("Описание", validators=[DataRequired(), Length(max=400)])
+    address = StringField('Адрес', validators=[DataRequired(), Length(max=100)])
     destination = SelectField('Назначение', validators=[DataRequired()], choices=['Поиск хозяев', "Продажа",
                                                                                   "Пристройство",
                                                                                   "Поиск питомца"],
                               default="Пристройство")
     delivery = BooleanField('Доставка')
-    breed = StringField('Порода', validators=[DataRequired()])
+    breed = StringField('Порода', validators=[DataRequired(), Length(max=50)])
     color = SelectField('Цвет',
                         choices=["Белый", "Черный", "Серый",
                                  "Рыжий", "Золотистый", "Зеленый",

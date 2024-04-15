@@ -11,12 +11,19 @@
                 src={{link_kard}}>
         </script>
         <a href="#city"><img src="/static/img/point.png" height="30" style="margin-right: 7px">г. {{ city }}</a>
-        <dialog id="city">
-            <a href=link>
-                <button class="back">назад</button>
-            </a>
-
-        </dialog>
+    </div>
+    <div>
+        {%for i in info %}
+        <div class="org" style="padding: 30px">
+            <div style="width: 80%;">
+                <h3>{{i[0]}}</h3>
+                <p>{{i[1]}}</p>
+            </div>
+            <div  class='v_div'>
+                <a href=''><button class="v_org" > ➜ </button></a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

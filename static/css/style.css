@@ -49,6 +49,16 @@ nav div{
     align-items: center;
     display: flex;
 }
+.user_info{
+    padding: 20px;
+    height: 270px;
+    width: 270px;
+    border-radius: 25px;
+    margin-left: 140px;
+    background: #fff;
+    border-color: none;
+    text-align: center;
+}
 .v_div{
     text-align: end;
     width: 40%;
@@ -295,9 +305,10 @@ nav div{
     text-decoration: none;
     background: #fff;
     color: #4F4F4F;
-    border-radius: 25px;
+    border-radius: 10px;
+    border-color: #f6f5f7;
     font-size: 17px;
-    width: 150px;
+    width: 120%;
 }
 .logout:hover, .logout:focus{
     text-decoration: none;
@@ -329,10 +340,13 @@ nav div{
 }
 .edit{
     padding: 10px;
+    width: 120%;
+    margin-bottom: 30px;
     text-decoration: none;
     background: #9292D9;
     color: #fff;
-    border-radius: 25px;
+    border-color: #9292D9;
+    border-radius: 10px;
     font-size: 17px;
 }
 .edit:hover, .edit:focus{
@@ -475,7 +489,7 @@ nav div{
 .butt2 {
     color: #fff;
     background: #8F8FD6;
-    border-radius: 30px;
+    border-radius: 10px;
     border-color: #ACAED2;
     justify-items: center;
     outline:none;
@@ -499,7 +513,7 @@ nav div{
 }
 .cancel {
     background: #fff;
-    border-radius: 30px;
+    border-radius: 10px;
     text-align: center;
     border-color:  #BFBFBF;
     padding: 7px;
@@ -513,7 +527,7 @@ nav div{
     background: #5C5E8A;
 }
 .submit_b{
-    border-radius: 30px;
+    border-radius: 10px;
     text-align: center;
     padding: 7px;
     margin-right: 20px;
@@ -631,8 +645,11 @@ nav div{
     width: 350px;
     padding: 3px;
     margin-left: 15px;
-    border-radius: 20px;
+    border-radius: 10px;
     border-color: #BDBDBD;
+}
+.org h3{
+    margin-bottom: 20px;
 }
 .form_login{
     padding: 5px;
