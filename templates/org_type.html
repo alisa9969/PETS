@@ -1,29 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>{{ name }}</h2>
 <div class="div_o">
-    <div class="geo2">
+    <div class="geo2" style="width: 91%; align-items: center;">
         <a href="/organizations">
             <button class="back">назад</button>
         </a>
-        <script type="text/javascript" charset="utf-8" async
-                src={{link_kard}}>
-        </script>
-        <a href="#city"><img src="/static/img/point.png" height="30" style="margin-right: 7px">г. {{ city }}</a>
+        <h2>{{ name }}</h2>
+        <a href="#city"><img src="/static/img/point.png" height="30">г. {{ city }}</a>
     </div>
-    <div>
+    <div style="display: flex; justify-content: center; width: 100%; ">
+    <script  type="text/javascript" charset="utf-8" async
+            src={{link_kard}}>
+    </script>
+    </div>
+    <a>
         {%for i in info %}
-        <div class="org" style="padding: 30px">
-            <div style="width: 80%;">
-                <h3>{{i[0]}}</h3>
-                <p>{{i[1]}}</p>
+        <a href='/organizations/{{i.type}}/{{i.id}}' class="post_mini"
+           style="padding: 30px; display: flex; height: 100%;">
+            <div style="width: 80%">
+                <h3>{{i.name}}</h3>
+                <p style="color: #807c8a">{{i.address}}</p>
             </div>
-            <div  class='v_div'>
-                <a href=''><button class="v_org" > ➜ </button></a>
+            <div class='v_div'>
+                <button class="v_org2"> ➜</button>
             </div>
-        </div>
+        </a>
         {% endfor %}
-    </div>
+    </a>
 </div>
 {% endblock %}

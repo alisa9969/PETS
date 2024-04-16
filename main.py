@@ -3,6 +3,7 @@ from data import db_session
 from data.users import User
 from forms.user import RegisterForm
 from data.post import Post
+from data.organizations import Organizations
 from forms.login import LoginForm
 from forms.posts import PostForm
 from flask_login import LoginManager, login_user, current_user
@@ -91,23 +92,54 @@ def organizations():
 def organization(types):
     f = open('organizations.json', encoding="utf8")
     r = json.load(f)
-    m = []
     n = r[types]["name"]
-    response = requests.get(
-        f'https://search-maps.yandex.ru/v1/?text={n} {current_user.city}&type=biz&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
-    if response:
-        json_response = response.json()
-        for i in json_response["features"]:
-            print(json_response)
-            i = i["properties"]
-            m.append([i["CompanyMetaData"]["name"], i["CompanyMetaData"]["address"],
-                   i["CompanyMetaData"]["url"], i["CompanyMetaData"]["Hours"]["text"], [i["CompanyMetaData"]["Phones"][j]["formatted"] for j in range(len(i["CompanyMetaData"]["Phones"]))]])
     if current_user.is_authenticated:
         city = current_user.city
     else:
         city = 'Москва'
+    ds = db_session.create_session()
+    filt = ds.query(Organizations).filter(Organizations.type == types,
+                                          Organizations.city == city).all()
+    if not filt:
+        response = requests.get(
+            f'https://search-maps.yandex.ru/v1/?text={n} {city}&type=biz&results=50&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
+        if response:
+            json_response = response.json()
+            for i in json_response["features"]:
+                i = i["properties"]["CompanyMetaData"]
+                if i["name"] and i["address"]:
+                    org = Organizations(
+                        name=i["name"],
+                        address=i["address"],
+                        type=types,
+                        city=city
+                    )
+                    try:
+                        org.url = i["url"]
+                    except:
+                        pass
+                    try:
+                        org.hours = i["Hours"]["text"]
+                    except:
+                        pass
+                    try:
+                        org.contacts = '\n'.join(list(j["formatted"] for j in i["Phones"]))
+                    except:
+                        pass
+                    ds = db_session.create_session()
+                    ds.add(org)
+                    ds.commit()
+    ds = db_session.create_session()
+    m = ds.query(Organizations).filter(Organizations.city == city, Organizations.type == types).all()
     src = r[types]["src"]
     return render_template('org_type.html', title=n, name=n, city=city, link_kard=src, info=m)
+
+
+@app.route('/organizations/<types>/<id>')
+def org(types, id):
+    ds = db_session.create_session()
+    m = ds.query(Organizations).filter(Organizations.id == id).first()
+    return render_template('org.html', info=m, title=m.name)
 
 
 @app.route('/add_post', methods=['GET', 'POST'])
@@ -115,10 +147,6 @@ def add_post():
     if current_user.is_authenticated:
         form = PostForm()
         if request.method == 'POST' or form.validate_on_submit():
-            if form.age.data < 0:
-                return render_template('add_post.html', title='Создание объявления', form=form,
-                                       age_err="Введен неверный возраст")
-
             with open('category.json', 'r', encoding="utf8") as f:
                 r = json.load(f)
                 if form.breed.data not in r[form.category.data]["types"]:
@@ -155,12 +183,18 @@ def add_post():
                     f'https://search-maps.yandex.ru/v1/?text={form.address.data}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
                 if response:
                     json_response = response.json()
-                    try:
+                    if json_response["properties"]["ResponseMetaData"]["SearchResponse"]["found"] == 0:
+                        response2 = requests.get(
+                            f'https://search-maps.yandex.ru/v1/?text={current_user.city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
+                        if response2:
+                            json_response2 = response2.json()
+                            ll1, ll2 = json_response2["features"][0]["geometry"]["coordinates"][0], \
+                                json_response2["features"][0]["geometry"]["coordinates"][1]
+                            address = json_response2["features"][0]["properties"]["GeocoderMetaData"]["text"]
+                    else:
                         ll1, ll2 = json_response["features"][0]["geometry"]["coordinates"][0], \
                             json_response["features"][0]["geometry"]["coordinates"][1]
-                        address = json_response["features"][0]["description"]
-                    except:
-                        address = ''
+                        address = json_response["features"][0]["properties"]["GeocoderMetaData"]["text"]
                     if address:
                         response = requests.get(
                             f"http://static-maps.yandex.ru/1.x/?ll={ll1},{ll2}&pt={ll1},{ll2},pm2vvl&spn=0.02,0.01&l=map&lang=ru_RU&apikey=b2673b46-1c73-4d52-9bb6-e23eab02974b")
@@ -169,7 +203,7 @@ def add_post():
                             with open(map_file, "wb") as file:
                                 file.write(response.content)
             post = Post(
-                price=form.price.data,
+                price=abs(form.price.data),
                 phone=form.phone.data,
                 photo=ph,
                 currency=form.currency.data,
@@ -181,7 +215,7 @@ def add_post():
                 user_id=current_user.id,
                 breed=form.breed.data,
                 color=form.color.data,
-                age=form.age.data,
+                age=abs(form.age.data),
                 documents=form.documents.data,
                 vaccin=form.vaccin.data,
                 steril=form.steril.data,

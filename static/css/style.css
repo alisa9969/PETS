@@ -137,6 +137,11 @@ nav div{
     width: 100%;
     text-align: start;
 }
+.inform{
+    margin-top: 20px;
+    text-align: start;
+    padding: 40px;
+}
 .geo{
     width: 500px;
     margin-top: 50px;
@@ -280,6 +285,13 @@ nav div{
     color: #4F4F4F;
     font-size: 20px;
 }
+.urll{
+    color: #6f4eb5;
+}
+.urll:hover{
+    color: #3c1075;
+}
+
 .names:hover{
     text-decoration: none;
     color: #5B5BCD;
@@ -417,6 +429,16 @@ nav div{
     width: 50%;
     font-size: 22px;
     height: 43px;
+}
+.v_org2{
+    font-size: 30px;
+    color: #BCBCBC;
+    background: none;
+    text-decoration: none;
+    border: none;
+}
+.v_org2:hover{
+    color: #9A9AD5
 }
 .v_org:hover{
     color: #fff;

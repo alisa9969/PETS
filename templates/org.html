@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="div_o">
+    <div style="text-align: start; padding: 20px;">
+        <a href="/organizations/{{info.type}}">
+            <button class="back">назад</button>
+        </a>
+        <div style="width: 100%;  text-align: center">
+            <h2>{{ info.name }}</h2>
+        </div>
+        <div class="inform">
+            <a class="urll" href="https://yandex.ru/maps/?text={{info.address}}">
+                <div style="margin-bottom: 40px; display: flex"><img src="/static/img/point.png" height="23" style="margin-right: 7px">{{info.address}}</div>
+            </a>
+            {% if info.url %}
+            <p style="margin-bottom: 40px;">
+            <h4 style="margin-bottom: 20px;">Сайт</h4><a href="{{info.url}}" class="urll">{{info.url}}</a></p>
+            {% endif %}
+            {% if info.contacts %}
+            <p style="margin-bottom: 40px;">
+            <h4 style="margin-bottom: 20px;">Контакты</h4>
+            {% for j in info.contacts.split('\n') %}
+            <p>{{j}}</p>
+            {% endfor %}
+            </p>
+            {% endif %}
+            {% if info.hours %}
+            <p style="margin-bottom: 40px;">
+            <h4 style="margin-bottom: 20px;">Режим работы</h4>
+            {{info.hours}}</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
