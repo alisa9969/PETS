@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h2>{{ name }}</h2>
 <div class="div_o">
     <div class="geo2" style="width: 91%; align-items: center;">
         <a href="/organizations">
             <button class="back">назад</button>
         </a>
-        <h2>{{ name }}</h2>
-        <a href="#city"><img src="/static/img/point.png" height="30">г. {{ city }}</a>
+        <a href="/choice_city"><img src="/static/img/point.png" height="30">{{ city }}</a>
     </div>
     <div style="display: flex; justify-content: center; width: 100%; ">
-    <script  type="text/javascript" charset="utf-8" async
-            src={{link_kard}}>
-    </script>
+        <script type="text/javascript" charset="utf-8" async
+                src={{link_kard}}>
+        </script>
     </div>
     <a>
         {%for i in info %}

@@ -1,7 +1,8 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, session
 from data import db_session
 from data.users import User
 from forms.user import RegisterForm
+from forms.city import CityForm
 from data.post import Post
 from data.organizations import Organizations
 from forms.login import LoginForm
@@ -17,12 +18,10 @@ app.config['SECRET_KEY'] = 'pets.website_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
-
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -30,7 +29,11 @@ def index():
     if current_user.is_authenticated:
         city = current_user.city
     else:
-        city = 'Москва'
+        city = session.get('city')
+        if not city:
+            session['city'] = 'Москва'
+    if len(city) > 50:
+        city = city[:50] + '...'
     db_sess = db_session.create_session()
     p = ''
     if request.method == 'POST':
@@ -41,6 +44,7 @@ def index():
     for i in range(len(p)):
         if len(p[i].content) >= 50:
             p[i].content = p[i].content[:50] + '...'
+    session["link"] = '/'
     return render_template('index.html', title='Главная', city=city, posts=p)
 
 
@@ -96,10 +100,11 @@ def organization(types):
     if current_user.is_authenticated:
         city = current_user.city
     else:
-        city = 'Москва'
+        city = session.get('city')
+        if not city:
+            session['city'] = 'Москва'
     ds = db_session.create_session()
-    filt = ds.query(Organizations).filter(Organizations.type == types,
-                                          Organizations.city == city).all()
+    filt = ds.query(Organizations).filter(Organizations.type == types, Organizations.city == city).all()
     if not filt:
         response = requests.get(
             f'https://search-maps.yandex.ru/v1/?text={n} {city}&type=biz&results=50&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
@@ -132,6 +137,9 @@ def organization(types):
     ds = db_session.create_session()
     m = ds.query(Organizations).filter(Organizations.city == city, Organizations.type == types).all()
     src = r[types]["src"]
+    session["link"] = f'/organizations/{types}'
+    if len(city) > 90:
+        city = city[:90] + '...'
     return render_template('org_type.html', title=n, name=n, city=city, link_kard=src, info=m)
 
 
@@ -227,14 +235,50 @@ def add_post():
         return render_template('add_post.html', title='Создание объявления', form=form)
 
 
-@app.route('/choice_city')
+@app.route('/choice_city', methods=['GET', 'POST'])
 def choice_city():
     n = "Выбор города"
-    if current_user.is_authenticated:
-        city = current_user.city
-    else:
-        city = 'Москва'
-    return render_template('choice_city.html', title=n, city=city)
+    form = CityForm()
+    flag = 0
+    if request.method == 'POST':
+        response = requests.get(
+            f"https://suggest-maps.yandex.ru/v1/suggest?text={form.search.data}&results=10&type=locality,province&apikey=efb15d6d-85bf-40c5-9172-f0d59c105cdd")
+        if response:
+            json_response = response.json()
+            m = []
+            try:
+                for i in json_response["results"]:
+                    if "locality" in i["tags"] or "province" in i["tags"]:
+                        try:
+                            text = i["title"]["text"]
+                        except:
+                            text = ''
+                        try:
+                            stext = i["subtitle"]["text"]
+                        except:
+                            stext = ''
+                        if text:
+                            if stext:
+                                m.append(f'{i["title"]["text"]}, {i["subtitle"]["text"]}')
+                            else:
+                                m.append(f'{i["title"]["text"]}')
+                        for ch in m:
+                            if ch not in form.city.choices:
+                                form.city.choices.append(ch)
+                            flag = 1
+            except:
+                error = 'Ничего не найдено'
+                return render_template('choice_city.html', title=n, form=form, error=error, flag=0)
+        if form.city.data:
+            if current_user.is_authenticated:
+                db_sess = db_session.create_session()
+                current_user.city = form.city.data
+                db_sess.merge(current_user)
+                db_sess.commit()
+            else:
+                session['city'] = form.city.data
+            return redirect(session["link"])
+    return render_template('choice_city.html', title=n, form=form, error='', flag=flag, cancel=session["link"])
 
 
 @app.route('/category/<types>')
@@ -249,8 +293,12 @@ def subcategory(types):
 
 @app.route('/profile')
 def profile():
+    session["link"] = '/profile'
     if current_user.is_authenticated:
-        city = 'Суругт'
+        if len(current_user.city) > 30:
+            city = current_user.city[:30] + '...'
+        else:
+            city = current_user.city
         return render_template('profile.html', title='Профиль', city=city)
     return render_template('autorization.html', title='Авторизация')
 

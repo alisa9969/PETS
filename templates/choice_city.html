@@ -1,5 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div>
+    <div style="text-align: start; width: 100%; padding-left: 50px;">
+        <a href="{{cancel}}">
+            <button class="back">назад</button>
+        </a>
+    </div>
+    <div style="padding: 30px; padding-left: 15px" xmlns="http://www.w3.org/1999/html">
+        <h6>Текущее местоположение:</h6>
+        <p> {{current_user.city}}</p>
+        <h4 style=" margin-top: 40px; ">
+            Введите название населенного пункта:
+        </h4>
+        <div style="text-align: center; justify-content: center; display: flex; margin-top:30px;">
+            <div>
+                <form action="" method="post" enctype="multipart/form-data" class="search_f" style="margin: 35px;">
+                    {{form.search}}<input type="submit" class="butt" style="width: 100px;" value="Найти">
+                </form>
+                {% if error %}
+                <p class="error" style="margin-left: -40px;">{{error}}</p>
+                {% endif %}
+                {% if flag %}
+                <p>
+                <form action="" method="post" enctype="multipart/form-data" class="search_f"
+                      style="margin-bottom: 50px;">
+                    {{form.city (class='category_select')}}
+                    {{form.submit (style="width: 110px;", class="butt2")}}
+                </form>
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
+</div>
 {% endblock %}

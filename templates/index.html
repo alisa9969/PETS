@@ -2,29 +2,20 @@
 
 {% block content %}
 {% if current_user.is_authenticated %}
-<div style="text-align: start;">
-    <a href="/add_post">
-        <button class="butt2"> + Создать объявление</button>
-    </a>
-</div>
 {% endif %}
 <div class="content">
-    <div class="button_group">
-        <button class="butt" autofocus>Все</button>
-        <button class="butt">Кошки</button>
-        <button class="butt">Собаки</button>
-        <button class="butt">Грызуны</button>
-        <button class="butt">Птицы</button>
-        <button class="butt">Рептилии</button>
-        <button class="butt">Моллюски</button>
-    </div>
     <div class="buttons">
         <div>
             <button class="img"><img src="/static/img/filter.png" height="33"></button>
             <button class="img"><img src="/static/img/sort.png" height="30"></button>
             <a href="/choice_city">
-                <button class="img"><img src="/static/img/point.png" height="30" style="margin-right: 7px">г. {{city}}
+                <button class="img"><img src="/static/img/point.png" height="30" style="margin-right: 7px">{{city}}
                 </button>
+            </a>
+        </div>
+        <div>
+            <a href="/add_post">
+                <button class="butt2"> + Создать объявление</button>
             </a>
         </div>
     </div>
