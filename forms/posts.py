@@ -5,12 +5,12 @@ from wtforms.validators import DataRequired, Length
 
 class PostForm(FlaskForm):
     price = IntegerField('Цена', default=0)
-    phone = TelField('Номер телефона', validators=[Length(max=20)])
+    phone = TelField('Номер телефона', validators=[Length(max=19)])
     photo = FileField('photo', default="")
     currency = SelectField('Валюта',
                            choices=["₽", "$", "€", "₾", "₴", "₸", "Br", "₼"],
                            default="₽")
-    title = StringField('Заголовок', validators=[DataRequired(), Length(max=30)])
+    title = StringField('Заголовок', validators=[DataRequired(), Length(max=18)])
     content = TextAreaField("Описание", validators=[DataRequired(), Length(max=400)])
     address = StringField('Адрес', validators=[DataRequired(), Length(max=100)])
     destination = SelectField('Назначение', validators=[DataRequired()], choices=['Поиск хозяев',

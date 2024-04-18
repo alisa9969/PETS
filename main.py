@@ -66,7 +66,8 @@ def index_post(ipost):
         t = p.title
     except:
         t = ''
-    if os.path.exists('C:/Users/Сергей/Desktop/pets/static/pets_photo/' + p.photo.split('/')[3] + '/map.png') == 0:
+    if os.path.exists(
+            '/'.join(os.getcwd().split('\\')) + '/static/pets_photo/' + p.photo.split('/')[3] + '/map.png') == 0:
         img = None
     else:
         img = '/static/pets_photo/' + p.photo.split('/')[3] + '/map.png'
@@ -123,7 +124,8 @@ def organization(types):
             for i in json_response["features"]:
                 i = i["properties"]["CompanyMetaData"]
                 if i["name"] and i["address"] and 'детский' not in i["name"] and "Детский" not in i[
-                    "name"] and "несовершеннолетних" not in i["name"] and "Несовершеннолетних" not in i["name"] and 'детей' not in i["name"]:
+                    "name"] and "несовершеннолетних" not in i["name"] and "Несовершеннолетних" not in i[
+                    "name"] and 'детей' not in i["name"]:
                     org = Organizations(
                         name=i["name"],
                         address=i["address"],
@@ -166,6 +168,16 @@ def add_post():
     if current_user.is_authenticated:
         form = PostForm()
         if request.method == 'POST' or form.validate_on_submit():
+            if len(str(form.age.data)) > 3:
+                try:
+                    form.age.data = int(str(form.age.data)[:3])
+                except:
+                    form.age.data = 0
+            if len(str(form.price.data)) > 10:
+                try:
+                    form.price.data = int(str(form.price.data)[:10])
+                except:
+                    form.price.data = 0
             with open('category.json', 'r', encoding="utf8") as f:
                 r = json.load(f)
                 if form.breed.data not in r[form.category.data]["types"]:
@@ -174,7 +186,7 @@ def add_post():
                 json.dump(r, f, ensure_ascii=False)
             db_sess = db_session.create_session()
             count_p = len(db_sess.query(Post).filter(Post.user_id == current_user.id).all()) + 1
-            os.makedirs(f'C:/Users/Сергей/Desktop/pets/static/pets_photo/{str(count_p)}', exist_ok=True)
+            os.makedirs('/'.join(os.getcwd().split('\\')) + f'/static/pets_photo/{str(count_p)}', exist_ok=True)
             if form.photo.data.filename != '':
                 try:
                     file = Image.open(form.photo.data, mode='r', formats=None)
@@ -187,15 +199,17 @@ def add_post():
                         if form.photo.data.filename == 'photo_def.jpg':
                             form.photo.data.filename = 'photo.jpg'
                         file.save(
-                            f'C:/Users/Сергей/Desktop/pets/static/pets_photo/{str(count_p)}/{form.photo.data.filename}')
+                            '/'.join(os.getcwd().split(
+                                '\\')) + f'/static/pets_photo/{str(count_p)}/{form.photo.data.filename}')
                         ph = f'/static/pets_photo/{str(count_p)}/{form.photo.data.filename}'
                 except:
                     pass
             else:
-                file = Image.open('C:/Users/Сергей/Desktop/pets/static/img/photo_def.jpg', mode='r', formats=None)
+                file = Image.open('/'.join(os.getcwd().split('\\')) + '/static/img/photo_def.jpg', mode='r',
+                                  formats=None)
                 if file:
-                    file.save(
-                        f'C:/Users/Сергей/Desktop/pets/static/pets_photo/{str(count_p)}/photo_def.jpg')
+                    file.save('/'.join(os.getcwd().split('\\')) +
+                              f'/static/pets_photo/{str(count_p)}/photo_def.jpg')
                     ph = f'/static/pets_photo/{str(count_p)}/photo_def.jpg'
             if form.address.data:
                 response = requests.get(
@@ -218,7 +232,7 @@ def add_post():
                         response = requests.get(
                             f"http://static-maps.yandex.ru/1.x/?ll={ll1},{ll2}&pt={ll1},{ll2},pm2vvl&spn=0.02,0.01&l=map&lang=ru_RU&apikey=b2673b46-1c73-4d52-9bb6-e23eab02974b")
                         if response:
-                            map_file = f'C:/Users/Сергей/Desktop/pets/static/pets_photo/{str(count_p)}/map.png'
+                            map_file = '/'.join(os.getcwd().split('\\')) + f'/static/pets_photo/{str(count_p)}/map.png'
                             with open(map_file, "wb") as file:
                                 file.write(response.content)
             post = Post(
@@ -314,12 +328,12 @@ def posts(types):
         posts = dbs.query(Post).filter(Post.category == types, Post.breed.in_(session["categories"])).all()
     else:
         posts = dbs.query(Post).filter(Post.category == types).all()
-    posts = list(map(lambda x: [x.title, x.destination, x.price, x.currency, x.created_date.strftime('%d.%m.%Y, %H:%M'),
-                                x.address[:30] + '...' if len(x.address) > 30 else x.address, x.photo, x.id] if float(
-        ll1) - 1 <= float(
-        x.coords.split(',')[0]) <= float(ll1) + 1 and float(ll2) - 1 <= float(x.coords.split(',')[1]) <= float(
-        ll2) + 1 else None, posts))
-    print(ll1, ll2, posts)
+    posts = list(
+        map(lambda x: [x.title[:9] + '...' if len(x.title) > 9 else x.title, x.destination, x.price, x.currency,
+                       x.address[:30] + '...' if len(x.address) > 30 else x.address, x.photo, x.id] if float(
+            ll1) - 2 <= float(
+            x.coords.split(',')[0]) <= float(ll1) + 2 and float(ll2) - 2 <= float(x.coords.split(',')[1]) <= float(
+            ll2) + 2 else None, posts))
     if len(city) > 70:
         city = city[:70] + '...'
     return render_template('posts.html', title=str(types), posts=posts, city=city, back=f"/category/{types}")
@@ -331,6 +345,8 @@ def subcategory(types):
     r = json.load(f)
     sb = []
     if request.method == "POST":
+        if 'назад' in request.values:
+            return redirect(f'/category')
         for i in request.values:
             sb.append(i)
         session["categories"] = sb
@@ -395,10 +411,10 @@ def register():
         db_sess.commit()
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
-        os.makedirs(f'C:/Users/Сергей/Desktop/pets/static/avatars/{user.id}', exist_ok=True)
-        file = Image.open('C:/Users/Сергей/Desktop/pets/static/img/avatar.png', mode='r', formats=None)
+        os.makedirs('/'.join(os.getcwd().split('\\')) + f'/static/avatars/{user.id}', exist_ok=True)
+        file = Image.open('/'.join(os.getcwd().split('\\')) + '/static/img/avatar.png', mode='r', formats=None)
         file.save(
-            f'C:/Users/Сергей/Desktop/pets/static/avatars/{user.id}/avatar.png')
+            '/'.join(os.getcwd().split('\\')) + f'/static/avatars/{user.id}/avatar.png')
         user.photo = f'/static/avatars/{user.id}/avatar.png'
         db_sess.commit()
         if user and user.check_password(form.password.data):

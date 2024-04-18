@@ -4,16 +4,14 @@
 <form method="post" enctype="multipart/form-data">
     <div class="subcategory">
         <div style="display: flex; justify-content: space-between">
-            <a href="/category">
-                <button class="back">назад</button>
-            </a>
+            <input type="submit" class="back" name='назад' value="назад" />
             <h2>{{ name }}</h2>
             <input type="submit" class="back" value="далее"/>
         </div>
         <div class="sb">
             <div>
                 <p>
-                    <input type="checkbox" id='all' name='all'/>
+                    <input type="checkbox" id='all' name='all' checked="checked" />
                     <label for='all'> Все</label>
                 </p>
                 {% for i in types %}

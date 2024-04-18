@@ -41,6 +41,18 @@ body .main, main .container{
     padding: 6px;
     font-size: 16px;
     background: #f6f5f7;
+}
+.dest2{
+    color: #444455;
+    margin-left: 16%;
+    border-radius: 20px;
+    border-color: #f6f5f7;
+    height: 40px;
+    width: 170px;
+    text-align: center;
+    padding: 6px;
+    font-size: 15px;
+    background: #f6f5f7;
 
 }
 nav div{
@@ -120,6 +132,24 @@ nav div{
     zoom: 1;
     *display: inline;
 }
+.posts_div{
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+    padding: 18px;
+    text-align: center;
+    border-radius: 20px;
+    background-color: #fff;
+    height: 450px;
+    margin: 12px;
+    width: 30%;
+    font-size: 19px;
+}
+.posts_div img{
+    height: 250px;
+    margin-bottom: -6px;
+    border-radius: 15px;
+}
 .subcategory{
     display: block;
     text-align: start;
@@ -171,10 +201,13 @@ nav div{
     align-items: center;
     margin-bottom: 10px;
 }
-.post_mini:hover{
+.post_mini:hover, .posts_div:hover{
     box-shadow: 0px 0px 5px 7px #e9e8eb;
     text-decoration: none;
     color: #201147;
+}
+.post_mini2:hover{
+    text-decoration: none;
 }
 .post_mini{
     color: #130e21;
@@ -189,6 +222,10 @@ nav div{
     text-align: start;
     justify-content: start;
     width: 90%;
+}
+.post_mini2{
+    color: #130e21;
+    text-decoration: none;
 }
 .main_div {
     display: inline-block;
