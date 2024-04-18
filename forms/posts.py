@@ -13,7 +13,7 @@ class PostForm(FlaskForm):
     title = StringField('Заголовок', validators=[DataRequired(), Length(max=30)])
     content = TextAreaField("Описание", validators=[DataRequired(), Length(max=400)])
     address = StringField('Адрес', validators=[DataRequired(), Length(max=100)])
-    destination = SelectField('Назначение', validators=[DataRequired()], choices=['Поиск хозяев', "Продажа",
+    destination = SelectField('Назначение', validators=[DataRequired()], choices=['Поиск хозяев',
                                                                                   "Пристройство",
                                                                                   "Поиск питомца"],
                               default="Пристройство")

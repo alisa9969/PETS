@@ -34,6 +34,12 @@ def index():
         city = session.get('city')
         if not city:
             session['city'] = 'Москва'
+    response2 = requests.get(
+        f'https://search-maps.yandex.ru/v1/?text={city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
+    if response2:
+        json_response2 = response2.json()
+        session[
+            'coords'] = f'{json_response2["features"][0]["geometry"]["coordinates"][0]} {json_response2["features"][0]["geometry"]["coordinates"][1]}'
     if len(city) > 50:
         city = city[:50] + '...'
     db_sess = db_session.create_session()
@@ -46,8 +52,8 @@ def index():
     for i in range(len(p)):
         if len(p[i].content) >= 50:
             p[i].content = p[i].content[:50] + '...'
-        if len(p[i].address) >= 60:
-            p[i].address = p[i].content[:60] + '...'
+        if len(p[i].address) >= 50:
+            p[i].address = p[i].address[:50] + '...'
     session["link"] = '/'
     return render_template('index.html', title='Главная', city=city, posts=p)
 
@@ -69,7 +75,7 @@ def index_post(ipost):
         r = json.load(f)
         c = r[p.category]["name"]
     a = str(p.age)
-    return render_template('view_post.html', title=t, post=p, img=img, user=user, a=a, c=c)
+    return render_template('view_post.html', title=t, post=p, img=img, user=user, a=a, c=c, back=session["link"])
 
 
 @app.route('/category')
@@ -116,7 +122,8 @@ def organization(types):
             json_response = response.json()
             for i in json_response["features"]:
                 i = i["properties"]["CompanyMetaData"]
-                if i["name"] and i["address"]:
+                if i["name"] and i["address"] and 'детский' not in i["name"] and "Детский" not in i[
+                    "name"] and "несовершеннолетних" not in i["name"] and "Несовершеннолетних" not in i["name"] and 'детей' not in i["name"]:
                     org = Organizations(
                         name=i["name"],
                         address=i["address"],
@@ -278,7 +285,13 @@ def choice_city():
             if current_user.is_authenticated:
                 db_sess = db_session.create_session()
                 current_user.city = form.city.data
-                db_sess.merge(current_user)
+                response2 = requests.get(
+                    f'https://search-maps.yandex.ru/v1/?text={form.city.data}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
+                if response2:
+                    json_response2 = response2.json()
+                    session[
+                        'coords'] = f'{json_response2["features"][0]["geometry"]["coordinates"][0]} {json_response2["features"][0]["geometry"]["coordinates"][1]}'
+                    db_sess.merge(current_user)
                 db_sess.commit()
             else:
                 session['city'] = form.city.data
@@ -296,21 +309,20 @@ def posts(types):
         city = session.get('city')
         if not city:
             session['city'] = 'Москва'
-    response2 = requests.get(
-        f'https://search-maps.yandex.ru/v1/?text={city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
-    if response2:
-        json_response2 = response2.json()
-        ll1, ll2 = json_response2["features"][0]["geometry"]["coordinates"][0], \
-            json_response2["features"][0]["geometry"]["coordinates"][1]
+    ll1, ll2 = session["coords"].split()[0], session["coords"].split()[1]
     if 'all' not in session["categories"]:
         posts = dbs.query(Post).filter(Post.category == types, Post.breed.in_(session["categories"])).all()
     else:
         posts = dbs.query(Post).filter(Post.category == types).all()
-    posts = set(map(lambda x: x if float(ll1) - 1 <= float(x.coords.split(',')[0]) <= float(ll1) + 1 and float(ll2) - 1 <= float(
-        x.coords.split(',')[1]) <= float(ll2) + 1 else '', posts))
+    posts = list(map(lambda x: [x.title, x.destination, x.price, x.currency, x.created_date.strftime('%d.%m.%Y, %H:%M'),
+                                x.address[:30] + '...' if len(x.address) > 30 else x.address, x.photo, x.id] if float(
+        ll1) - 1 <= float(
+        x.coords.split(',')[0]) <= float(ll1) + 1 and float(ll2) - 1 <= float(x.coords.split(',')[1]) <= float(
+        ll2) + 1 else None, posts))
+    print(ll1, ll2, posts)
     if len(city) > 70:
         city = city[:70] + '...'
-    return render_template('posts.html', title=str(types), posts=posts, city=city)
+    return render_template('posts.html', title=str(types), posts=posts, city=city, back=f"/category/{types}")
 
 
 @app.route('/category/<types>', methods=['GET', 'POST'])

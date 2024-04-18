@@ -2,11 +2,16 @@
 
 {% block content %}
 <div class="content2">
+    <div style="text-align: start; width: 100%; margin-bottom: 25px; padding-left: 10px; margin-top: -15px;">
+        <a href={{back}} class="back_a">
+            ←
+        </a>
+    </div>
     <div>
         <div style="display: flex; margin-top: -20px; margin-bottom: 40px;">
             <div style="text-align: start; padding: 15px">
                 <h2>{{post.title}}</h2><br>
-                <img src={{post.photo}} style="border-radius: 30px; width: 400px; margin-bottom: 10px;">
+                <img src={{post.photo}} style="border-radius: 30px; width: 450px; margin-bottom: 10px; margin-right: 50px;">
             </div>
             <div style="width: 100%; padding: 15px; text-align: center; justify-content: center">
                 {% if post.price >= 1 %}
@@ -28,7 +33,7 @@
                         </button>
                     </a>
                     <div class="user_info">
-                        <a class="img"><img src={{user.photo}} style="border-radius: 20px" width="100px"></a>
+                        <a class="img"><img src={{user.photo}} style="border-radius: 20px" width="140px"></a>
                         <h3>{{user.name}}</h3>
                         <a>
                             <button class="butt2" style="font-size: 20px; margin-top: 10px; margin-bottom: 10px;">
@@ -48,9 +53,9 @@
                     <h3>Описание</h3>
                     <p>{{post.content}}</p>
                     <p>
-                    <img src="/static/img/{{post.documents}}.png" width="15px;"> Наличие документов</p>
+                        <img src="/static/img/{{post.documents}}.png" width="15px;"> Наличие документов</p>
                     <p>
-                    <img src="/static/img/{{post.steril}}.png" width="15px;"> Стерилизация</p>
+                        <img src="/static/img/{{post.steril}}.png" width="15px;"> Стерилизация</p>
                     <p><img src="/static/img/{{post.vaccin}}.png" width="15px;"> Вакцинация</p>
                 </div>
                 <div style="width: 98%; margin-bottom: 30px;">

@@ -51,10 +51,10 @@ nav div{
 }
 .user_info{
     padding: 20px;
-    height: 270px;
+    height: 320px;
     width: 270px;
     border-radius: 25px;
-    margin-left: 140px;
+    margin-left: 90px;
     background: #fff;
     border-color: none;
     text-align: center;
@@ -228,6 +228,16 @@ nav div{
     width: 91%;
     justify-content: space-between;
     }
+.back_a{
+    font-size: 37px;
+    color: #5a5a70;
+    font-width: bold;
+    text-decoration: none;
+}
+.back_a:hover{
+    color: #5a5a70;
+    text-decoration: none;
+}
 .content2{
     border-radius: 30px;
     background-color: #f6f5f7;
