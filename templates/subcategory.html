@@ -1,25 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="subcategory">
-    <div style="display: flex; justify-content: space-between">
-        <a href="/category">
-            <button class="back">назад</button>
-        </a>
-        <h2>{{ name }}</h2>
-        <a href="/category">
-            <button class="back">далее</button>
-        </a>
-    </div>
-    <div class="sb">
-        <div>
-            {% for i in types %}
+<form method="post" enctype="multipart/form-data">
+    <div class="subcategory">
+        <div style="display: flex; justify-content: space-between">
+            <a href="/category">
+                <button class="back">назад</button>
+            </a>
+            <h2>{{ name }}</h2>
+            <input type="submit" class="back" value="далее"/>
+        </div>
+        <div class="sb">
             <div>
-                <input type="checkbox" id=f'{{i}}' name=f'{{i}}'/>
-                <label for=f'{{i}}'>{{i}}</label>
+                <p>
+                    <input type="checkbox" id='all' name='all'/>
+                    <label for='all'> Все</label>
+                </p>
+                {% for i in types %}
+                <p>
+                    <input type="checkbox" id={{i}} name={{i}}/>
+                    <label for=f'{{i}}'> {{i}}</label>
+                </p>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
-</div>
+</form>
 {% endblock %}

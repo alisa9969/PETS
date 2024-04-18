@@ -2,5 +2,40 @@
 
 {% block content %}
 <div class="div_o">
+    <div class="buttons">
+        <div>
+            <button class="img"><img src="/static/img/filter.png" height="33"></button>
+            <button class="img"><img src="/static/img/sort.png" height="30"></button>
+            <a href="/choice_city">
+                <button class="img"><img src="/static/img/point.png" height="30" style="margin-right: 7px">{{city}}
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="main_div">
+        {% for i in posts %}
+        <a href='/post/{{i.id}}' class="post_mini">
+            <div style="text-align: start; display: flex;">
+                <p style="margin-right: 20px;"><img src={{i.photo}} height="150px" style="border-radius: 20px; "></p>
+                <div style="width:75%">
+                    <h3>{{i.title}}</h3>
+                    {% if i.price >= 1 %}
+                    <h5>{{i.price}} {{i.currency}}</h5>
+                    {% else %}
+                    <h5>Бесплатно</h5>
+                    {% endif %}
+                    <p></p>
+                    <p style="color: #807c8a">{{i.content}}</p>
+                    <p></p>
+                    <p>{{i.address}}</p>
+                </div>
+                <div style="align-content: space-between;">
+                    <p class="dest">{{i.destination}}</p>
+                    <p style="color: #807c8a"> {{i.created_date.strftime('%d.%m.%Y, %H:%M')}}</p>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

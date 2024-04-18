@@ -18,10 +18,12 @@ app.config['SECRET_KEY'] = 'pets.website_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
+
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -40,10 +42,12 @@ def index():
         pass
         # p = db_sess.query(Post).filter(Post.category == form.category.data).all()
     else:
-        p = db_sess.query(Post).order_by(Post.created_date.desc()).limit(50).all()
+        p = db_sess.query(Post).order_by(Post.created_date.desc()).limit(30).all()
     for i in range(len(p)):
         if len(p[i].content) >= 50:
             p[i].content = p[i].content[:50] + '...'
+        if len(p[i].address) >= 60:
+            p[i].address = p[i].content[:60] + '...'
     session["link"] = '/'
     return render_template('index.html', title='Главная', city=city, posts=p)
 
@@ -138,8 +142,8 @@ def organization(types):
     m = ds.query(Organizations).filter(Organizations.city == city, Organizations.type == types).all()
     src = r[types]["src"]
     session["link"] = f'/organizations/{types}'
-    if len(city) > 90:
-        city = city[:90] + '...'
+    if len(city) > 100:
+        city = city[:100] + '...'
     return render_template('org_type.html', title=n, name=n, city=city, link_kard=src, info=m)
 
 
@@ -218,6 +222,7 @@ def add_post():
                 title=form.title.data,
                 content=form.content.data,
                 address=address,
+                coords=f'{ll1},{ll2}',
                 destination=form.destination.data,
                 delivery=form.delivery.data,
                 user_id=current_user.id,
@@ -281,10 +286,43 @@ def choice_city():
     return render_template('choice_city.html', title=n, form=form, error='', flag=flag, cancel=session["link"])
 
 
-@app.route('/category/<types>')
+@app.route('/category/<types>/posts')
+def posts(types):
+    dbs = db_session.create_session()
+    session["link"] = f"/category/{types}/posts"
+    if current_user.is_authenticated:
+        city = current_user.city
+    else:
+        city = session.get('city')
+        if not city:
+            session['city'] = 'Москва'
+    response2 = requests.get(
+        f'https://search-maps.yandex.ru/v1/?text={city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
+    if response2:
+        json_response2 = response2.json()
+        ll1, ll2 = json_response2["features"][0]["geometry"]["coordinates"][0], \
+            json_response2["features"][0]["geometry"]["coordinates"][1]
+    if 'all' not in session["categories"]:
+        posts = dbs.query(Post).filter(Post.category == types, Post.breed.in_(session["categories"])).all()
+    else:
+        posts = dbs.query(Post).filter(Post.category == types).all()
+    posts = set(map(lambda x: x if float(ll1) - 1 <= float(x.coords.split(',')[0]) <= float(ll1) + 1 and float(ll2) - 1 <= float(
+        x.coords.split(',')[1]) <= float(ll2) + 1 else '', posts))
+    if len(city) > 70:
+        city = city[:70] + '...'
+    return render_template('posts.html', title=str(types), posts=posts, city=city)
+
+
+@app.route('/category/<types>', methods=['GET', 'POST'])
 def subcategory(types):
     f = open('category.json', encoding="utf8")
     r = json.load(f)
+    sb = []
+    if request.method == "POST":
+        for i in request.values:
+            sb.append(i)
+        session["categories"] = sb
+        return redirect(f'/category/{types}/posts')
     if types in r:
         m = r[f"{types}"]['types']
         name = r[f"{types}"]['name']

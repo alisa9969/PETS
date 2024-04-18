@@ -16,6 +16,7 @@ class Post(SqlAlchemyBase):
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     address = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    coords = sqlalchemy.Column(sqlalchemy.String)
     views_count = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     destination = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     delivery = sqlalchemy.Column(sqlalchemy.Boolean)
