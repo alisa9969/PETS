@@ -23,8 +23,8 @@
         {% if i != None %}
         <a href='/post/{{i[6]}}' class="post_mini2">
             <div class="posts_div">
-                <p><img src={{i[5]}}></p>
-                <h3>{{i[0]}}</h3>
+                <p><img src={{i[5]}} height="250"></p>
+                <h3 style="color: #322873">{{i[0]}}</h3>
                 {% if i[2] >= 1 %}
                 <h5>{{i[2]}} {{i[3]}}</h5>
                 {% else %}
@@ -38,7 +38,7 @@
         {% endfor %}
         {%else%}
         <div style="text-align: center;">
-            <h3>Нет записей</h3>
+            <h3>Нет объявлений</h3>
             <p></p>
             <p>Измените параметры фильтра или укажите другой населенный пункт</p>
         </div>

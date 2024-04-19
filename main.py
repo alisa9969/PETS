@@ -4,6 +4,7 @@ from data.users import User
 from forms.user import RegisterForm
 from forms.city import CityForm
 from data.post import Post
+from forms.edit import EditForm
 from data.organizations import Organizations
 from forms.login import LoginForm
 from forms.posts import PostForm
@@ -330,7 +331,7 @@ def posts(types):
         posts = dbs.query(Post).filter(Post.category == types).all()
     posts = list(
         map(lambda x: [x.title[:9] + '...' if len(x.title) > 9 else x.title, x.destination, x.price, x.currency,
-                       x.address[:30] + '...' if len(x.address) > 30 else x.address, x.photo, x.id] if float(
+                       x.address[:20] + '...' if len(x.address) > 20 else x.address, x.photo, x.id] if float(
             ll1) - 2 <= float(
             x.coords.split(',')[0]) <= float(ll1) + 2 and float(ll2) - 2 <= float(x.coords.split(',')[1]) <= float(
             ll2) + 2 else None, posts))
@@ -361,11 +362,17 @@ def subcategory(types):
 def profile():
     session["link"] = '/profile'
     if current_user.is_authenticated:
-        if len(current_user.city) > 30:
-            city = current_user.city[:30] + '...'
+        if len(current_user.city) > 40:
+            city = current_user.city[:40] + '...'
         else:
             city = current_user.city
-        return render_template('profile.html', title='Профиль', city=city)
+        dbs = db_session.create_session()
+        posts = dbs.query(Post).filter(Post.user == current_user).order_by(Post.created_date).all()
+        posts = list(
+            map(lambda x: [x.title[:9] + '...' if len(x.title) > 9 else x.title, x.price, x.currency, x.views_count,
+                           x.photo, x.id, x.created_date.strftime('%d.%m.%Y, %H:%M')], posts))
+        session['link'] = '/profile'
+        return render_template('profile.html', title='Профиль', city=city, posts=posts)
     return render_template('autorization.html', title='Авторизация')
 
 
@@ -421,6 +428,35 @@ def register():
             login_user(user, remember=True)
             return redirect("/profile")
     return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit():
+    if current_user.is_authenticated:
+        form = EditForm()
+        if request.method == 'POST':
+            db_sess = db_session.create_session()
+            if db_sess.query(User).filter(
+                    User.email == form.email.data).first() and form.email.data != current_user.email:
+                return render_template('change_profile.html', title='Редактирование',
+                                       form=form,
+                                       message="Почта телефона уже используется")
+            s = db_sess.query(User).filter(User.id == current_user.id).first()
+            s.name = form.name.data
+            current_user.name = form.name.data
+            s.email = form.email.data
+            current_user.email = form.email.data
+            s.about = form.about.data
+            current_user.about = form.about.data
+            db_sess.merge(current_user)
+            db_sess.commit()
+            return redirect("/profile")
+        else:
+            form.email.data = current_user.email
+            form.name.data = current_user.name
+            form.about.data = current_user.about
+        return render_template('change_profile.html', title='Редактирование', form=form)
+    return redirect("/autorization")
 
 
 if __name__ == '__main__':

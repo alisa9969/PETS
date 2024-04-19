@@ -20,12 +20,14 @@
                 <h2>Бесплатно</h2>
                 {% endif %}
                 <div style="display: block; text-align: center; justify-content: center">
+                    {% if post.user != current_user %}
                     <a>
                         <button class="butt2"
                                 style="width: 270px; font-size: 22px; margin-top: 25px;">
                             Написать
                         </button>
                     </a><br>
+                    {% endif %}
                     <a>
                         <button class="butt2"
                                 style="width: 270px; font-size: 22px; margin-top: 20px; margin-bottom: 20px; background: #fff; color: black">
