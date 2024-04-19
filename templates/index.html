@@ -25,16 +25,19 @@
             <div style="text-align: start; display: flex;">
                 <p style="margin-right: 20px;"><img src={{i.photo}} height="150px" style="border-radius: 20px; "></p>
                 <div style="width:75%">
-                    <h3 style="color: #322873">{{i.title}}</h3>
+                    <h3 style="color: #242229">{{i.title}}</h3>
                     {% if i.price >= 1 %}
-                    <h5>{{i.price}} {{i.currency}}</h5>
+                    <h5 style='color: #4a494d'>{{i.price}} {{i.currency}}</h5>
                     {% else %}
-                    <h5>Бесплатно</h5>
+                    <h5 style='color: #4a494d'>Бесплатно</h5>
                     {% endif %}
                     <p></p>
                     <p style="color: #807c8a">{{i.content}}</p>
                     <p></p>
-                    <p>{{i.address}}</p>
+                    <p>
+                    {% if i.delivery %}
+                    <img src="/static/img/delivery2.png" height="30" style="margin-right: 10px;">
+                    {% endif %}{{i.address}}</p>
                 </div>
                 <div style="text-align: center">
                     <p class="dest">{{i.destination}}</p>

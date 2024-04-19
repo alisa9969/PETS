@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+    <div style="text-align: start; width: 100%; margin-bottom: 25px; padding-left: 10px; margin-top: -15px;">
+        <a href='/profile' class="back_a">
+            ←
+        </a>
+    </div>
+    <div style="text-align: start; width: 100%; padding-left: 70px; margin-top: 10px;">
+        <div>
+            <a href="/change_password" class="aa">
+                <img src="/static/img/pin.png" height="25px" style="margin-top:-15px" />
+                <p>Изменить пароль</p>
+            </a>
+        </div>
+        <div>
+            <form method="post" action="" class="aa" style="align-items: center;">
+                <img src="/static/img/pin.png" height="25px"/>
+                <input type="submit" name="logout" value="Выйти"/>
+            </form>
+        </div>
+        <div>
+            <form method="post" action="" class="aa" style="align-items: center;">
+                <img src="/static/img/delete.png" height="25px"/>
+                <input type="submit" name="del_acc" value="Удалить профиль"/>
+            </form>
+        </div>
+        <div>
+            <a href="/help" class="aa">
+                <img src="/static/img/pin.png" height="25px" style="margin-top:-15px" />
+                <p>Обратиться в тех. поддержку</p>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

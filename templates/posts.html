@@ -2,13 +2,13 @@
 
 {% block content %}
 <div class="div_o">
-    <div style="text-align: start; width: 100%; padding-left: 50px; margin-bottom: 40px;">
-        <a href={{back}}>
-            <button class="back">назад</button>
-        </a>
-    </div>
     <div class="buttons">
-        <div>
+        <div style="text-align: start; width: 20%; padding-left: 50px; margin-bottom: 40px;">
+            <a href={{back}}>
+                <button class="back">назад</button>
+            </a>
+        </div>
+        <div style="text-align: end; width: 80%;">
             <button class="img"><img src="/static/img/filter.png" height="33"></button>
             <button class="img"><img src="/static/img/sort.png" height="30"></button>
             <a href="/choice_city">
@@ -24,11 +24,11 @@
         <a href='/post/{{i[6]}}' class="post_mini2">
             <div class="posts_div">
                 <p><img src={{i[5]}} height="250"></p>
-                <h3 style="color: #322873">{{i[0]}}</h3>
+                <h3 style="color: #242229">{{i[0]}}</h3>
                 {% if i[2] >= 1 %}
-                <h5>{{i[2]}} {{i[3]}}</h5>
+                <h5 style='color: #4a494d'>{{i[2]}} {{i[3]}}</h5>
                 {% else %}
-                <h5>Бесплатно</h5>
+                <h5 style='color: #4a494d'>Бесплатно</h5>
                 {% endif %}
                 <p style="font-size: 15px;">{{i[4]}}</p>
                 <p class="dest2">{{i[1]}}</p>

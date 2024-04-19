@@ -414,7 +414,8 @@ nav div{
 }
 .edit{
     padding: 10px;
-    width: 120%;
+    width: 100%;
+    height: 21%;
     margin-bottom: 30px;
     text-decoration: none;
     background: #9292D9;
@@ -682,6 +683,12 @@ nav div{
     margin-bottom: 30px;
     border-radius: 20px
 }
+.ava2{
+    width: 210px;
+    height: 210px;
+    margin-bottom: 30px;
+    border-radius: 20px
+}
 .cont img{
     margin-top: -16px;
     height:30px;
@@ -763,4 +770,23 @@ nav div{
     margin-top: 10px;
     font-size: 17px;
     color: #39399D;
+}
+.aa p, .aa input{
+    font-size: 24px;
+    color: #282829;
+    padding: 0px;
+    align-items: center;
+    background: none;
+    border: none;
+    margin-left: 13px;
+}
+.aa{
+    text-decoration: none;
+    align-items: center;
+    display: flex;
+    padding: 26px;
+}
+.aa:hover, .aa p:hover, .aa input:hover {
+    text-decoration: none;
+    color: #282829;
 }

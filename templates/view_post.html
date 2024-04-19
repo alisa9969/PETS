@@ -35,9 +35,9 @@
                         </button>
                     </a>
                     <div class="user_info">
-                        <a class="img"><img src={{user.photo}} style="border-radius: 20px" width="140px"></a>
+                        <a href='/user/{{user.id}}' class="img"><img src={{user.photo}} style="border-radius: 20px" width="140px"></a>
                         <h3>{{user.name}}</h3>
-                        <a>
+                        <a href='/user/{{user.id}}'>
                             <button class="butt2" style="font-size: 20px; margin-top: 10px; margin-bottom: 10px;">
                                 Профиль
                             </button>
@@ -80,6 +80,9 @@
                         <p>
                             {{post.address}}
                         </p>
+                        {% if post.delivery %}
+                        <p><img src="/static/img/delivery.png" height="40" style="margin-right: 10px;"> Доступна доставка</p>
+                        {% endif %}
                         {% if img %}
                         <p>
                             <img src={{img}} style="border-radius: 30px; width: 500px;">
@@ -89,6 +92,7 @@
                 </div>
                 <div style="text-align: center; margin-top: 70px;">
                     <h6>{{post.created_date.strftime('%d.%m.%Y, %H:%M')}}</h6>
+                    <p style="font-size: 17px; color: #919090; margin-top: 18px;">{{post.views_count}} <img src="/static/img/views.png" height="17px" /></p>
                 </div>
             </div>
         </div>

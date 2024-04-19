@@ -1,9 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if current_user.is_authenticated %}
-{% endif %}
-<div class="content">
+<div class="content" style="justify-content: center; text-align: center">
     <form action="" method="post" enctype="multipart/form-data" >
         {{ form.csrf_token }}
         <p>
@@ -37,7 +35,7 @@
         <h5 class='error'>{{message}}</h5>
     </form>
     <a href="/profile">
-        <button class="cancel" style="margin-left: 35%"> Отмена</button>
+        <button class="cancel" style="width: 200px; margin-left: 20px;"> Отмена</button>
     </a>
 </div>
 {% endblock %}

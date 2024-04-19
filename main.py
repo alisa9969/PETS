@@ -1,3 +1,4 @@
+import werkzeug.security
 from flask import Flask, render_template, redirect, request, session
 from data import db_session
 from data.users import User
@@ -8,7 +9,7 @@ from forms.edit import EditForm
 from data.organizations import Organizations
 from forms.login import LoginForm
 from forms.posts import PostForm
-from flask_login import LoginManager, login_user, current_user
+from flask_login import LoginManager, login_user, current_user, logout_user
 import json
 import os
 import requests
@@ -35,6 +36,7 @@ def index():
         city = session.get('city')
         if not city:
             session['city'] = 'Москва'
+            city = session['city']
     response2 = requests.get(
         f'https://search-maps.yandex.ru/v1/?text={city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
     if response2:
@@ -76,6 +78,7 @@ def index_post(ipost):
     with open('category.json', encoding="utf8") as f:
         r = json.load(f)
         c = r[p.category]["name"]
+    session['link'] = f'/post/{ipost}'
     a = str(p.age)
     return render_template('view_post.html', title=t, post=p, img=img, user=user, a=a, c=c, back=session["link"])
 
@@ -456,6 +459,40 @@ def edit():
             form.name.data = current_user.name
             form.about.data = current_user.about
         return render_template('change_profile.html', title='Редактирование', form=form)
+    return redirect("/autorization")
+
+
+@app.route('/user/<uid>', methods=['GET', 'POST'])
+def user(uid):
+    db_sess = db_session.create_session()
+    session['link'] = f'/user/{uid}'
+    userr = db_sess.query(User).filter(User.id == uid).first()
+    if userr == current_user:
+        return redirect("/profile")
+    posts = db_sess.query(Post).filter(Post.user_id == uid).all()
+    posts = list(
+        map(lambda x: [x.title, x.price, x.currency, x.address[:50] + '...' if len(x.address) > 50 else x.address,
+                       x.photo, x.id, x.created_date.strftime('%d.%m.%Y, %H:%M'), x.destination,
+                       x.content[:50] + '...' if len(x.content) > 50 else x.content], posts))
+    return render_template('user.html', title=userr.name, userr=userr, posts=posts)
+
+
+@app.route('/settings', methods=['GET', 'POST'])
+def settings():
+    if current_user.is_authenticated:
+        if request.method == "POST":
+            if 'logout' in request.values:
+                logout_user()
+                return redirect("/profile")
+            if 'del_acc' in request.values:
+                ds = db_session.create_session()
+                us = ds.query(User).filter(User.id == current_user.id).first()
+                print(us)
+                ds.delete(us)
+                ds.commit()
+                logout_user()
+                return redirect("/profile")
+        return render_template('settings.html', title='Настройки')
     return redirect("/autorization")
 
 
