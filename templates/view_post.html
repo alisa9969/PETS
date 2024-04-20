@@ -11,7 +11,8 @@
         <div style="display: flex; margin-top: -20px; margin-bottom: 40px;">
             <div style="text-align: start; padding: 15px">
                 <h2>{{post.title}}</h2><br>
-                <img src={{post.photo}} style="border-radius: 30px; width: 450px; margin-bottom: 10px; margin-right: 50px;">
+                <img src={{post.photo}}
+                     style="border-radius: 30px; width: 450px; margin-bottom: 10px; margin-right: 50px;">
             </div>
             <div style="width: 100%; padding: 15px; text-align: center; justify-content: center">
                 {% if post.price >= 1 %}
@@ -20,7 +21,7 @@
                 <h2>Бесплатно</h2>
                 {% endif %}
                 <div style="display: block; text-align: center; justify-content: center">
-                    {% if post.user != current_user %}
+                    {% if post.user_id != current_user.id %}
                     <a>
                         <button class="butt2"
                                 style="width: 270px; font-size: 22px; margin-top: 25px;">
@@ -28,24 +29,21 @@
                         </button>
                     </a><br>
                     {% endif %}
-                    <a>
-                        <button class="butt2"
-                                style="width: 270px; font-size: 22px; margin-top: 20px; margin-bottom: 20px; background: #fff; color: black">
-                            В избранное
-                        </button>
-                    </a>
+                    <form method="post">
+                        <input type='submit' class="butt2"
+                                style="width: 270px; font-size: 19px; margin-top: 22px; margin-bottom: 20px; background: #fff; color: black"
+                            value='{{fvt}}' name="fav" />
+                    </form>
+                    <form method="post" enctype="multipart/form-data">
                     <div class="user_info">
-                        <a href='/user/{{user.id}}' class="img"><img src={{user.photo}} style="border-radius: 20px" width="140px"></a>
+                        <a class="img"><img src={{user.photo}} style="border-radius: 20px" width="140px"></a>
                         <h3>{{user.name}}</h3>
-                        <a href='/user/{{user.id}}'>
-                            <button class="butt2" style="font-size: 20px; margin-top: 10px; margin-bottom: 10px;">
-                                Профиль
-                            </button>
-                        </a>
+                        <input name='user' value="Профиль" type="submit" class="butt2" style="font-size: 20px; margin-top: 10px; margin-bottom: 10px;"/>
                         {% if post.phone %}
                         <p>Тел.: {{post.phone}}</p>
                         {%endif%}
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -81,7 +79,8 @@
                             {{post.address}}
                         </p>
                         {% if post.delivery %}
-                        <p><img src="/static/img/delivery.png" height="40" style="margin-right: 10px;"> Доступна доставка</p>
+                        <p><img src="/static/img/delivery.png" height="40" style="margin-right: 10px;"> Доступна
+                            доставка</p>
                         {% endif %}
                         {% if img %}
                         <p>
@@ -92,7 +91,8 @@
                 </div>
                 <div style="text-align: center; margin-top: 70px;">
                     <h6>{{post.created_date.strftime('%d.%m.%Y, %H:%M')}}</h6>
-                    <p style="font-size: 17px; color: #919090; margin-top: 18px;">{{post.views_count}} <img src="/static/img/views.png" height="17px" /></p>
+                    <p style="font-size: 17px; color: #919090; margin-top: 18px;">{{post.views_count}} <img
+                            src="/static/img/views.png" height="17px"/></p>
                 </div>
             </div>
         </div>

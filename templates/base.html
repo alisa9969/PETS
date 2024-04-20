@@ -40,7 +40,7 @@
             {% if current_user.is_authenticated %}
             <a class="img_a"><img src="/static/img/chat2.png" height="27px" alt="сообщения"></a>
             <a class="img_a"><img src="/static/img/bell.png" height="27px" alt="уведомления"></a>
-            <a class="img_a"><img src="/static/img/fav.png" height="27px" alt="избранное"></a>
+            <a href="/favorites" class="img_a"><img src="/static/img/fav.png" height="27px" alt="избранное"></a>
             <a class="img_a" href="/profile"><img src="/static/img/avatar.png" height="45px"
                                                   style='border-radius: 10px; margin-left: 30px;'></a>
             {% else %}

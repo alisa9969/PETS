@@ -424,6 +424,11 @@ nav div{
     border-radius: 10px;
     font-size: 17px;
 }
+.del_img{
+    background: none;
+    border: none;
+    border-radius: 0px;
+}
 .edit:hover, .edit:focus{
     text-decoration: none;
     background: #8585D1;

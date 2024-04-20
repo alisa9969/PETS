@@ -2,6 +2,7 @@ import werkzeug.security
 from flask import Flask, render_template, redirect, request, session
 from data import db_session
 from data.users import User
+from data.favorite import Favorite
 from forms.user import RegisterForm
 from forms.city import CityForm
 from data.post import Post
@@ -58,6 +59,7 @@ def index():
         if len(p[i].address) >= 50:
             p[i].address = p[i].address[:50] + '...'
     session["link"] = '/'
+    session['link2'] = '/'
     return render_template('index.html', title='Главная', city=city, posts=p)
 
 
@@ -74,13 +76,71 @@ def index_post(ipost):
         img = None
     else:
         img = '/static/pets_photo/' + p.photo.split('/')[3] + '/map.png'
+    db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == p.user_id).first()
     with open('category.json', encoding="utf8") as f:
         r = json.load(f)
         c = r[p.category]["name"]
-    session['link'] = f'/post/{ipost}'
     a = str(p.age)
-    return render_template('view_post.html', title=t, post=p, img=img, user=user, a=a, c=c, back=session["link"])
+    if user != current_user:
+        p.views_count += 1
+        db_sess.merge(p)
+        db_sess.commit()
+    fv = ''
+    fav_txt = ''
+    if current_user:
+        db_sess = db_session.create_session()
+        fv = db_sess.query(Favorite).filter(Favorite.user_id == current_user.id, Favorite.post_id == ipost).first()
+        if fv:
+            fav_txt = 'В избранном'
+        else:
+            fav_txt = 'В избранное'
+    if request.method == "POST":
+        for i in request.values:
+            if i == 'fav':
+                if fv:
+                    db_sess.delete(fv)
+                    db_sess.commit()
+                    db_sess = db_session.create_session()
+                    user = db_sess.query(User).filter(User.id == p.user_id).first()
+                    return render_template('view_post.html', title=t, post=p, img=img, user=user, a=a, c=c,
+                                           back=session["link2"], fvt='В избранное')
+                favorites = Favorite(
+                    user_id=current_user.id,
+                    post_id=p.id
+                )
+                db_sess = db_session.create_session()
+                db_sess.add(favorites)
+                db_sess.commit()
+                db_sess = db_session.create_session()
+                user = db_sess.query(User).filter(User.id == p.user_id).first()
+                return render_template('view_post.html', title=t, post=p, img=img, user=user, a=a, c=c,
+                                       back=session["link2"], fvt='В избранном')
+            else:
+                session['link'] = f'/post/{ipost}'
+                db_sess.commit()
+                return redirect(f'/user/{p.user_id}')
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == p.user_id).first()
+    return render_template('view_post.html', title=t, post=p, img=img, user=user, a=a, c=c, back=session["link2"],
+                           fvt=fav_txt)
+
+
+@app.route('/favorites')
+def favorites():
+    session['link'] = '/favorites'
+    session['link2'] = '/favorites'
+    if current_user:
+        posts = []
+        db_sess = db_session.create_session()
+        favs = db_sess.query(Favorite.post_id).filter(Favorite.user_id == current_user.id).all()
+        for i in favs:
+            posts.append(db_sess.query(Post).filter(Post.id == i[0]).first())
+            posts = list(
+                map(lambda x: [x.title, x.destination, x.price, x.currency, x.content[:45] + '...' if len(x.content) > 45 else x.content,
+                               x.address[:45] + '...' if len(x.address) > 45 else x.address, x.photo, x.id, x.delivery, x.created_date.strftime('%d.%m.%Y, %H:%M')], posts))
+        return render_template('favorites.html', title='Избранное', posts=posts, ln=len(posts), n=int(str(len(posts))[-1]))
+    return redirect('/profile')
 
 
 @app.route('/category')
@@ -172,6 +232,8 @@ def add_post():
     if current_user.is_authenticated:
         form = PostForm()
         if request.method == 'POST' or form.validate_on_submit():
+            if not str(form.age.data).isdigit() or not str(form.price.data).isdigit():
+                return render_template('add_post.html', title='Создание объявления', form=form, message='Неправильный формат ввода')
             if len(str(form.age.data)) > 3:
                 try:
                     form.age.data = int(str(form.age.data)[:3])
@@ -340,6 +402,7 @@ def posts(types):
             ll2) + 2 else None, posts))
     if len(city) > 70:
         city = city[:70] + '...'
+    session['link2'] = f"/category/{types}/posts"
     return render_template('posts.html', title=str(types), posts=posts, city=city, back=f"/category/{types}")
 
 
@@ -361,10 +424,18 @@ def subcategory(types):
         return render_template('subcategory.html', title=str(types), name=name, types=m)
 
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
-    session["link"] = '/profile'
+    session["link2"] = '/profile'
+    session["link1"] = '/profile'
     if current_user.is_authenticated:
+        if request.method == "POST":
+            for i in request.values:
+                if i.isdigit():
+                    dbs = db_session.create_session()
+                    del_p = dbs.query(Post).filter(Post.id == i).first()
+                    dbs.delete(del_p)
+                    dbs.commit()
         if len(current_user.city) > 40:
             city = current_user.city[:40] + '...'
         else:
@@ -465,7 +536,6 @@ def edit():
 @app.route('/user/<uid>', methods=['GET', 'POST'])
 def user(uid):
     db_sess = db_session.create_session()
-    session['link'] = f'/user/{uid}'
     userr = db_sess.query(User).filter(User.id == uid).first()
     if userr == current_user:
         return redirect("/profile")
@@ -487,7 +557,6 @@ def settings():
             if 'del_acc' in request.values:
                 ds = db_session.create_session()
                 us = ds.query(User).filter(User.id == current_user.id).first()
-                print(us)
                 ds.delete(us)
                 ds.commit()
                 logout_user()
