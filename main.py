@@ -1,5 +1,5 @@
-import werkzeug.security
 from flask import Flask, render_template, redirect, request, session
+import shutil
 from data import db_session
 from data.users import User
 from data.favorite import Favorite
@@ -43,7 +43,8 @@ def index():
     if response2:
         json_response2 = response2.json()
         session[
-            'coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0], json_response2["features"][0]["geometry"]["coordinates"][1]]
+            'coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0],
+                         json_response2["features"][0]["geometry"]["coordinates"][1]]
     if len(city) > 50:
         city = city[:50] + '...'
     db_sess = db_session.create_session()
@@ -58,6 +59,7 @@ def index():
                                                                           Post.coords2 <= ll2,
                                                                           Post.coords2 >= ll4).limit(
             30).all()
+        print(ll1, ll2, ll3, ll4)
     for i in range(len(p)):
         if len(p[i].content) >= 50:
             p[i].content = p[i].content[:50] + '...'
@@ -146,7 +148,7 @@ def index_post(ipost):
                            fvt=fav_txt)
 
 
-@app.route('/favorites')
+@app.route('/favorites', methods=['GET', 'POST'])
 def favorites():
     session['link'] = '/favorites'
     session['link2'] = '/favorites'
@@ -403,7 +405,8 @@ def choice_city():
                 if response2:
                     json_response2 = response2.json()
                     session[
-                        'coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0], json_response2["features"][0]["geometry"]["coordinates"][1]]
+                        'coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0],
+                                     json_response2["features"][0]["geometry"]["coordinates"][1]]
                     db_sess.merge(current_user)
                 db_sess.commit()
             else:
@@ -420,7 +423,8 @@ def posts(types):
         if response2:
             json_response2 = response2.json()
             session[
-                'coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0], json_response2["features"][0]["geometry"]["coordinates"][1]]
+                'coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0],
+                             json_response2["features"][0]["geometry"]["coordinates"][1]]
     dbs = db_session.create_session()
     session["link"] = f"/category/{types}/posts"
     if current_user.is_authenticated:
@@ -476,6 +480,8 @@ def profile():
                 if i.isdigit():
                     dbs = db_session.create_session()
                     del_p = dbs.query(Post).filter(Post.id == i).first()
+                    shutil.rmtree('/'.join(os.getcwd().split(
+                                '\\')) + f'/static/pets_photo/{str(i)}')
                     dbs.delete(del_p)
                     dbs.commit()
         if len(current_user.city) > 40:
@@ -599,6 +605,8 @@ def settings():
             if 'del_acc' in request.values:
                 ds = db_session.create_session()
                 us = ds.query(User).filter(User.id == current_user.id).first()
+                shutil.rmtree('/'.join(os.getcwd().split(
+                    '\\')) + f'/static/avatars/{current_user.id}')
                 ds.delete(us)
                 ds.commit()
                 logout_user()
