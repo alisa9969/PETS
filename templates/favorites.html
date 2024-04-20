@@ -15,7 +15,7 @@
         <h4 style=" margin-left: 20px">{{ln}} избранных объявлений</h4>
         {% endif %}
         {% for i in posts %}
-        <a href='/post/{{i[7]}}' class="post_mini" style="width: 97%; margin-left: 10px;">
+        <a href='/post/{{i[7]}}' class="post_fav" style="width: 97%; margin-left: 10px;">
             <div style="text-align: start; display: flex;">
                 <p style="margin-right: 20px;"><img src={{i[6]}} height="150px" style="border-radius: 20px; "></p>
                 <div style="width:75%">
@@ -36,6 +36,15 @@
                 <div style="text-align: center">
                     <p class="dest">{{i[1]}}</p>
                     <p style="color: #807c8a"> {{i[9]}}</p>
+                    <div class="delete_p" style="text-align: end; margin-top: 40px;">
+                        <form method="post">
+                            <input type="submit" hidden="hidden" name={{i[5]}} id="del"/>
+                            <label for="del">
+                                <button class="del_img" name={{i[5]}}><img height="30" src="/static/img/delete.png"/>
+                                </button>
+                            </label>
+                        </form>
+                    </div>
                 </div>
             </div>
         </a>

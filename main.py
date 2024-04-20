@@ -43,7 +43,7 @@ def index():
     if response2:
         json_response2 = response2.json()
         session[
-            'coords'] = f'{json_response2["features"][0]["geometry"]["coordinates"][0]} {json_response2["features"][0]["geometry"]["coordinates"][1]}'
+            'coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0], json_response2["features"][0]["geometry"]["coordinates"][1]]
     if len(city) > 50:
         city = city[:50] + '...'
     db_sess = db_session.create_session()
@@ -52,7 +52,12 @@ def index():
         pass
         # p = db_sess.query(Post).filter(Post.category == form.category.data).all()
     else:
-        p = db_sess.query(Post).order_by(Post.created_date.desc()).limit(30).all()
+        ll1, ll2 = float(session['coords'][0]) + 1, float(session['coords'][1]) + 1
+        ll3, ll4 = float(session['coords'][0]) - 1, float(session['coords'][1]) - 1
+        p = db_sess.query(Post).order_by(Post.created_date.desc()).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
+                                                                          Post.coords2 <= ll2,
+                                                                          Post.coords2 >= ll4).limit(
+            30).all()
     for i in range(len(p)):
         if len(p[i].content) >= 50:
             p[i].content = p[i].content[:50] + '...'
@@ -61,6 +66,21 @@ def index():
     session["link"] = '/'
     session['link2'] = '/'
     return render_template('index.html', title='Главная', city=city, posts=p)
+
+
+@app.route('/order', methods=['GET', 'POST'])
+def sort_post():
+    return render_template('sort.html', title='Сортировка объявлений')
+
+
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_pin():
+    return render_template('change_pin.html', title='Изменение пароля')
+
+
+@app.route('/filter', methods=['GET', 'POST'])
+def filter():
+    return render_template('filter.html', title='Фильтр')
 
 
 @app.route('/post/<ipost>', methods=['GET', 'POST'])
@@ -131,15 +151,26 @@ def favorites():
     session['link'] = '/favorites'
     session['link2'] = '/favorites'
     if current_user:
+        if request.method == "POST":
+            for i in request.values:
+                if i.isdigit():
+                    dbs = db_session.create_session()
+                    del_p = dbs.query(Favorite).filter(Favorite.user_id == current_user.id,
+                                                       Favorite.post_id == int(i)).first()
+                    dbs.delete(del_p)
+                    dbs.commit()
         posts = []
         db_sess = db_session.create_session()
         favs = db_sess.query(Favorite.post_id).filter(Favorite.user_id == current_user.id).all()
         for i in favs:
             posts.append(db_sess.query(Post).filter(Post.id == i[0]).first())
-            posts = list(
-                map(lambda x: [x.title, x.destination, x.price, x.currency, x.content[:45] + '...' if len(x.content) > 45 else x.content,
-                               x.address[:45] + '...' if len(x.address) > 45 else x.address, x.photo, x.id, x.delivery, x.created_date.strftime('%d.%m.%Y, %H:%M')], posts))
-        return render_template('favorites.html', title='Избранное', posts=posts, ln=len(posts), n=int(str(len(posts))[-1]))
+        posts = list(
+            map(lambda x: [x.title, x.destination, x.price, x.currency,
+                           x.content[:45] + '...' if len(x.content) > 45 else x.content,
+                           x.address[:45] + '...' if len(x.address) > 45 else x.address, x.photo, x.id, x.delivery,
+                           x.created_date.strftime('%d.%m.%Y, %H:%M')], posts))
+        return render_template('favorites.html', title='Избранное', posts=posts, ln=len(posts),
+                               n=int(str(len(posts))[-1]))
     return redirect('/profile')
 
 
@@ -233,7 +264,8 @@ def add_post():
         form = PostForm()
         if request.method == 'POST' or form.validate_on_submit():
             if not str(form.age.data).isdigit() or not str(form.price.data).isdigit():
-                return render_template('add_post.html', title='Создание объявления', form=form, message='Неправильный формат ввода')
+                return render_template('add_post.html', title='Создание объявления', form=form,
+                                       message='Неправильный формат ввода')
             if len(str(form.age.data)) > 3:
                 try:
                     form.age.data = int(str(form.age.data)[:3])
@@ -309,7 +341,8 @@ def add_post():
                 title=form.title.data,
                 content=form.content.data,
                 address=address,
-                coords=f'{ll1},{ll2}',
+                coords1=ll1,
+                coords2=ll2,
                 destination=form.destination.data,
                 delivery=form.delivery.data,
                 user_id=current_user.id,
@@ -370,7 +403,7 @@ def choice_city():
                 if response2:
                     json_response2 = response2.json()
                     session[
-                        'coords'] = f'{json_response2["features"][0]["geometry"]["coordinates"][0]} {json_response2["features"][0]["geometry"]["coordinates"][1]}'
+                        'coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0], json_response2["features"][0]["geometry"]["coordinates"][1]]
                     db_sess.merge(current_user)
                 db_sess.commit()
             else:
@@ -381,6 +414,13 @@ def choice_city():
 
 @app.route('/category/<types>/posts')
 def posts(types):
+    if not session["coords"]:
+        response2 = requests.get(
+            f'https://search-maps.yandex.ru/v1/?text={current_user.city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
+        if response2:
+            json_response2 = response2.json()
+            session[
+                'coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0], json_response2["features"][0]["geometry"]["coordinates"][1]]
     dbs = db_session.create_session()
     session["link"] = f"/category/{types}/posts"
     if current_user.is_authenticated:
@@ -389,20 +429,22 @@ def posts(types):
         city = session.get('city')
         if not city:
             session['city'] = 'Москва'
-    ll1, ll2 = session["coords"].split()[0], session["coords"].split()[1]
+    ll1, ll2 = float(session["coords"][0]) - 1, float(session["coords"][0]) + 1
+    ll3, ll4 = float(session["coords"][1]) - 1, float(session["coords"][1]) + 1
+    print(ll1, ll3, ll4, ll2)
     if 'all' not in session["categories"]:
         posts = dbs.query(Post).filter(Post.category == types, Post.breed.in_(session["categories"])).all()
     else:
         posts = dbs.query(Post).filter(Post.category == types).all()
     posts = list(
         map(lambda x: [x.title[:9] + '...' if len(x.title) > 9 else x.title, x.destination, x.price, x.currency,
-                       x.address[:20] + '...' if len(x.address) > 20 else x.address, x.photo, x.id] if float(
-            ll1) - 2 <= float(
-            x.coords.split(',')[0]) <= float(ll1) + 2 and float(ll2) - 2 <= float(x.coords.split(',')[1]) <= float(
-            ll2) + 2 else None, posts))
+                       x.address[:20] + '...' if len(x.address) > 20 else x.address, x.photo, x.id] if
+        ll2 >= x.coords1 >= ll1 and ll4 >= x.coords2 >= ll3 else None, posts))
     if len(city) > 70:
         city = city[:70] + '...'
     session['link2'] = f"/category/{types}/posts"
+    if all(i == None for i in posts):
+        posts = []
     return render_template('posts.html', title=str(types), posts=posts, city=city, back=f"/category/{types}")
 
 
