@@ -2,6 +2,20 @@
 
 {% block content %}
 <div class="post_d">
-    <form method="post"
+        <a href="/profile">
+            <button class="back" style="margin-bottom: 30px;">назад</button>
+        </a>
+    <form method="post" style="padding: 40px;">
+        <p>
+            Введите новый пароль<br>
+            <input class="form_login" type="password" name="passw1"/>
+        </p>
+        <p style="margin-top: 30px;">
+            Повторите пароль<br>
+            <input class="form_login" type="password" name="passw2"/>
+        </p>
+        <p style="margin-top: 40px;"><input class="butt2" type="submit" value="Сохранить" /></p>
+        <p style="font-size: 20px; color: #48317a; margin-top: 40px;">{{mess}}</p>
+    </form>
 </div>
 {% endblock %}

@@ -1,3 +1,4 @@
+import werkzeug
 from flask import Flask, render_template, redirect, request, session
 import shutil
 from data import db_session
@@ -59,7 +60,6 @@ def index():
                                                                           Post.coords2 <= ll2,
                                                                           Post.coords2 >= ll4).limit(
             30).all()
-        print(ll1, ll2, ll3, ll4)
     for i in range(len(p)):
         if len(p[i].content) >= 50:
             p[i].content = p[i].content[:50] + '...'
@@ -77,6 +77,17 @@ def sort_post():
 
 @app.route('/change_password', methods=['GET', 'POST'])
 def change_pin():
+    if current_user:
+        if request.method == 'POST':
+            if request.values['passw2'] == request.values['passw1']:
+                pin1 = werkzeug.security.generate_password_hash(request.values['passw2'])
+                db_s = db_session.create_session()
+                current_user.hashed_password = pin1
+                db_s.merge(current_user)
+                db_s.commit()
+                return render_template('change_pin.html', title='Изменение пароля', mess="Пароль успешно изменен")
+            else:
+                return render_template('change_pin.html', title='Изменение пароля', mess="Пароли не совпадают")
     return render_template('change_pin.html', title='Изменение пароля')
 
 
@@ -435,7 +446,6 @@ def posts(types):
             session['city'] = 'Москва'
     ll1, ll2 = float(session["coords"][0]) - 1, float(session["coords"][0]) + 1
     ll3, ll4 = float(session["coords"][1]) - 1, float(session["coords"][1]) + 1
-    print(ll1, ll3, ll4, ll2)
     if 'all' not in session["categories"]:
         posts = dbs.query(Post).filter(Post.category == types, Post.breed.in_(session["categories"])).all()
     else:
@@ -481,7 +491,7 @@ def profile():
                     dbs = db_session.create_session()
                     del_p = dbs.query(Post).filter(Post.id == i).first()
                     shutil.rmtree('/'.join(os.getcwd().split(
-                                '\\')) + f'/static/pets_photo/{str(i)}')
+                        '\\')) + f'/static/pets_photo/{str(i)}')
                     dbs.delete(del_p)
                     dbs.commit()
         if len(current_user.city) > 40:
