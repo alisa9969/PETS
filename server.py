@@ -293,8 +293,7 @@ def category():
     r = json.load(f)
     m = []
     for i in r:
-        if r[i]["types"]:
-            m.append([r[i]["name"], i, r[i]["src"]])
+        m.append([r[i]["name"], i, r[i]["src"]])
     return render_template('category.html', title='Категории', m=m, )
 
 
