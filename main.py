@@ -1,6 +1,7 @@
 import werkzeug
 from flask import Flask, render_template, redirect, request, session
 import shutil
+import datetime
 from data import db_session
 from data.users import User
 from data.favorite import Favorite
@@ -21,6 +22,9 @@ app = Flask(__name__, static_folder="static")
 app.config['SECRET_KEY'] = 'pets.website_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
+    days=30
+)
 
 
 @login_manager.user_loader
@@ -52,31 +56,31 @@ def index():
     p = ''
     ll1, ll2 = float(session['coords'][0]) + 1, float(session['coords'][1]) + 1
     ll3, ll4 = float(session['coords'][0]) - 1, float(session['coords'][1]) - 1
-    try:
-        if session['order']:
-            if session['order'] == 'views':
-                p = db_sess.query(Post).order_by(Post.views_count).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
+    ord = session.get('order')
+    if ord:
+        if ord == 'views':
+            p = db_sess.query(Post).order_by(Post.views_count).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
                                                                           Post.coords2 <= ll2,
                                                                           Post.coords2 >= ll4)
-            elif session['order'] == 'price1':
-                p = db_sess.query(Post).order_by(Post.price).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
+        elif ord == 'price1':
+            p = db_sess.query(Post).order_by(Post.price).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
                                                                     Post.coords2 <= ll2,
                                                                     Post.coords2 >= ll4)
-            elif session['order'] == 'price2':
-                p = db_sess.query(Post).order_by(Post.price.desc()).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
+        elif ord == 'price2':
+            p = db_sess.query(Post).order_by(Post.price.desc()).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
                                                                            Post.coords2 <= ll2,
                                                                            Post.coords2 >= ll4)
-            elif session['order'] == 'date':
-                p = db_sess.query(Post).order_by(Post.created_date.desc()).filter(Post.coords1 <= ll1,
+        elif ord == 'date':
+            p = db_sess.query(Post).order_by(Post.created_date.desc()).filter(Post.coords1 <= ll1,
                                                                                   Post.coords1 >= ll3,
                                                                                   Post.coords2 <= ll2,
                                                                                   Post.coords2 >= ll4)
-    except:
+    else:
         p = db_sess.query(Post).order_by(Post.created_date.desc()).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
                                                                           Post.coords2 <= ll2,
                                                                           Post.coords2 >= ll4)
+    m = session.get('filter')
     try:
-        m = session['filter']
         if m['age1']:
             if m['age2']:
                 p = p.filter(Post.age >= int(m['age1']), Post.age <= int(m['age2']))
@@ -125,7 +129,6 @@ def index():
             p = p.filter(Post.steril == 1)
     except:
         pass
-    print(p)
     p = p.limit(30).all()
     for i in range(len(p)):
         if len(p[i].content) >= 50:
@@ -165,7 +168,7 @@ def change_pin():
 def filter():
     if request.method == 'POST':
         if request.values['delete']:
-            session['filter'] = ''
+            session.pop('filter', None)
             return redirect(session['link'])
         m = {}
         c = []
@@ -521,32 +524,108 @@ def choice_city():
 
 @app.route('/category/<types>/posts')
 def posts(types):
-    if not session["coords"]:
-        response2 = requests.get(
-            f'https://search-maps.yandex.ru/v1/?text={current_user.city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
-        if response2:
-            json_response2 = response2.json()
-            session[
-                'coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0],
-                             json_response2["features"][0]["geometry"]["coordinates"][1]]
     dbs = db_session.create_session()
     session["link"] = f"/category/{types}/posts"
     if current_user.is_authenticated:
         city = current_user.city
     else:
-        city = session.get('city')
-        if not city:
+        if not session.get('city'):
             session['city'] = 'Москва'
+        city = session.get('city')
+    response2 = requests.get(
+            f'https://search-maps.yandex.ru/v1/?text={city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
+    if response2:
+        json_response2 = response2.json()
+        session['coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0],
+                             json_response2["features"][0]["geometry"]["coordinates"][1]]
     ll1, ll2 = float(session["coords"][0]) - 1, float(session["coords"][0]) + 1
     ll3, ll4 = float(session["coords"][1]) - 1, float(session["coords"][1]) + 1
-    if 'all' not in session["categories"]:
-        posts = dbs.query(Post).filter(Post.category == types, Post.breed.in_(session["categories"])).all()
+
+    print(ll1,  ll2, ll3,ll4)
+    categ = session.get("categories")
+    if 'all' not in categ:
+        posts = dbs.query(Post).filter(Post.category == types, Post.breed.in_(categ))
     else:
-        posts = dbs.query(Post).filter(Post.category == types).all()
+        posts = dbs.query(Post).filter(Post.category == types)
+    ord = session.get('order')
+    if ord:
+        if ord == 'views':
+            p = posts.order_by(Post.views_count).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
+                                                                          Post.coords2 <= ll4,
+                                                                          Post.coords2 >= ll2)
+        elif ord == 'price1':
+            p = posts.order_by(Post.price).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
+                                                                          Post.coords2 <= ll4,
+                                                                          Post.coords2 >= ll2)
+        elif ord == 'price2':
+            p = posts.order_by(Post.price.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
+                                                                          Post.coords2 <= ll4,
+                                                                          Post.coords2 >= ll2)
+        elif ord == 'date':
+            p = posts.order_by(Post.created_date.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
+                                                                          Post.coords2 <= ll4,
+                                                                          Post.coords2 >= ll2)
+    else:
+        p = posts.order_by(Post.created_date.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
+                                                                          Post.coords2 <= ll4,
+                                                                          Post.coords2 >= ll2)
+    m = session.get('filter')
+    try:
+        if m['age1']:
+            if m['age2']:
+                p = p.filter(Post.age >= int(m['age1']), Post.age <= int(m['age2']))
+            else:
+                p = p.filter(Post.age >= int(m['age1']))
+        elif m['age2']:
+            p = p.filter(Post.age <= int(m['age2']))
+    except:
+        pass
+    try:
+        p = p.filter(Post.destination.in_(m['destination']))
+    except:
+        pass
+
+    try:
+        p = p.filter(Post.color.in_(m['color']))
+    except:
+        pass
+    try:
+        if m['delivery']:
+            p = p.filter(Post.delivery == 1)
+    except:
+        pass
+    try:
+        if m['price1']:
+            if m['price2']:
+                p = p.filter(int(m['price1']) <= Post.price <= int(m['price2']))
+            else:
+                p = p.filter(Post.price >= int(m['price1']))
+        elif m['price2']:
+            p = p.filter(Post.price <= int(m['price2']))
+    except:
+        pass
+    try:
+        if m['documents']:
+            p = p.filter(Post.documents == 1)
+    except:
+        pass
+    try:
+        if m['vaccin']:
+            p = p.filter(Post.vaccin == 1)
+    except:
+        pass
+    try:
+        if m['steril']:
+            p = p.filter(Post.steril == 1)
+    except:
+        pass
+    p = p.all()
+    for i in p:
+        print(i)
     posts = list(
         map(lambda x: [x.title[:9] + '...' if len(x.title) > 9 else x.title, x.destination, x.price, x.currency,
                        x.address[:20] + '...' if len(x.address) > 20 else x.address, x.photo, x.id] if
-        ll2 >= x.coords1 >= ll1 and ll4 >= x.coords2 >= ll3 else None, posts))
+        ll2 >= x.coords1 >= ll1 and ll4 >= x.coords2 >= ll3 else None, p))
     if len(city) > 70:
         city = city[:70] + '...'
     session['link2'] = f"/category/{types}/posts"
