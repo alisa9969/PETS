@@ -23,18 +23,19 @@
                 <div style="display: block; text-align: center; justify-content: center">
                     <form method="post">
                         <input type='submit' class="butt2"
-                                style="width: 270px; font-size: 19px; margin-top: 22px; margin-bottom: 20px; background: #fff; color: black"
-                            value='{{fvt}}' name="fav" />
+                               style="width: 270px; font-size: 19px; margin-top: 22px; margin-bottom: 20px; background: #fff; color: black"
+                               value='{{fvt}}' name="fav"/>
                     </form>
                     <form method="post" enctype="multipart/form-data">
-                    <div class="user_info">
-                        <a class="img"><img src={{user.photo}} style="border-radius: 20px" width="140px"></a>
-                        <h3>{{user.name}}</h3>
-                        <input name='user' value="Профиль" type="submit" class="butt2" style="font-size: 20px; margin-top: 10px; margin-bottom: 10px;"/>
-                        {% if post.phone %}
-                        <p>Тел.: {{post.phone}}</p>
-                        {%endif%}
-                    </div>
+                        <div class="user_info">
+                            <a class="img"><img src={{user.photo}} style="border-radius: 20px" width="140px"></a>
+                            <h3>{{user.name}}</h3>
+                            <input name='user' value="Профиль" type="submit" class="butt2"
+                                   style="font-size: 20px; margin-top: 10px; margin-bottom: 10px;"/>
+                            {% if post.phone %}
+                            <p>Тел.: {{post.phone}}</p>
+                            {%endif%}
+                        </div>
                     </form>
                 </div>
             </div>

@@ -4,12 +4,10 @@
 <div class="account">
     <div style="text-align: start; display: flex; padding-left: 20px;">
         <div style="justify-content: center;">
+            <img src={{current_user.photo}} class="ava"><br>
             <form method="post" enctype="multipart/form-data">
-                <img src={{current_user.photo}} class="ava"><br>
-                <label>
-                <input type="file" hidden="hidden" name="img" accept="image/png, image/jpeg, image/jpg" >
-                    <span class="butt2" style="margin-left: 40px;">Изменить фото</span>
-                </label>
+                <p>{{form.photo (accept="image/png, image/jpeg, image/jpg") }}</p>
+                <p>{{form.submit (class="butt2", style="width: 120px; margin-left: 5px;") }}</p>
             </form>
         </div>
         <div style="text-align: start; margin-left: 40px;">

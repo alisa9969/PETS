@@ -9,6 +9,7 @@ from forms.user import RegisterForm
 from forms.city import CityForm
 from data.post import Post
 from forms.edit import EditForm
+from forms.photo import PhotoForm
 from data.organizations import Organizations
 from forms.login import LoginForm
 from forms.posts import PostForm
@@ -654,10 +655,29 @@ def subcategory(types):
 def profile():
     session["link2"] = '/profile'
     session["link1"] = '/profile'
+    form = PhotoForm()
     if current_user.is_authenticated:
         if request.method == "POST":
+            if form.photo.data:
+                os.remove('/'.join(os.getcwd().split(
+                    '\\')) + current_user.photo)
+                file = Image.open(form.photo.data, mode='r', formats=None)
+                if file:
+                    w, h = file.size
+                    if w > h:
+                        file = file.crop((w - (w - h) // 2 - h, 0, w - (w - h) // 2, h))
+                    if w < h:
+                        file = file.crop((0, h - (h - w) // 2 - w, w, h - (h - w) // 2))
+                    file.save(
+                        '/'.join(os.getcwd().split(
+                            '\\')) + f'/static/avatars/{current_user.id}/{form.photo.data.filename}')
+                    ph = f'/static/avatars/{current_user.id}/{form.photo.data.filename}'
+                    current_user.photo = ph
+                    dbs = db_session.create_session()
+                    dbs.merge(current_user)
+                    dbs.commit()
+                    return redirect('/profile')
             for i in request.values:
-                print(request.values[i])
                 if i.isdigit():
                     dbs = db_session.create_session()
                     del_p = dbs.query(Post).filter(Post.id == i).first()
@@ -675,7 +695,7 @@ def profile():
             map(lambda x: [x.title[:9] + '...' if len(x.title) > 9 else x.title, x.price, x.currency, x.views_count,
                            x.photo, x.id, x.created_date.strftime('%d.%m.%Y, %H:%M')], posts))
         session['link'] = '/profile'
-        return render_template('profile.html', title='Профиль', city=city, posts=posts)
+        return render_template('profile.html', title='Профиль', city=city, posts=posts, form=form)
     return render_template('autorization.html', title='Авторизация')
 
 
