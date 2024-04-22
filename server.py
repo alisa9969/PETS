@@ -83,6 +83,7 @@ def index():
                                                                           Post.coords2 >= ll4)
     try:
         m = session.get('filter')
+        print(m)
         if m[0]:
             if 'Все' not in m[0]:
                 filt = p.filter(Post.destination.in_(m[0]))
@@ -99,11 +100,11 @@ def index():
                 if filt:
                     p = filt
         if m[3]:
-            filt = p.filter(Post.age <= m[3][0], Post.age >= m[3][1])
+            filt = p.filter(Post.age >= m[3][0], Post.age <= m[3][1])
             if filt:
                 p = filt
         if m[4]:
-            filt = p.filter(Post.price <= m[4][0], Post.price >= m[4][1])
+            filt = p.filter(Post.price >= m[4][0], Post.price <= m[4][1])
             if filt:
                 p = filt
         if m[5]:
@@ -148,9 +149,9 @@ def filter():
         c = []
         d = []
         t = []
-        if str(form.price1.data).isalnum() or str(form.price2.data).isalnum() or str(form.age.data).isalnum() or str(
-                form.age2.data).isalnum():
-            return render_template('filter.html', title='Фильтр', message='Неверный формат ввода')
+        v = [form.price1.data, form.price2.data, form.age.data, form.age2.data]
+        if False in [(str(j).isalnum() and not str(j).isalpha()) for j in v]:
+            return render_template('filter.html', title='Фильтр', message='Неверный формат ввода', form=form)
         for i in form.color.data:
             c.append(i)
         for i in form.destination.data:
