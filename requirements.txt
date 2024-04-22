@@ -1,5 +1,6 @@
 werkzeug
 flask
+flask-login
 requests
 pillow
 flask-wtf
