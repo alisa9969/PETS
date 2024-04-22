@@ -19,6 +19,5 @@ import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, TextAreaField, SubmitField, EmailField
-from wtforms.validators import DataRequired, Email, Length
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, IntegerField, SelectField, BooleanField, FileField, TelField
