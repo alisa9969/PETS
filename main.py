@@ -5,8 +5,6 @@ import datetime
 from data import db_session
 from data.users import User
 from data.favorite import Favorite
-from data.chat import Chat
-from data.message import Message
 from forms.user import RegisterForm
 from forms.city import CityForm
 from data.post import Post
@@ -796,34 +794,6 @@ def settings():
         return render_template('settings.html', title='Настройки')
     return redirect("/profile")
 
-
-@app.route('/messenger', methods=['GET', 'POST'])
-def chats():
-    if current_user.is_authenticated:
-        ds = db_session.create_session()
-        chat = []
-        chat_list = ds.query(Chat).filter((Chat.user1 == current_user.id) | (Chat.user2 == current_user.id)).all()
-        for i in chat_list:
-            if i.user1 == current_user.id:
-                r_user = ds.query(User).filter(User.id == i.user2).first()
-            if i.user2 == current_user.id:
-                r_user = ds.query(User).filter(User.id == i.user1).first()
-            message = ds.query(Message).order_by(Message.date.desc()).filter(Message.chat_id == i.id).first()
-            date = message.date
-            view = i.views
-            chat.append([i.id, r_user.photo, r_user.name, message.sms, date, view])
-        return render_template('chats.html', title='Мессенджер', c=chat)
-    return redirect("/profile")
-
-
-@app.route('/messenger/<chat_id>', methods=['GET', 'POST'])
-def chat(chat_id):
-    if current_user.is_authenticated:
-        ds = db_session.create_session()
-        chat = []
-        chat_list = ds.query(Chat).filter((Chat.user1 == current_user.id) | (Chat.user2 == current_user.id)).all()
-        return render_template('chat_with_user.html', title='Чат')
-    return redirect("/profile")
 
 
 if __name__ == '__main__':

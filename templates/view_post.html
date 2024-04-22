@@ -21,14 +21,6 @@
                 <h2>Бесплатно</h2>
                 {% endif %}
                 <div style="display: block; text-align: center; justify-content: center">
-                    {% if post.user_id != current_user.id %}
-                    <a>
-                        <button class="butt2"
-                                style="width: 270px; font-size: 22px; margin-top: 25px;">
-                            Написать
-                        </button>
-                    </a><br>
-                    {% endif %}
                     <form method="post">
                         <input type='submit' class="butt2"
                                 style="width: 270px; font-size: 19px; margin-top: 22px; margin-bottom: 20px; background: #fff; color: black"
