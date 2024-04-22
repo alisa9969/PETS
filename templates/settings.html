@@ -2,11 +2,13 @@
 
 {% block content %}
 <div class="content">
+    {%if session['link'] == '/profile' %}
     <div style="text-align: start; width: 100%; margin-bottom: 25px; padding-left: 10px; margin-top: -15px;">
         <a href='/profile' class="back_a">
             ←
         </a>
     </div>
+    {% endif %}
     <div style="text-align: start; width: 100%; padding-left: 70px; margin-top: 10px;">
         <div>
             <a href="/change_password" class="aa">

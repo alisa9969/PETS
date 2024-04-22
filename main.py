@@ -657,6 +657,7 @@ def profile():
     if current_user.is_authenticated:
         if request.method == "POST":
             for i in request.values:
+                print(request.values[i])
                 if i.isdigit():
                     dbs = db_session.create_session()
                     del_p = dbs.query(Post).filter(Post.id == i).first()
@@ -794,6 +795,35 @@ def settings():
         return render_template('settings.html', title='Настройки')
     return redirect("/profile")
 
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    dbs = db_session.create_session()
+    m = []
+    lst = []
+    session['link'], session['link2'] = '/search', '/search'
+    if request.method == 'POST':
+        session['request_s'] = request.values
+        for i in request.values:
+            m = request.values[i].split()
+            m = list(map(lambda x: "".join(c for c in x if c.isalnum()), m))
+            for j in m:
+                posts = dbs.query(Post).filter((Post.content.like(f'%{j}%')) | (Post.title.in_(m))).all()
+                if posts:
+                    for h in posts:
+                        lst.append(h)
+    else:
+        s = session.get('request_s')
+        for i in s:
+            m = s[i].split()
+            m = list(map(lambda x: "".join(c for c in x if c.isalnum()), m))
+            for j in m:
+                posts = dbs.query(Post).filter((Post.content.like(f'%{j}%')) | (Post.title.in_(m))).all()
+                if posts:
+                    for h in posts:
+                        lst.append(h)
+
+    return render_template('search_request.html', title='Поиск', lst=lst, ln=len(lst))
 
 
 if __name__ == '__main__':
