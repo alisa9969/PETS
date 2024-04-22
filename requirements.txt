@@ -1,7 +1,11 @@
 werkzeug
 flask
-flask-login
+Flask-Login
 requests
 pillow
 flask-wtf
+SQLAlchemy
 wtforms
+email-validator
+alembic
+Jinja2
