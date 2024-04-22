@@ -9,8 +9,16 @@
             </a>
         </div>
         <div style="text-align: end; width: 80%;">
-            <button class="img"><img src="/static/img/filter.png" height="33"></button>
-            <button class="img"><img src="/static/img/sort.png" height="30"></button>
+            {% if session['filter'] %}
+            <a href="/filter" class="img"><img src="/static/img/filter2.png" height="30"></a>
+            {% else %}
+            <a href="/filter" class="img"><img src="/static/img/filter.png" height="30"></a>
+            {% endif %}
+            {% if session['order'] %}
+            <a href="/order" class="img"><img src="/static/img/sort2.png" height="30"></a>
+            {% else %}
+            <a href="/order" class="img"><img src="/static/img/sort.png" height="30"></a>
+            {% endif %}
             <a href="/choice_city">
                 <button class="img"><img src="/static/img/point.png" height="30" style="margin-right: 7px">{{city}}
                 </button>

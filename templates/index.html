@@ -4,8 +4,16 @@
 <div class="content">
     <div class="buttons">
         <div>
+            {% if session['filter'] %}
+            <a href="/filter" class="img"><img src="/static/img/filter2.png" height="27"></a>
+            {% else %}
             <a href="/filter" class="img"><img src="/static/img/filter.png" height="27"></a>
+            {% endif %}
+            {% if session['order'] %}
+            <a href="/order" class="img"><img src="/static/img/sort2.png" height="27"></a>
+            {% else %}
             <a href="/order" class="img"><img src="/static/img/sort.png" height="27"></a>
+            {% endif %}
             <a href="/choice_city">
                 <button class="img"><img src="/static/img/point.png" height="27" style="margin-right: 7px">{{city}}
                 </button>

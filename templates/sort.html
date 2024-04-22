@@ -4,5 +4,32 @@
 {% if current_user.is_authenticated %}
 {% endif %}
 <div class="content">
+    <div style="text-align: start; width: 100%; margin-bottom: 25px; padding-left: 20px; margin-top: -15px;">
+        <a href={{session['link']}} class="back_a">
+            ←
+        </a>
+    </div>
+    <div style='padding-left: 10%; font-size: 19px;'>
+        <h3>Сортировать:</h3>
+        <form style='padding: 50px;' method="post">
+            <p>
+                <input type="radio" name="sort" checked='checked' id="f" value="views"/>
+                <label for="f">По популярности</label>
+            </p>
+            <p style='margin-top: 30px;'>
+                <input type="radio" name="sort" id="p1" value="price1"/>
+                <label for="p1">По возрастанию цены</label>
+            </p>
+            <p style='margin-top: 30px;'>
+                <input type="radio" name="sort" id="p2" value="price2"/>
+                <label for="p2">По убыванию цены</label>
+            </p>
+            <p style='margin-top: 30px;'>
+                <input type="radio" name="sort" id="d" value="date"/>
+                <label for="d">По дате</label>
+            </p>
+            <input style='margin-top: 30px;' class='butt2' type="submit" name="ok" value="Применить"/>
+        </form>
+    </div>
 </div>
 {% endblock %}

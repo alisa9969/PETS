@@ -4,6 +4,68 @@
 {% if current_user.is_authenticated %}
 {% endif %}
 <div class="content">
-
+    <div style="text-align: start; width: 100%; margin-bottom: 25px; padding-left: 20px; margin-top: -15px;">
+        <a href={{session['link']}} class="back_a">
+            ←
+        </a>
+    </div>
+    <div style='padding-left: 10%; font-size: 19px;'>
+        <h3>Фильтр</h3>
+        <p style="font-size: 20px; color: #48317a; margin-top: 30px;">{{message}}</p>
+        <form class="filter" style='padding: 50px;' method="post" enctype="multipart/form-data">
+            <p>
+            <h5>Тип объявлений</h5>
+            <input type="checkbox" name="dest1" id="d1" value="Пристройство"> <label for="d1"> Пристройство</label><br>
+            <input type="checkbox" name="dest2" id="d2" value="Поиск хозяев"> <label for="d2"> Поиск хозяев</label><br>
+            <input type="checkbox" name="dest3" id="d3" value="Поиск питомца"> <label for="d3"> Поиск питомца</label><br>
+            </p>
+            <h5>
+                <input type="radio" name="delivery" value="1"/> Возможность доставки
+            </h5>
+            <p>
+            <h5>Цена</h5><br>
+            от <input type="number" name="price1" placeholder="0"/>
+            до <input type="number" name="price2" placeholder="1 000 000"/>
+            </p>
+            <p>
+                <input type="checkbox" name="documents" value="1"/> Наличие документов
+            </p>
+            <p>
+                <input type="checkbox" name="vaccin" value="1"/> Прививки
+            </p>
+            <p>
+                <input type="checkbox" name="steril" value="1"/> Питомец стерилизован
+            </p>
+            <p>
+            <h5>Возраст</h5><br>
+            от <input type="number" name="age1"/>
+            до <input type="number" name="age2"/>
+            </p>
+            <p>
+            <h5>Окрас</h5>
+            <div class="colors">
+                <input type="checkbox" name="Белый" id='1' value="color"/> <label for="1"> Белый</label>
+                <input type="checkbox" name="Черный" id='2' value="color"/><label for="2"> Черный</label>
+                <input type="checkbox" name="Серый" id='3' value="color"/><label for="3"> Серый</label>
+                <input type="checkbox" name="Рыжий" id='4' value="color"/><label for="4"> Рыжий</label>
+                <input type="checkbox" name="Разноцветный" id='13' value="color"/><label for="13">
+                Разноцветный</label><br>
+                <input type="checkbox" name="Золотистый" id='5' value="color"/><label for="5"> Золотистый</label>
+                <input type="checkbox" name="Зеленый" id='6' value="color"/><label for="6"> Зеленый</label>
+                <input type="checkbox" name="Синий" id='7' value="color"/><label for="7"> Синий</label>
+                <input type="checkbox" name="Розовый" id='8' value="color"/><label for="8"> Розовый</label><br>
+                <input type="checkbox" name="Коричневый" id='9' value="color"/><label for="9"> Коричневый</label>
+                <input type="checkbox" name="Фиолетовый" id='10' value="color"/><label for="10"> Фиолетовый</label>
+                <input type="checkbox" name="Красный" id='11' value="color"/><label for="11"> Красный</label>
+                <input type="checkbox" name="Бежевый" id='12' value="color"/><label for="12"> Бежевый</label><br>
+            </div>
+            </p>
+            <input style='margin-top: 10px; width: 24%;' class='submit_b' type="submit" name="ok" value="Применить"/>
+            <input style='margin-top: 10px; width: 24%; margin-left: 5px;' class='cancel' type="submit" name="delete"
+                   value="Сбросить"/>
+        </form>
+    </div>
 </div>
+<script>
+</script>
 {% endblock %}

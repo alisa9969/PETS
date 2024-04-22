@@ -50,16 +50,83 @@ def index():
         city = city[:50] + '...'
     db_sess = db_session.create_session()
     p = ''
-    if request.method == 'POST':
-        pass
-        # p = db_sess.query(Post).filter(Post.category == form.category.data).all()
-    else:
-        ll1, ll2 = float(session['coords'][0]) + 1, float(session['coords'][1]) + 1
-        ll3, ll4 = float(session['coords'][0]) - 1, float(session['coords'][1]) - 1
+    ll1, ll2 = float(session['coords'][0]) + 1, float(session['coords'][1]) + 1
+    ll3, ll4 = float(session['coords'][0]) - 1, float(session['coords'][1]) - 1
+    try:
+        if session['order']:
+            if session['order'] == 'views':
+                p = db_sess.query(Post).order_by(Post.views_count).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
+                                                                          Post.coords2 <= ll2,
+                                                                          Post.coords2 >= ll4)
+            elif session['order'] == 'price1':
+                p = db_sess.query(Post).order_by(Post.price).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
+                                                                    Post.coords2 <= ll2,
+                                                                    Post.coords2 >= ll4)
+            elif session['order'] == 'price2':
+                p = db_sess.query(Post).order_by(Post.price.desc()).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
+                                                                           Post.coords2 <= ll2,
+                                                                           Post.coords2 >= ll4)
+            elif session['order'] == 'date':
+                p = db_sess.query(Post).order_by(Post.created_date.desc()).filter(Post.coords1 <= ll1,
+                                                                                  Post.coords1 >= ll3,
+                                                                                  Post.coords2 <= ll2,
+                                                                                  Post.coords2 >= ll4)
+    except:
         p = db_sess.query(Post).order_by(Post.created_date.desc()).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
                                                                           Post.coords2 <= ll2,
-                                                                          Post.coords2 >= ll4).limit(
-            30).all()
+                                                                          Post.coords2 >= ll4)
+    try:
+        m = session['filter']
+        if m['age1']:
+            if m['age2']:
+                p = p.filter(Post.age >= int(m['age1']), Post.age <= int(m['age2']))
+            else:
+                p = p.filter(Post.age >= int(m['age1']))
+        elif m['age2']:
+            p = p.filter(Post.age <= int(m['age2']))
+    except:
+        pass
+    try:
+        p = p.filter(Post.destination.in_(m['destination']))
+    except:
+        pass
+
+    try:
+        p = p.filter(Post.color.in_(m['color']))
+    except:
+        pass
+    try:
+        if m['delivery']:
+            p = p.filter(Post.delivery == 1)
+    except:
+        pass
+    try:
+        if m['price1']:
+            if m['price2']:
+                p = p.filter(int(m['price1']) <= Post.price <= int(m['price2']))
+            else:
+                p = p.filter(Post.price >= int(m['price1']))
+        elif m['price2']:
+            p = p.filter(Post.price <= int(m['price2']))
+    except:
+        pass
+    try:
+        if m['documents']:
+            p = p.filter(Post.documents == 1)
+    except:
+        pass
+    try:
+        if m['vaccin']:
+            p = p.filter(Post.vaccin == 1)
+    except:
+        pass
+    try:
+        if m['steril']:
+            p = p.filter(Post.steril == 1)
+    except:
+        pass
+    print(p)
+    p = p.limit(30).all()
     for i in range(len(p)):
         if len(p[i].content) >= 50:
             p[i].content = p[i].content[:50] + '...'
@@ -72,7 +139,10 @@ def index():
 
 @app.route('/order', methods=['GET', 'POST'])
 def sort_post():
-    return render_template('sort.html', title='Сортировка объявлений')
+    if request.method == "POST":
+        session['order'] = request.values['sort']
+        return redirect(session['link'])
+    return render_template('sort.html', title='Сортировка')
 
 
 @app.route('/change_password', methods=['GET', 'POST'])
@@ -93,6 +163,29 @@ def change_pin():
 
 @app.route('/filter', methods=['GET', 'POST'])
 def filter():
+    if request.method == 'POST':
+        if request.values['delete']:
+            session['filter'] = ''
+            return redirect(session['link'])
+        m = {}
+        c = []
+        d = []
+        if request.values['ok']:
+            for i in request.values:
+                if (i == 'age1' and request.values[i]) or (i == 'age2' and request.values[i]) or (
+                        i == 'price1' and request.values[i]) or (i == 'price2' and request.values[i]):
+                    if request.values[i].isdigit() == 0:
+                        return render_template('filter.html', title='Фильтр', message='Неверный формат ввода')
+                if request.values[i] == 'color':
+                    c.append(i)
+                elif 'dest' in i:
+                    d.append(request.values[i])
+                else:
+                    m[i] = request.values[i]
+            m['destination'] = d
+            m['color'] = c
+            session['filter'] = m
+            return redirect(session['link'])
     return render_template('filter.html', title='Фильтр')
 
 
