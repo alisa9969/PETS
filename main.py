@@ -168,9 +168,12 @@ def change_pin():
 @app.route('/filter', methods=['GET', 'POST'])
 def filter():
     if request.method == 'POST':
-        if request.values['delete']:
-            session.pop('filter', None)
-            return redirect(session['link'])
+        try:
+            if request.values['delete']:
+                session.pop('filter', None)
+                return redirect(session['link'])
+        except:
+            pass
         m = {}
         c = []
         d = []
@@ -393,7 +396,7 @@ def add_post():
             with open('category.json', 'w', encoding="utf8") as f:
                 json.dump(r, f, ensure_ascii=False)
             db_sess = db_session.create_session()
-            count_p = len(db_sess.query(Post).filter(Post.user_id == current_user.id).all()) + 1
+            count_p = len(db_sess.query(Post).all()) + 1
             os.makedirs('/'.join(os.getcwd().split('\\')) + f'/static/pets_photo/{str(count_p)}', exist_ok=True)
             if form.photo.data.filename != '':
                 try:
@@ -619,8 +622,6 @@ def posts(types):
     except:
         pass
     p = p.all()
-    for i in p:
-        print(i)
     posts = list(
         map(lambda x: [x.title[:9] + '...' if len(x.title) > 9 else x.title, x.destination, x.price, x.currency,
                        x.address[:20] + '...' if len(x.address) > 20 else x.address, x.photo, x.id] if

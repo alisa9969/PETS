@@ -1,11 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if not m%}
-<div class="category">
-    <h2>Категорий нет</h2>
-</div>
-{% else %}
 <h2>Все категории</h2>
 {% for i in m %}
 <div class="category">
@@ -15,5 +10,4 @@
     </div>
 </div>
 {%endfor%}
-{% endif%}
 {% endblock %}
