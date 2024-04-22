@@ -1,8 +1,6 @@
 werkzeug
 flask
-flask_login
 requests
 pillow
-sqlalchemy
-flask_wtf
+flask-wtf
 wtforms
