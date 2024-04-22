@@ -768,9 +768,10 @@ nav div{
     display: flex;
     align-items: center;
     margin-right: 20px;
+    margin-left: 50px;
 }
 .search_f input{
-    width: 350px;
+    width: 400px;
     padding: 3px;
     margin-left: 15px;
     border-radius: 10px;
@@ -826,4 +827,36 @@ nav div{
 .aa:hover, .aa p:hover, .aa input:hover {
     text-decoration: none;
     color: #282829;
+}
+.ava_chats{
+    border-radius: 20px;
+    margin-right: 20px;
+}
+.view_chat{
+    width: 98%;
+    border: solid;
+    display: flex;
+    border-width: 2px;
+    border-color: #604191;
+    background: #fff;
+    border-radius: 20px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.chats_a{
+    text-decoration: none;
+    color: #322f38;
+}
+.chats{
+    margin-bottom: 20px;
+    width: 98%;
+    display: flex;
+    border-width: 2px;
+    background: #fff;
+    padding: 10px;
+    border-radius: 20px;
+}
+.chats_a:hover{
+    text-decoration: none;
+    color: #322f38;
 }

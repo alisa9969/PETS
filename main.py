@@ -5,6 +5,8 @@ import datetime
 from data import db_session
 from data.users import User
 from data.favorite import Favorite
+from data.chat import Chat
+from data.message import Message
 from forms.user import RegisterForm
 from forms.city import CityForm
 from data.post import Post
@@ -60,21 +62,21 @@ def index():
     if ord:
         if ord == 'views':
             p = db_sess.query(Post).order_by(Post.views_count).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
-                                                                          Post.coords2 <= ll2,
-                                                                          Post.coords2 >= ll4)
+                                                                      Post.coords2 <= ll2,
+                                                                      Post.coords2 >= ll4)
         elif ord == 'price1':
             p = db_sess.query(Post).order_by(Post.price).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
-                                                                    Post.coords2 <= ll2,
-                                                                    Post.coords2 >= ll4)
+                                                                Post.coords2 <= ll2,
+                                                                Post.coords2 >= ll4)
         elif ord == 'price2':
             p = db_sess.query(Post).order_by(Post.price.desc()).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
-                                                                           Post.coords2 <= ll2,
-                                                                           Post.coords2 >= ll4)
+                                                                       Post.coords2 <= ll2,
+                                                                       Post.coords2 >= ll4)
         elif ord == 'date':
             p = db_sess.query(Post).order_by(Post.created_date.desc()).filter(Post.coords1 <= ll1,
-                                                                                  Post.coords1 >= ll3,
-                                                                                  Post.coords2 <= ll2,
-                                                                                  Post.coords2 >= ll4)
+                                                                              Post.coords1 >= ll3,
+                                                                              Post.coords2 <= ll2,
+                                                                              Post.coords2 >= ll4)
     else:
         p = db_sess.query(Post).order_by(Post.created_date.desc()).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
                                                                           Post.coords2 <= ll2,
@@ -150,7 +152,7 @@ def sort_post():
 
 @app.route('/change_password', methods=['GET', 'POST'])
 def change_pin():
-    if current_user:
+    if current_user.is_authenticated:
         if request.method == 'POST':
             if request.values['passw2'] == request.values['passw1']:
                 pin1 = werkzeug.security.generate_password_hash(request.values['passw2'])
@@ -217,7 +219,7 @@ def index_post(ipost):
         db_sess.commit()
     fv = ''
     fav_txt = ''
-    if current_user:
+    if current_user.is_authenticated:
         db_sess = db_session.create_session()
         fv = db_sess.query(Favorite).filter(Favorite.user_id == current_user.id, Favorite.post_id == ipost).first()
         if fv:
@@ -259,7 +261,7 @@ def index_post(ipost):
 def favorites():
     session['link'] = '/favorites'
     session['link2'] = '/favorites'
-    if current_user:
+    if current_user.is_authenticated:
         if request.method == "POST":
             for i in request.values:
                 if i.isdigit():
@@ -533,15 +535,13 @@ def posts(types):
             session['city'] = 'Москва'
         city = session.get('city')
     response2 = requests.get(
-            f'https://search-maps.yandex.ru/v1/?text={city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
+        f'https://search-maps.yandex.ru/v1/?text={city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
     if response2:
         json_response2 = response2.json()
         session['coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0],
                              json_response2["features"][0]["geometry"]["coordinates"][1]]
     ll1, ll2 = float(session["coords"][0]) - 1, float(session["coords"][0]) + 1
     ll3, ll4 = float(session["coords"][1]) - 1, float(session["coords"][1]) + 1
-
-    print(ll1,  ll2, ll3,ll4)
     categ = session.get("categories")
     if 'all' not in categ:
         posts = dbs.query(Post).filter(Post.category == types, Post.breed.in_(categ))
@@ -551,24 +551,24 @@ def posts(types):
     if ord:
         if ord == 'views':
             p = posts.order_by(Post.views_count).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
-                                                                          Post.coords2 <= ll4,
-                                                                          Post.coords2 >= ll2)
+                                                        Post.coords2 <= ll4,
+                                                        Post.coords2 >= ll2)
         elif ord == 'price1':
             p = posts.order_by(Post.price).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
-                                                                          Post.coords2 <= ll4,
-                                                                          Post.coords2 >= ll2)
+                                                  Post.coords2 <= ll4,
+                                                  Post.coords2 >= ll2)
         elif ord == 'price2':
             p = posts.order_by(Post.price.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
-                                                                          Post.coords2 <= ll4,
-                                                                          Post.coords2 >= ll2)
+                                                         Post.coords2 <= ll4,
+                                                         Post.coords2 >= ll2)
         elif ord == 'date':
             p = posts.order_by(Post.created_date.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
-                                                                          Post.coords2 <= ll4,
-                                                                          Post.coords2 >= ll2)
+                                                                Post.coords2 <= ll4,
+                                                                Post.coords2 >= ll2)
     else:
         p = posts.order_by(Post.created_date.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
-                                                                          Post.coords2 <= ll4,
-                                                                          Post.coords2 >= ll2)
+                                                            Post.coords2 <= ll4,
+                                                            Post.coords2 >= ll2)
     m = session.get('filter')
     try:
         if m['age1']:
@@ -711,7 +711,7 @@ def register():
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Почта телефона уже используется")
+                                   message="Почта уже используется")
         user = User(
             name=form.name.data,
             email=form.email.data,
@@ -760,7 +760,7 @@ def edit():
             form.name.data = current_user.name
             form.about.data = current_user.about
         return render_template('change_profile.html', title='Редактирование', form=form)
-    return redirect("/autorization")
+    return redirect("/profile")
 
 
 @app.route('/user/<uid>', methods=['GET', 'POST'])
@@ -794,7 +794,36 @@ def settings():
                 logout_user()
                 return redirect("/profile")
         return render_template('settings.html', title='Настройки')
-    return redirect("/autorization")
+    return redirect("/profile")
+
+
+@app.route('/messenger', methods=['GET', 'POST'])
+def chats():
+    if current_user.is_authenticated:
+        ds = db_session.create_session()
+        chat = []
+        chat_list = ds.query(Chat).filter((Chat.user1 == current_user.id) | (Chat.user2 == current_user.id)).all()
+        for i in chat_list:
+            if i.user1 == current_user.id:
+                r_user = ds.query(User).filter(User.id == i.user2).first()
+            if i.user2 == current_user.id:
+                r_user = ds.query(User).filter(User.id == i.user1).first()
+            message = ds.query(Message).order_by(Message.date.desc()).filter(Message.chat_id == i.id).first()
+            date = message.date
+            view = i.views
+            chat.append([i.id, r_user.photo, r_user.name, message.sms, date, view])
+        return render_template('chats.html', title='Мессенджер', c=chat)
+    return redirect("/profile")
+
+
+@app.route('/messenger/<chat_id>', methods=['GET', 'POST'])
+def chat(chat_id):
+    if current_user.is_authenticated:
+        ds = db_session.create_session()
+        chat = []
+        chat_list = ds.query(Chat).filter((Chat.user1 == current_user.id) | (Chat.user2 == current_user.id)).all()
+        return render_template('chat_with_user.html', title='Чат')
+    return redirect("/profile")
 
 
 if __name__ == '__main__':
