@@ -30,7 +30,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="link" href="#">О сайте</a>
+                    <a class="link" href="/about_site">О сайте</a>
                 </li>
             </ul>
             <form class="search_f" action="/search" method="post">
@@ -39,7 +39,7 @@
             {% if current_user.is_authenticated %}
             <a href="/favorites" class="img_a"><img src="/static/img/fav.png" height="27px" alt="избранное"></a>
             <a class="img_a" href="/settings"><img src="/static/img/sett.png" height="27px"></a>
-            <a class="img_a" href="/profile"><img src="/static/img/avatar.png" height="45px"
+            <a class="img_a" href="/profile"><img src={{current_user.photo}} height="45px"
                                                   style='border-radius: 10px; margin-left: 10px;'></a>
             {% else %}
             <a href='/profile'>
@@ -74,11 +74,8 @@
             <div class="cont">
                 <img src="/static/img/email.png">
                 <p>E-mail: pets.support@gmail.com</p>
-            </div>
-            <a>
-                <button class="butt" style="margin-bottom: 13px;">Поддержка</button>
-            </a><br>
-            <a href="" class="help">Справка</a>
+            </div><br>
+            <a href="/about_site" class="help">Справка</a>
         </div>
     </div>
 </footer>

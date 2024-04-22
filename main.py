@@ -716,6 +716,11 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
+@app.route('/about_site')
+def about():
+    return render_template('about_site.html', title='Информация о сайте')
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:

@@ -22,7 +22,7 @@ class Post(SqlAlchemyBase):
     destination = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     delivery = sqlalchemy.Column(sqlalchemy.Boolean)
     photo = sqlalchemy.Column(sqlalchemy.String)
-    phone = sqlalchemy.Column(sqlalchemy.String)
+    phone = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     breed = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     color = sqlalchemy.Column(sqlalchemy.String)
     age = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
