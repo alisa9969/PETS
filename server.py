@@ -1,5 +1,6 @@
 import werkzeug
 from flask import Flask, render_template, redirect, request, session
+from forms.filter import FilterForm
 import shutil
 import datetime
 from data import db_session
@@ -80,54 +81,47 @@ def index():
         p = db_sess.query(Post).order_by(Post.created_date.desc()).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
                                                                           Post.coords2 <= ll2,
                                                                           Post.coords2 >= ll4)
-    m = session.get('filter')
     try:
-        if m['age1']:
-            if m['age2']:
-                p = p.filter(Post.age >= int(m['age1']), Post.age <= int(m['age2']))
-            else:
-                p = p.filter(Post.age >= int(m['age1']))
-        elif m['age2']:
-            p = p.filter(Post.age <= int(m['age2']))
-    except:
-        pass
-    try:
-        p = p.filter(Post.destination.in_(m['destination']))
-    except:
-        pass
-
-    try:
-        p = p.filter(Post.color.in_(m['color']))
-    except:
-        pass
-    try:
-        if m['delivery']:
-            p = p.filter(Post.delivery == 1)
-    except:
-        pass
-    try:
-        if m['price1']:
-            if m['price2']:
-                p = p.filter(int(m['price1']) <= Post.price <= int(m['price2']))
-            else:
-                p = p.filter(Post.price >= int(m['price1']))
-        elif m['price2']:
-            p = p.filter(Post.price <= int(m['price2']))
-    except:
-        pass
-    try:
-        if m['documents']:
-            p = p.filter(Post.documents == 1)
-    except:
-        pass
-    try:
-        if m['vaccin']:
-            p = p.filter(Post.vaccin == 1)
-    except:
-        pass
-    try:
-        if m['steril']:
-            p = p.filter(Post.steril == 1)
+        m = session.get('filter')
+        if m[0]:
+            if 'Все' not in m[0]:
+                filt = p.filter(Post.destination.in_(m[0]))
+                if filt:
+                    p = filt
+        if m[1]:
+            if 'Все' not in m[1]:
+                filt = p.filter(Post.color.in_(m[1]))
+                if filt:
+                    p = filt
+        if m[2]:
+            if 'Все' not in m[2]:
+                filt = p.filter(Post.category.in_(m[2]))
+                if filt:
+                    p = filt
+        if m[3]:
+            filt = p.filter(Post.age <= m[3][0], Post.age >= m[3][1])
+            if filt:
+                p = filt
+        if m[4]:
+            filt = p.filter(Post.price <= m[4][0], Post.price >= m[4][1])
+            if filt:
+                p = filt
+        if m[5]:
+            filt = p.filter(Post.delivery == 1)
+            if filt:
+                p = filt
+        if m[6]:
+            filt = p.filter(Post.delivery == 1)
+            if filt:
+                p = filt
+        if m[7]:
+            filt = p.filter(Post.delivery == 1)
+            if filt:
+                p = filt
+        if m[8]:
+            filt = p.filter(Post.delivery == 1)
+            if filt:
+                p = filt
     except:
         pass
     p = p.limit(30).all()
@@ -139,6 +133,35 @@ def index():
     session["link"] = '/'
     session['link2'] = '/'
     return render_template('index.html', title='Главная', city=city, posts=p)
+
+
+@app.route('/filter', methods=['GET', 'POST'])
+def filter():
+    form = FilterForm()
+    if request.method == 'POST':
+        try:
+            if request.values['delete']:
+                session.pop('filter', None)
+                return redirect(session['link'])
+        except:
+            pass
+        c = []
+        d = []
+        t = []
+        if str(form.price1.data).isalnum() or str(form.price2.data).isalnum() or str(form.age.data).isalnum() or str(
+                form.age2.data).isalnum():
+            return render_template('filter.html', title='Фильтр', message='Неверный формат ввода')
+        for i in form.color.data:
+            c.append(i)
+        for i in form.destination.data:
+            d.append(i)
+        for i in form.category.data:
+            t.append(i)
+        m = [d, c, t, [form.age.data, form.age2.data], [form.price1.data, form.price2.data], form.delivery.data,
+             form.documents.data, form.vaccin.data, form.steril.data]
+        session['filter'] = m
+        return redirect(session['link'])
+    return render_template('filter.html', title='Фильтр', form=form)
 
 
 @app.route('/order', methods=['GET', 'POST'])
@@ -163,37 +186,6 @@ def change_pin():
             else:
                 return render_template('change_pin.html', title='Изменение пароля', mess="Пароли не совпадают")
     return render_template('change_pin.html', title='Изменение пароля')
-
-
-@app.route('/filter', methods=['GET', 'POST'])
-def filter():
-    if request.method == 'POST':
-        try:
-            if request.values['delete']:
-                session.pop('filter', None)
-                return redirect(session['link'])
-        except:
-            pass
-        m = {}
-        c = []
-        d = []
-        if request.values['ok']:
-            for i in request.values:
-                if (i == 'age1' and request.values[i]) or (i == 'age2' and request.values[i]) or (
-                        i == 'price1' and request.values[i]) or (i == 'price2' and request.values[i]):
-                    if request.values[i].isdigit() == 0:
-                        return render_template('filter.html', title='Фильтр', message='Неверный формат ввода')
-                if request.values[i] == 'color':
-                    c.append(i)
-                elif 'dest' in i:
-                    d.append(request.values[i])
-                else:
-                    m[i] = request.values[i]
-            m['destination'] = d
-            m['color'] = c
-            session['filter'] = m
-            return redirect(session['link'])
-    return render_template('filter.html', title='Фильтр')
 
 
 @app.route('/post/<ipost>', methods=['GET', 'POST'])
@@ -828,27 +820,30 @@ def search():
     lst = []
     session['link'], session['link2'] = '/search', '/search'
     if request.method == 'POST':
-        session['request_s'] = request.values
         for i in request.values:
             m = request.values[i].split()
             m = list(map(lambda x: "".join(c for c in x if c.isalnum()), m))
             for j in m:
-                posts = dbs.query(Post).filter((Post.content.like(f'%{j}%')) | (Post.title.in_(m))).all()
+                if len(j) > 2:
+                    j = j[:-1]
+                posts = dbs.query(Post).filter((Post.content.like(f'%{j}%')) | (Post.title.in_(m)) | (
+                    Post.content.like(f'%{j.lower()}%')) | (Post.content.like(f'%{j.capitalize()}%')) |
+                                               (Post.content.like(f'%{j.upper()}%')) | (
+                                                   Post.breed.like(f'%{j.capitalize()}%')) | (
+                                                   Post.category.like(f'%{j.capitalize()}%')) | (
+                                                   Post.breed.like(f'%{j.lower()}%'))).all()
                 if posts:
                     for h in posts:
                         lst.append(h)
-    else:
-        s = session.get('request_s')
-        for i in s:
-            m = s[i].split()
-            m = list(map(lambda x: "".join(c for c in x if c.isalnum()), m))
-            for j in m:
-                posts = dbs.query(Post).filter((Post.content.like(f'%{j}%')) | (Post.title.in_(m))).all()
-                if posts:
-                    for h in posts:
-                        lst.append(h)
-
-    return render_template('search_request.html', title='Поиск', lst=lst, ln=len(lst))
+    lst = list(
+        map(lambda x: [x.title, x.destination, x.price, x.currency, x.delivery,
+                       x.content[:50] + '...' if len(x.content) > 50 else x.content,
+                       x.address[:50] + '...' if len(x.address) > 50 else x.address,
+                       x.created_date.strftime('%d.%m.%Y, %H:%M'), x.photo, x.id], lst))
+    if lst:
+        session['request_s'] = lst
+    print(session['request_s'])
+    return render_template('search_request.html', title='Поиск', lst=session['request_s'], ln=len(session['request_s']))
 
 
 if __name__ == '__main__':

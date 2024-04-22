@@ -1,36 +1,34 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if current_user.is_authenticated %}
-{% endif %}
 <div class="content">
     {% if lst %}
     <H3>Результаты поиска ({{ln}})</H3>
     {% for i in lst %}
-    <a href='/post/{{i.id}}' class="post_mini">
-        <div style="text-align: start; display: flex;">
-            <p style="margin-right: 20px;"><img src={{i.photo}} height="150px" style="border-radius: 20px; "></p>
-            <div style="width:75%">
-                <h3 style="color: #242229">{{i.title}}</h3>
-                {% if i.price >= 1 %}
-                <h5 style='color: #4a494d'>{{i.price}} {{i.currency}}</h5>
-                {% else %}
-                <h5 style='color: #4a494d'>Бесплатно</h5>
-                {% endif %}
-                <p></p>
-                <p style="color: #807c8a">{{i.content}}</p>
-                <p></p>
-                <p>
-                    {% if i.delivery %}
-                    <img src="/static/img/delivery2.png" height="30" style="margin-right: 10px;">
-                    {% endif %}{{i.address}}</p>
+    <a href='/post/{{i[9]}}' class="post_mini">
+            <div style="text-align: start; display: flex;">
+                <p style="margin-right: 20px;"><img src={{i[8]}} height="150px" style="border-radius: 20px; "></p>
+                <div style="width:75%">
+                    <h3 style="color: #242229">{{i[0]}}</h3>
+                    {% if i[2] >= 1 %}
+                    <h5 style='color: #4a494d'>{{i[2]}} {{i[3]}}</h5>
+                    {% else %}
+                    <h5 style='color: #4a494d'>Бесплатно</h5>
+                    {% endif %}
+                    <p></p>
+                    <p style="color: #807c8a">{{i[5]}}</p>
+                    <p></p>
+                    <p>
+                        {% if i[4] %}
+                        <img src="/static/img/delivery2.png" height="30" style="margin-right: 10px;">
+                        {% endif %}{{i[6]}}</p>
+                </div>
+                <div style="text-align: center">
+                    <p class="dest">{{i[1]}}</p>
+                    <p style="color: #807c8a"> {{i[7]}}</p>
+                </div>
             </div>
-            <div style="text-align: center">
-                <p class="dest">{{i.destination}}</p>
-                <p style="color: #807c8a"> {{i.created_date.strftime('%d.%m.%Y, %H:%M')}}</p>
-            </div>
-        </div>
-    </a>
+        </a>
     {% endfor %}
     {%else%}
     <h3>Ничего не нашлось</h3>
