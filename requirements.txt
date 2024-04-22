@@ -4,7 +4,5 @@ flask_login
 requests
 pillow
 sqlalchemy
-.db_session
-sqlalchemy
 flask_wtf
 wtforms
