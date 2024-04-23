@@ -193,6 +193,11 @@ def change_pin():
 def index_post(ipost):
     db_sess = db_session.create_session()
     p = db_sess.query(Post).filter(Post.id == ipost).first()
+    if not p:
+        try:
+            return redirect(session['link2'])
+        except:
+            return redirect('/')
     try:
         t = p.title
     except:
@@ -323,9 +328,9 @@ def organization(types):
             json_response = response.json()
             for i in json_response["features"]:
                 i = i["properties"]["CompanyMetaData"]
-                if i["name"] and i["address"] and 'детский' not in i["name"] and "Детский" not in i[
+                if i["name"] and i["address"] and 'детск' not in i["name"] and "Детск" not in i[
                     "name"] and "несовершеннолетних" not in i["name"] and "Несовершеннолетних" not in i[
-                    "name"] and 'детей' not in i["name"]:
+                    "name"] and 'детей' not in i["name"] and 'семей' not in i["name"] and 'социальн' not in i["name"]:
                     org = Organizations(
                         name=i["name"],
                         address=i["address"],
