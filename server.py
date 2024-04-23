@@ -83,7 +83,6 @@ def index():
                                                                           Post.coords2 >= ll4)
     try:
         m = session.get('filter')
-        print(m)
         if m[0]:
             if 'Все' not in m[0]:
                 filt = p.filter(Post.destination.in_(m[0]))
@@ -848,7 +847,6 @@ def search():
                        x.created_date.strftime('%d.%m.%Y, %H:%M'), x.photo, x.id], lst))
     if lst:
         session['request_s'] = lst
-    print(session['request_s'])
     return render_template('search_request.html', title='Поиск', lst=session['request_s'], ln=len(session['request_s']))
 
 
