@@ -35,9 +35,8 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
-def index():
+def filt_sort(arg):
+    dbs = db_session.create_session()
     if current_user.is_authenticated:
         city = current_user.city
     else:
@@ -49,38 +48,40 @@ def index():
         f'https://search-maps.yandex.ru/v1/?text={city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
     if response2:
         json_response2 = response2.json()
-        session[
-            'coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0],
-                         json_response2["features"][0]["geometry"]["coordinates"][1]]
-    if len(city) > 50:
-        city = city[:50] + '...'
-    db_sess = db_session.create_session()
-    p = ''
-    ll1, ll2 = float(session['coords'][0]) + 1, float(session['coords'][1]) + 1
-    ll3, ll4 = float(session['coords'][0]) - 1, float(session['coords'][1]) - 1
+        session['coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0],
+                             json_response2["features"][0]["geometry"]["coordinates"][1]]
+    ll1, ll2 = float(session["coords"][0]) - 1, float(session["coords"][0]) + 1
+    ll3, ll4 = float(session["coords"][1]) - 1, float(session["coords"][1]) + 1
     ord = session.get('order')
+    if arg:
+        categ = session.get("categories")
+        if 'all' not in categ:
+            posts = dbs.query(Post).filter(Post.category == arg, Post.breed.in_(categ))
+        else:
+            posts = dbs.query(Post).filter(Post.category == arg)
+    else:
+        posts = dbs.query(Post)
     if ord:
         if ord == 'views':
-            p = db_sess.query(Post).order_by(Post.views_count).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
-                                                                      Post.coords2 <= ll2,
-                                                                      Post.coords2 >= ll4)
+            p = posts.order_by(Post.views_count).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
+                                                        Post.coords2 <= ll4,
+                                                        Post.coords2 >= ll3)
         elif ord == 'price1':
-            p = db_sess.query(Post).order_by(Post.price).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
-                                                                Post.coords2 <= ll2,
-                                                                Post.coords2 >= ll4)
+            p = posts.order_by(Post.price).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
+                                                  Post.coords2 <= ll4,
+                                                  Post.coords2 >= ll3)
         elif ord == 'price2':
-            p = db_sess.query(Post).order_by(Post.price.desc()).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
-                                                                       Post.coords2 <= ll2,
-                                                                       Post.coords2 >= ll4)
+            p = posts.order_by(Post.price.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
+                                                         Post.coords2 <= ll4,
+                                                         Post.coords2 >= ll3)
         elif ord == 'date':
-            p = db_sess.query(Post).order_by(Post.created_date.desc()).filter(Post.coords1 <= ll1,
-                                                                              Post.coords1 >= ll3,
-                                                                              Post.coords2 <= ll2,
-                                                                              Post.coords2 >= ll4)
+            p = posts.order_by(Post.created_date.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
+                                                                Post.coords2 <= ll4,
+                                                                Post.coords2 >= ll3)
     else:
-        p = db_sess.query(Post).order_by(Post.created_date.desc()).filter(Post.coords1 <= ll1, Post.coords1 >= ll3,
-                                                                          Post.coords2 <= ll2,
-                                                                          Post.coords2 >= ll4)
+        p = posts.order_by(Post.created_date.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
+                                                            Post.coords2 <= ll4,
+                                                            Post.coords2 >= ll3)
     try:
         m = session.get('filter')
         if m[0]:
@@ -124,7 +125,18 @@ def index():
                 p = filt
     except:
         pass
+    return [ll1, ll2, ll3, ll4, city, p]
+
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
+def index():
+    fs = list(filt_sort(None))
+    p = fs[5]
+    ll1, ll2, ll3, ll4, city = fs[0], fs[1], fs[2], fs[3], fs[4]
     p = p.limit(30).all()
+    if len(city) > 50:
+        city = city[:50] + '...'
     for i in range(len(p)):
         if len(p[i].content) >= 50:
             p[i].content = p[i].content[:50] + '...'
@@ -524,100 +536,10 @@ def choice_city():
 
 @app.route('/category/<types>/posts')
 def posts(types):
-    dbs = db_session.create_session()
     session["link"] = f"/category/{types}/posts"
-    if current_user.is_authenticated:
-        city = current_user.city
-    else:
-        if not session.get('city'):
-            session['city'] = 'Москва'
-        city = session.get('city')
-    response2 = requests.get(
-        f'https://search-maps.yandex.ru/v1/?text={city}&type=geo&results=1&lang=ru_RU&apikey=2c36664f-f6e2-4bc1-9042-306afc19c9fa')
-    if response2:
-        json_response2 = response2.json()
-        session['coords'] = [json_response2["features"][0]["geometry"]["coordinates"][0],
-                             json_response2["features"][0]["geometry"]["coordinates"][1]]
-    ll1, ll2 = float(session["coords"][0]) - 1, float(session["coords"][0]) + 1
-    ll3, ll4 = float(session["coords"][1]) - 1, float(session["coords"][1]) + 1
-    categ = session.get("categories")
-    if 'all' not in categ:
-        posts = dbs.query(Post).filter(Post.category == types, Post.breed.in_(categ))
-    else:
-        posts = dbs.query(Post).filter(Post.category == types)
-    ord = session.get('order')
-    if ord:
-        if ord == 'views':
-            p = posts.order_by(Post.views_count).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
-                                                        Post.coords2 <= ll4,
-                                                        Post.coords2 >= ll2)
-        elif ord == 'price1':
-            p = posts.order_by(Post.price).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
-                                                  Post.coords2 <= ll4,
-                                                  Post.coords2 >= ll2)
-        elif ord == 'price2':
-            p = posts.order_by(Post.price.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
-                                                         Post.coords2 <= ll4,
-                                                         Post.coords2 >= ll2)
-        elif ord == 'date':
-            p = posts.order_by(Post.created_date.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
-                                                                Post.coords2 <= ll4,
-                                                                Post.coords2 >= ll2)
-    else:
-        p = posts.order_by(Post.created_date.desc()).filter(Post.coords1 <= ll2, Post.coords1 >= ll1,
-                                                            Post.coords2 <= ll4,
-                                                            Post.coords2 >= ll2)
-    m = session.get('filter')
-    try:
-        if m['age1']:
-            if m['age2']:
-                p = p.filter(Post.age >= int(m['age1']), Post.age <= int(m['age2']))
-            else:
-                p = p.filter(Post.age >= int(m['age1']))
-        elif m['age2']:
-            p = p.filter(Post.age <= int(m['age2']))
-    except:
-        pass
-    try:
-        p = p.filter(Post.destination.in_(m['destination']))
-    except:
-        pass
-
-    try:
-        p = p.filter(Post.color.in_(m['color']))
-    except:
-        pass
-    try:
-        if m['delivery']:
-            p = p.filter(Post.delivery == 1)
-    except:
-        pass
-    try:
-        if m['price1']:
-            if m['price2']:
-                p = p.filter(int(m['price1']) <= Post.price <= int(m['price2']))
-            else:
-                p = p.filter(Post.price >= int(m['price1']))
-        elif m['price2']:
-            p = p.filter(Post.price <= int(m['price2']))
-    except:
-        pass
-    try:
-        if m['documents']:
-            p = p.filter(Post.documents == 1)
-    except:
-        pass
-    try:
-        if m['vaccin']:
-            p = p.filter(Post.vaccin == 1)
-    except:
-        pass
-    try:
-        if m['steril']:
-            p = p.filter(Post.steril == 1)
-    except:
-        pass
-    p = p.all()
+    fs = list(filt_sort(types))
+    p = fs[5].all()
+    ll1, ll2, ll3, ll4, city = fs[0], fs[1], fs[2], fs[3], fs[4]
     posts = list(
         map(lambda x: [x.title[:9] + '...' if len(x.title) > 9 else x.title, x.destination, x.price, x.currency,
                        x.address[:20] + '...' if len(x.address) > 20 else x.address, x.photo, x.id] if

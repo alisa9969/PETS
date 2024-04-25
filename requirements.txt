@@ -6,6 +6,7 @@ pillow
 flask-wtf
 SQLAlchemy
 wtforms
+urllib3==1.26.6
 email-validator
 alembic
 Jinja2
