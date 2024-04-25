@@ -7,5 +7,5 @@ flask-wtf
 SQLAlchemy
 wtforms
 email-validator
+alembic
 Jinja2
-urllib3==1.26.6
