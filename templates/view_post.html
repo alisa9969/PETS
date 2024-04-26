@@ -21,11 +21,13 @@
                 <h2>Бесплатно</h2>
                 {% endif %}
                 <div style="display: block; text-align: center; justify-content: center">
+                    {% if current_user.is_authenticated %}
                     <form method="post">
                         <input type='submit' class="butt2"
                                style="width: 270px; font-size: 19px; margin-top: 22px; margin-bottom: 20px; background: #fff; color: black"
                                value='{{fvt}}' name="fav"/>
                     </form>
+                    {%endif%}
                     <form method="post" enctype="multipart/form-data">
                         <div class="user_info">
                             <a class="img"><img src={{user.photo}} style="border-radius: 20px" width="140px"></a>
