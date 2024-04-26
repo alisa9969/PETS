@@ -264,7 +264,11 @@ def index_post(ipost):
                 return redirect(f'/user/{p.user_id}')
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == p.user_id).first()
-    return render_template('view_post.html', title=t, post=p, img=img, user=user, a=a, c=c, back=session["link2"],
+    try:
+        bl = session["link2"]
+    except:
+        bl = '/'
+    return render_template('view_post.html', title=t, post=p, img=img, user=user, a=a, c=c, back=bl,
                            fvt=fav_txt)
 
 
